@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/skillshare.js"></script>
+  
+  <title>プラン一覧</title>
+</head>
+
+<body>
+  <header class="top schedule-list">
+    <div class="header-title">
+      <div class="title">プラン一覧</div>
+    </div>
+  </header>
+  <div class="sub-header">
+    <button id="prev-btn">
+      <i class="fas fa-caret-left fa-2x icon"></i>
+    </button>
+    <span id="title-date"></span>
+    <button id="next-btn">
+      <i class="fas fa-caret-right fa-2x icon"></i>
+    </button>
+  </div>
+
+  <main class="h-footer plan-list">
+
+    <div class="slider">
+      <div class="slide-set">
+        <div class="list">
+          <ul id="plan-list" class="plan-list-area"></ul>
+          <ul id="not-plan-list" class="plan-list-area" style="display:none">
+            <li>
+              イベントはありません。
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script id="plans-template" type="text/x-handlebars-template">
+    {{#each this}}
+    {{#if (ff_date startDate)}}
+     <a href="plan-info.html?eventId={{__id}}">
+      <li class="{{planStatus}}-schedule event">
+        <div class="list-image">
+          <div class="list-thumbnail-m">
+            <img src="{{image}}" class="list-thumbnail">
+          </div>
+        </div>
+        <div class="list-text">
+          <div class="title">
+            {{summary}}
+          </div>
+          <div class="etc_area">
+            <div class="status">
+              {{time startDate}}～{{time endDate}}
+            </div>
+            <div class="evaluation">
+              {{#if (eq planStatus "consideration")}}
+              <i class="fa fa-star fa-2x icon active"></i>
+              {{else}}
+              <i class="fa fa-star fa-2x icon"></i>
+              {{/if}}
+              <span>25</span>
+              {{#if (eq planStatus "confirm")}}
+              <i class="fas fa-check-circle fa-2x icon active"></i>
+              {{else}}
+              <i class="fas fa-check-circle fa-2x icon"></i>
+              {{/if}}
+              <span>123</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </a>
+    {{/if}}
+    {{/each}}
+  </script>
+
+  <script>
+      $(function() {
+        nowMoment = moment("2018-03-18T09:00:00+09:00");
+        $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+        var paramObj = {};
+        paramObj.callback = function(odataObj) {
+          planList = odataObj.d.results;
+          getPlanningAPI().done(function(planningObj) {
+            if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
+              $("title").text("プラン一覧");
+              $("#planList").addClass("current");
+              $("#considerationList").removeClass("current");
+              events = planList;
+              _.each(planningObj.d.results, function(p_event, p_index, p_list) {
+                _.every(events, function(event) {
+                  if (p_event.event_id == event.__id) {
+                    event.planStatus = p_event.planStatus;
+                    return false;
+                  }
+                  return true;
+                })
+              });
+            } else {
+              $("title").text("検討中一覧");
+              $("#considerationList").addClass("current");
+              $("#planList").removeClass("current");
+              planStatus = sessionStorage.planStatus;
+              events = planningObj.d.results;
+              _.each(events, function(p_event, p_index, p_list) {
+                _.every(planList, function(event) {
+                  if (planStatus == p_event.planStatus && p_event.event_id == event.__id) {
+                    $.extend(p_event, event);
+                    return false;
+                  }
+                  return true;
+                })
+              });
+            }
+
+            console.log(events);
+          }).fail(function() {
+            console.log(e);
+          }).always(function() {
+            setHandlebars();
+          })
+        }
+        getSortedEvents(paramObj);
+      });
+
+      setHandlebars = function() {
+        dataCnt = events.length;
+        $("#plan-list").show();
+        $("#not-plan-list").hide();
+        Handlebars.registerHelper({
+          'eq': function(v1, v2) {
+            return v1 == v2;
+          },
+          'time': function(date) {
+            return moment(date).format('H:mm');
+          },
+          'ff_date': function(date) {
+            // For FF2018 May 18th
+            let dateFF = nowMoment;
+            if (dateFF.isSame(moment(date), 'day')) {
+              return true;
+            } else {
+              dataCnt--;
+              if (dataCnt == 0) {
+                $("#plan-list").hide();
+                $("#not-plan-list").show();
+              }
+              return false;
+            }
+            
+          }
+        });
+        var source = $("#plans-template").text();
+        var template = Handlebars.compile(source);
+        var html = template(events);
+        $("#plan-list").html(html);
+      }
+
+      $('#prev-btn').off().click(function () {
+        nowMoment.add(-1,"day");
+        $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+        setHandlebars();
+      });
+
+      $('#next-btn').off().click(function () {
+        nowMoment.add(1,"day");
+        $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+        setHandlebars();
+      });
+  </script>
+
+
+  <footer class="schedule-list">
+    <button id="recommandList" onclick="javascript:location.href = 'index.html';">
+      <i class="fas fa-calendar-alt fa-2x icon"></i>
+      <div class="icon-text">おすすめ</div>
+    </button>
+    <button>
+      <i class="fa fa-bullhorn fa-2x icon"></i>
+      <div class="icon-text">ピックアップ</div>
+    </button>
+    <button id="planList" class="current" onclick="javascript:sessionStorage.removeItem('planStatus');location.href = 'plan.html';">
+      <i class="fas fa-clipboard fa-2x icon"></i>
+      <div class="icon-text">プラン一覧</div>
+    </button>
+    <button id="considerationList" onclick="javascript:sessionStorage.planStatus = 'consideration';location.href = 'plan.html';">
+      <i class="fas fa-star fa-2x icon"></i>
+      <div class="icon-text">検討中</div>
+    </button>
+    <button>
+      <i class="fas fa-check-circle fa-2x icon"></i>
+      <div class="icon-text">参加一覧</div>
+    </button>
+  </footer>
+</body>
+
+</html>

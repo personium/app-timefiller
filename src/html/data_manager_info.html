@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+
+  <title>フィットネス</title>
+</head>
+
+<body class="data-manager">
+  <header class="top">
+    <a class="header-btn pn-back-btn" href="data_manager.html">
+      <div id="back_btn" class="pn-btn white">
+        <i class="fas fa-angle-left fa-2x icon"></i>
+      </div>
+    </a>
+    <div class="header-title header-app-icon">
+      <img class="img-fluid" src="img/fitness@3x.png" alt="フィットネス">
+      <span class="title">フィットネス</span>
+    </div>
+  </header>
+
+  <main class="h-footer">
+    <div class="data-info">
+      <div class="app-text">
+        説明：
+        <br> 活動両データを提供いただくとより良いおすすめスケジュールの提案が出来ます。
+        <br> データ利用目的：
+        <br> スキルシェアリングで最適なリコメンドを行うため。
+      </div>
+    </div>
+
+    <div id="not-change-bg-check-list">
+      <ul>
+        <li class="pn-check-list check-position-l check-mark-left">
+          <div class="pn-list pn-list-no-arrow">
+            <span>歩数</span>
+          </div>
+        </li>
+        <li class="pn-check-list check-position-l check-mark-left">
+          <div class="pn-list pn-list-no-arrow">
+            <span>ウォーキング＋ランニング…</span>
+          </div>
+        </li>
+        <li class="pn-check-list check-position-l check-mark-left">
+          <div class="pn-list pn-list-no-arrow">
+            <span>上った階段</span>
+          </div>
+        </li>
+        <li class="pn-check-list check-position-l check-mark-left">
+          <div class="pn-list pn-list-no-arrow">
+            <span>アクティブエネルギー</span>
+          </div>
+        </li>
+        <li class="pn-check-list check-position-l check-mark-left">
+          <div class="pn-list pn-list-no-arrow">
+            <span>安静時消費エネルギー</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </main>
+  <script>
+    $(function() {
+      let tempProfile = getProfileFromSession();
+      $('#not-change-bg-check-list li.pn-check-list:nth-child(1)').click();
+      $('#not-change-bg-check-list li.pn-check-list:nth-child(4)').click();
+    });
+  </script>
+
+  <footer>
+    <button type="button" class="btn add-btn" onclick="javascript:location.href = 'data_manager.html';">登録</button>
+  </footer>
+</body>
+
+</html>

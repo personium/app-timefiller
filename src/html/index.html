@@ -1,0 +1,390 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+  <link rel="stylesheet" href="./css/recommend.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/skillshare.js"></script>
+  <script src="./js/recommend.js"></script>
+
+  <title>おすすめスケジュール</title>
+</head>
+<script>
+  additionalCallback = function() {
+    targetCellName = sessionStorage.cellname;
+    nowMoment = moment("2018-03-18T09:00:00+09:00");
+    $("#today").text(nowMoment.format('M/DD(ddd)'));
+    getRecommendList(nowMoment.toISOString(), createList);
+
+    $('#prev-btn').off().click(function () {
+      nowMoment.add(-1,"day");
+      $("#today").text(nowMoment.format('M/DD(ddd)'));
+      getRecommendList(nowMoment.toISOString(), createList);
+    });
+
+    $('#next-btn').off().click(function () {
+      nowMoment.add(1,"day");
+      $("#today").text(nowMoment.format('M/DD(ddd)'));
+      getRecommendList(nowMoment.toISOString(), createList);
+    });
+  }
+</script>
+<body>
+  <header class="top schedule-list">
+    <div class="header-title">
+      <div class="title">おすすめスケジュール</div>
+    </div>
+    <button id="setting_btn" class="header-btn pn-btn header-right"  onclick="javascript:location.href = 'data_manager.html';">
+      <i class="fas fa-cog fa-2x icon"></i>
+    </button>
+  </header>
+  <div class="sub-header">
+    <button id="prev-btn">
+      <i class="fas fa-caret-left fa-2x icon"></i>
+    </button>
+    <span id="today"></span>
+    <button id="next-btn">
+      <i class="fas fa-caret-right fa-2x icon"></i>
+    </button>
+  </div>
+
+  <main class="h-footer schedule-list">
+
+    <div class="slider">
+      <div class="slide-set">
+        <div class="list">
+          <ul id="recommended-schedule" ></ul>
+
+          <script id="recommended-template" type="text/x-handlebars-template">
+            {{#each this}}
+
+            {{#if (eq type "home")}}
+            <!-- Start from home -->
+            <li class="time-list">
+              <div class="list-text">
+                {{time startDate}}
+              </div>
+            </li>
+            <li class="default-schedule schedule-list-s">
+              <div class="list-image">
+                <div class="list-thumbnail-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14.78 -14.5 59.12 58">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: none;
+                        }
+                      </style>
+                    </defs>
+                    <title>house</title>
+                    <g id="Layouts">
+                      <rect class="cls-1" width="59.12" height="58" />
+                      <path d="M15,.5A14.5,14.5,0,1,0,29.5,15,14.5,14.5,0,0,0,15,.5Zm9.92,21.57H17.38V15.32H12.62v6.74H5.08V13.49l9.54-7.86a.61.61,0,0,1,.76,0l9.32,7.68a.6.6,0,0,1,.21.46Z"
+                      />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <div class="list-text">
+                <div class="title">
+                  {{#if summary}}
+                  {{title}}<span class="title-text">
+                  <br>{{summary}}</span>
+                  {{else}}
+                  {{title}}
+                  {{/if}}
+                </div>
+              </div>
+            </li>
+            <li class="time-list">
+              <div class="list-text">
+                {{#if endDate}}
+                  {{time endDate}}
+                {{/if}}
+              </div>
+            </li>
+            {{/if}}
+
+            <!-- calendar -->
+            {{#if (eq type "calendar")}}
+            <!-- Start from home -->
+            <li class="time-list">
+              <div class="list-text">
+                {{time startDate}}
+              </div>
+            </li>
+            <li class="default-schedule schedule-list-s">
+              <div class="list-image">
+                <div class="list-thumbnail-s">
+                  <img src="{{image}}" class="list-thumbnail">
+                </div>
+              </div>
+              <div class="list-text">
+                <div class="title">
+                  {{summary}}
+                </div>
+              </div>
+            </li>
+            <li class="time-list">
+              <div class="list-text">
+                {{#if endDate}}
+                  {{time endDate}}
+                {{/if}}
+              </div>
+            </li>
+            {{/if}}
+
+            <!-- Transportation -->
+            {{#if (eq type "transportation")}}
+            {{{transportation_html this}}}
+            {{/if}}
+            
+            <!-- travel -->
+            {{#if (eq type "ridesharing")}}
+            <a href="route-info.html?planStatus={{planStatus}}">
+            <li class="{{planStatus}}-schedule event schedule-list-m">
+              <div class="list-image">
+                <div class="list-thumbnail-xs"></div>
+              </div>
+              <div class="list-text">
+                <div class="title">
+                  {{title}}
+                  {{#if (eq planStatus "confirm")}}
+                  <span class="reserved batch">予約済</span>
+                  {{/if}}
+                </div>
+                <div class="etc_area">
+                  <div class="status">
+                    <img src="{{serviceImage}}" alt="car" style="width: 18px; height: 18px; vertical-align: -.20em;">
+                    <span>【{{serviceName}}】</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+            </a>
+            {{/if}}
+
+            <!-- Event -->
+            {{#if (eq type "event")}}
+            <li class="time-list">
+              <div class="list-text">
+                {{time startDate}}
+              </div>
+            </li>
+            <a href="recommend-info.html?eventId={{__id}}">
+            <li class="{{planStatus}}-schedule event schedule-list-m">
+              <div class="list-image">
+                <div class="list-thumbnail-s">
+                  <img src="{{image}}" class="list-thumbnail">
+                </div>
+              </div>
+              <div class="list-text">
+                <div class="title"><p class="ellipsis">
+                  {{summary}}
+                </p></div>
+                <div class="etc_area">
+                  <div class="status">
+                    <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.25em;"><span>【{{serviceName}}】</span>
+                  </div>
+                  <div class="evaluation">
+                    {{#if (eq planStatus "consideration")}}
+                    <i class="fa fa-star fa-2x icon active"></i>
+                    {{else}}
+                    <i class="fa fa-star fa-2x icon"></i>
+                    {{/if}}
+                    <span>25</span>
+                    {{#if (eq planStatus "confirm")}}
+                    <i class="fas fa-check-circle fa-2x icon active"></i>
+                    {{else}}
+                    <i class="fas fa-check-circle fa-2x icon"></i>
+                    {{/if}}
+                    <span>123</span>
+                  </div>
+                </div>
+              </div>
+            </li>
+            </a>
+            <li class="time-list">
+              <div class="list-text">
+                {{time endDate}}
+              </div>
+            </li>
+            {{/if}}
+
+            {{#if (eq type "PR")}}
+            <!-- lunch -->
+            <li class="time-list">
+              <div class="list-text">
+                {{time startDate}}
+              </div>
+            </li>
+            <li class="{{planStatus}}-schedule event schedule-list-m">
+              <div class="list-image">
+                <div class="list-thumbnail-s">
+                  <img src="{{image}}" class="list-thumbnail">
+                </div>
+              </div>
+              <div class="list-text">
+                <div class="title">
+                  <span class="title-text"> 【{{title}}】
+                    <br> {{summary}}</span>
+                  <button class="delete-btn">×</button>
+                </div>
+                <div class="etc_area">
+                  <div class="status">
+                    【{{serviceName}}】
+                  </div>
+                </div>
+              </div>
+            </li>
+            <li class="time-list">
+              <div class="list-text">
+                {{time endDate}}
+              </div>
+            </li>
+            {{/if}}
+            {{/each}}
+
+
+
+            <!--  back to home -->
+<!--
+            <li class="time-list">
+              <div class="list-text">
+                18:20
+              </div>
+            </li>
+            <li class="default-schedule schedule-list-s">
+              <div class="list-image">
+                <div class="list-thumbnail-xs">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="-14.78 -14.5 59.12 58">
+                    <defs>
+                      <style>
+                        .cls-1 {
+                          fill: none;
+                        }
+                      </style>
+                    </defs>
+                    <title>car</title>
+                    <g id="Layouts">
+                      <rect class="cls-1" width="59.12" height="58" />
+                      <path d="M15,.5A14.5,14.5,0,1,0,29.5,15,14.5,14.5,0,0,0,15,.5Zm9.92,21.57H17.38V15.32H12.62v6.74H5.08V13.49l9.54-7.86a.61.61,0,0,1,.76,0l9.32,7.68a.6.6,0,0,1,.21.46Z"
+                      />
+                    </g>
+                  </svg>
+                </div>
+              </div>
+              <div class="list-text">
+                <div class="title">
+                  自宅
+                </div>
+              </div>
+            </li>
+            <li class="list-footer">
+            </li>
+-->
+          </script>
+          <script>
+              createList = function(recommendedSchedule) {
+                Handlebars.registerHelper({
+                  'eq': function(v1, v2) {
+                    return v1 == v2;
+                  },
+                  'time': function(date) {
+                    return moment(date).format('H:mm');
+                  },
+                  'ff_date': function(date) {
+                    // For FF2018 May 18th
+                    let dateFF = nowMoment;
+                    return dateFF.isSame(moment(date), 'day');
+                  },
+                  'transportation_html': function(object) {
+                    let title = Handlebars.escapeExpression(object.title);
+                    let distance = Handlebars.escapeExpression(object.distance);
+                    return new Handlebars.SafeString(
+                      [
+                      "<li class='default-schedule traffic schedule-list-s'>",
+                        "<div class='list-image'>",
+                          "<div class='list-thumbnail-xs'>",
+                          "</div>",
+                        "</div>",
+                        "<div class='list-text'>",
+                          "<div class='title'>",
+                            title,
+                          "</div>",
+                          "<div class='etc_area'>",
+                            "<div class='status'>",
+                              distance,
+                            "</div>",
+                          "</div>",
+                        "</div>",
+                      "</li>"].join("")
+                    )
+                  }
+                });
+                var source = $("#recommended-template").text();
+                var template = Handlebars.compile(source);
+                //var html = template(sortedEventHash);
+console.log(recommendedSchedule);
+                var html = template(recommendedSchedule);
+                $("#recommended-schedule").html(html);
+              }
+          </script>
+        </div>
+
+      </div>
+    </div>
+
+
+  </main>
+
+  <footer class="schedule-list">
+    <button class="current" onclick="javascript:location.href = 'index.html';">
+      <i class="fas fa-calendar-alt fa-2x icon"></i>
+      <div class="icon-text">おすすめ</div>
+    </button>
+    <button>
+      <i class="fa fa-bullhorn fa-2x icon"></i>
+      <div class="icon-text">ピックアップ</div>
+    </button>
+    <button onclick="javascript:sessionStorage.removeItem('planStatus');location.href = 'plan.html';">
+      <i class="fas fa-clipboard fa-2x icon"></i>
+      <div class="icon-text">プラン一覧</div>
+    </button>
+    <button onclick="javascript:sessionStorage.planStatus = 'consideration';location.href = 'plan.html';">
+      <i class="fas fa-star fa-2x icon"></i>
+      <div class="icon-text">検討中</div>
+    </button>
+    <button>
+      <i class="fas fa-check-circle fa-2x icon"></i>
+      <div class="icon-text">参加一覧</div>
+    </button>
+  </footer>
+</body>
+
+</html>

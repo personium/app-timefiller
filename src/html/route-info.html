@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/skillshare.js"></script>
+
+  <title>ライドシェア</title>
+  <script>
+  $(function() {
+    let selectedEventId = location.search.match(/eventId=(.*?)(&|$)/);
+    let eventId;
+    if (_.isUndefined(selectedEventId) || _.isNull(selectedEventId)) {
+      eventId = "per-1";
+    } else {
+      eventId = selectedEventId[1] || "per-1";
+    }
+    let paramObj = {};
+    paramObj.callback = function(odataObj) {
+      sortedEvents = odataObj.d.results;
+      _.each(sortedEvents, function(event, index, list) {
+        event.__id = 'per-' + index;
+        event.start = event.startDate || event.calendars[0].useStartDatetime;
+        event.end = event.endDate || event.calendars[0].useEndDatetime;
+      });
+
+      tempEvent = _.findWhere(sortedEvents, {__id: eventId});
+      console.log(tempEvent);
+
+      planStatus = location.search.match(/planStatus=(.*?)(&|$)/)[1];
+      if (_.isUndefined(planStatus) || _.isNull(planStatus)) {
+        planStatus = "pending";
+      }
+      if (planStatus == "confirm") {
+        $('.plan-footer-btn').click();
+      }
+    }
+    getSortedEvents(paramObj);
+  });
+  </script>
+</head>
+
+<body>
+  <header class="plan-info-header">
+    <a class="header-btn pn-back-btn" href="index.html">
+      <div id="back_btn" class="pn-btn black">
+        <i class="fas fa-angle-left fa-2x icon"></i>
+      </div>
+    </a>
+
+    <div class="header-title">
+      <div class="title"><img src="./img/car.png" alt="car" style="width: 18px; height: 18px; vertical-align: -.1em;"> 支え合い交通サービス</div>
+    </div>
+  </header>
+  <main id="main-area" class="h-footer"></main>
+  <script id="main-template" type="text/x-handlebars-template">
+    <div class="plan-article">
+      <div class="plan-info-title">
+        ライドシェア
+      </div>
+      <div class="plan-info-text">
+        移動距離: 15.5km
+        <br> 交通費: 一人当たり:￥800
+        <br> 同乗人数: 満席
+      </div>
+      <div class="plan-info-place mb-2 mt-2">
+        <div class="plan-info-place-title mb-2">開催場所</div>
+        <div class="place-map mb-2">
+          <img src="./img/route2.png" style="width: 100%">
+        </div>
+      </div>
+    </div>
+  </script>
+  
+  <footer id="footer-area">
+    <button type="button" class="btn add-btn plan-footer-btn plan-check-btn" data-label="予約する">予約する</button>
+  </footer>
+  <script>
+      dispInfo = function() {
+        Handlebars.registerHelper({
+          'eq': function(v1, v2) {
+            return v1 == v2;
+          },
+          'postDate': function(date) {
+            return moment(date).format('YYYY/MM/DD(ddd) H:mm');
+          },
+          'eventDate': function(date) {
+            return moment(date).format('M/DD (ddd) ');
+          },
+          'eventTime': function(date) {
+            return moment(date).format('H:mm');
+          }
+        });
+        var source = $("#main-template").text();
+        var template = Handlebars.compile(source);
+        var html = template(tempEvent);
+        $("#main-area").html(html);
+      }
+  </script>
+</body>
+
+</html>

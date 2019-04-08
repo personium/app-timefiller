@@ -1,0 +1,5 @@
+icon
+http://portalsite.gcs.g01.fujitsu.local/sites/executivepresentation/DDL/Pages/default.aspx
+pictures
+https://pixabay.com/
+https://www.pexels.com/
