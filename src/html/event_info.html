@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/event.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/eventInfo.js"></script>
+  <script src="./js/skillshare.js"></script>
+  
+  <title>イベント管理</title>
+</head>
+
+<body>
+  <header class="top schedule-list">
+    <button class="header-btn pn-back-btn pn-btn" onclick="javascript:location.href = 'index_org.html';">
+        <i id="back_btn" class="fas fa-angle-left fa-2x header-ic-01"></i>
+    </button>
+    <div class="header-title">
+      <div class="title">イベント管理</div>
+    </div>
+    <button id="edit_btn" class="header-btn pn-btn header-right">
+      保存
+    </button>
+  </header>
+
+  <main class="no-footer">
+    <ul class="add-event">
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input id="event-title" type="text" class="form-control" placeholder="イベント名" aria-label="イベント名" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input id="event-image" type="text" class="form-control" placeholder="イメージURL" aria-label="イメージURL" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <textarea class="form-control" rows="3" id="description" placeholder="紹介文"></textarea>
+          </div>
+        </div>
+      </li>
+
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-info-title" data-i18n="glossary:event.start">開始</div>
+        <div class="event-date-setting">
+          <input type="date" class="event-date" id="dtstart_date" value="2017-04-01">
+          <input type="time" class="event-date" id="dtstart_time" value="00:00">
+        </div>
+        <span id="errorStartDate" class="error-text"></span>
+      </li>
+      <li class="event-info-li">
+        <div class="event-info-title" data-i18n="glossary:event.end">終了</div>
+        <div class="event-date-setting">
+          <input type="date" class="event-date" id="dtend_date" value="2017-04-01">
+          <input type="time" class="event-date" id="dtend_time" value="00:00">
+        </div>
+        <span id="errorEndDate" class="error-text"></span>
+      </li>
+
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input id="address" type="text" class="form-control" placeholder="イベント開催地" aria-label="イベント開催地" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="cellUrl" placeholder="主催者セルURL" aria-label="主催者セルURL" aria-describedby="basic-addon2" readOnly>
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="webUrl" placeholder="WebサイトURL" aria-label="WebサイトURL" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="tel" class="form-control" id="nowPar" placeholder="現在参加者数" aria-label="現在参加者数" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="tel" class="form-control" id="maxPar" placeholder="最大参加者数" aria-label="最大参加者数" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+
+      <li class="separate-li"></li>
+      <li class="event-info-li">
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="tag" placeholder="タグ" aria-label="タグ" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+    </ul>
+  </main>
+  <footer>
+    <button id="b-delete-vevent-ok" class="width-full-btn" onclick="deleteEvent();">削除</button>
+  </footer>
+</body>
+
+</html>

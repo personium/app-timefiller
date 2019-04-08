@@ -1,0 +1,18 @@
+{
+    "title": "Time Filling",
+    "label": "Time Filling",
+    "event": {
+        "start": "start",
+        "end": "end",
+        "btn": {
+            "OK": "OK"
+        }
+    },
+    "eventMessage": {
+        "regist": "event has been registered.",
+        "update": "updated the event.",
+        "delete": "The event has been deleted.",
+        "confirmDelete": "Delete an event Is it OK?",
+        "back": "will return to the list screen."
+    }
+}

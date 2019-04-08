@@ -1,0 +1,104 @@
+{
+    "me": "Me",
+    "menu": {
+        "title": "Menu",
+        "notification": {
+            "title": "Notifications",
+            "header": "List of notifications"
+        },
+        "Version": "Version 1.2.1"
+    },
+    "navbar": {
+        "toggleNavigation": "Toggle navigation",
+        "appName": "$t(glossary:title)"
+    },
+    "sessionExpiredDialog": {
+        "title": "Session Expired",
+        "message": "Session has expired.<br>This app will be terminated.",
+        "cancelBtn": "cencel",
+        "btnOk": "OK"
+    },
+    "irrecoverableErrorDialog": {
+        "title": "$t(glossary:irrecoverableErrorDialog.title)"
+    },
+    "warningDialog": {
+        "title": "Warning"
+    },
+    "confirmDialog": {
+        "title": "Confirmation"
+    },
+    "readRequestTitle": "$t(glossary:readRequestTarget)_Read Permission Request",
+    "readRequestBody": "Please grant read permission for your $t(glossary:readRequestBodyTarget).",
+    "readResponseTitle": "$t(glossary:readRequestTarget)_Read Permission Reply",
+    "readResponseApprovedBody": "Read permission is granted.",
+    "readResponseDeclinedBody": "Read permission is not granted.",
+    "error": {
+        "title": "Error",
+        "label": "Error"
+    },
+    "msg": {
+        "info": {
+            "pleaseSelectTargetCell": "Please select a $t(glossary:dataSubject.label).",
+            "messageSent": "Succeeded in sending the message.",
+            "requestSent": "Send a permission request. Is it OK?",
+            "requestApproval": "Grant the requested authority. Is it OK?",
+            "requestRejection": "Refuse the request. Is it OK?"
+        },
+        "warning": {
+            "failedToGetLaunchJson": "Failed to get this App's launching information."
+        },
+        "error": {
+            "failedToSendMessage": "Failed to send message.",
+            "failedRequestSent": "Failed to send permission request.",
+            "failedChangeStatus": "Failed to change the status.",
+            "targetCellNotSelected": "Target cell not selected.",
+            "tokenMissing": "Token is missing.",
+            "refreshTokenMissing": "Refresh token is missing.",
+            "tokenExpiryDateMissing": "Token's expiry date is not set.",
+            "refreshTokenExpiryDateMissing": "Refresh token's expiry date is not set.",
+            "failedToRetrieveData": "Failed to retrieve data.",
+            "dataNotFound": "Data not found.",
+            "failedToRefreshToken": "Failed to refresh token.<br>Please reload page.",
+            "failedToGetBoxUrl": "Failed to get Box URL."
+        }
+    },
+    "btn": {
+        "cancel": "Cancel",
+        "edit": "Edit",
+        "save": "Save",
+        "release": "Ungrant",
+        "approve": "Approve",
+        "decline": "Decline",
+        "finish": "OK"
+    },
+    "Authority": {
+        "label": "Authority",
+        "owner": "owner",
+        "editor": "write",
+        "viewer": "read"
+    },
+    "Sharing": {
+        "title": "Show different $t(glossary:label)",
+        "by": {
+            "label": "sharing my $t(glossary:label)"
+        },
+        "with": {
+            "label": "sharing with"
+        },
+        "Member": {
+            "label": "Sharing Member",
+            "add": "Add Member"
+        },
+        "Send": {
+            "label": "Send sharing request",
+            "description": "Send sharing request with the following authority.",
+            "btnFooter": "Send"
+        },
+        "Received": {
+            "label": "Received sharing request",
+            "description": "If you allow it, your $t(glossary:label) will be shared with the following authority.",
+            "rejectionBtn": "Discard",
+            "approvelBtn": "Permit"
+        }
+    }
+}

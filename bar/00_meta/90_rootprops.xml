@@ -1,0 +1,37 @@
+<multistatus xmlns="DAV:">
+    <response>
+        <href>personium-localbox:/</href>
+        <propstat>
+            <prop>
+                <resourcetype>
+                    <collection/>
+                </resourcetype>
+                <acl xml:base="https://demo.personium.io/app-timefiller-wakaba/__role/__/" xmlns:p="urn:x-personium:xmlns">
+                </acl>
+            </prop>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/OData</href>
+        <propstat>
+            <prop>
+                <resourcetype>
+                    <collection/>
+                    <p:odata xmlns:p="urn:x-personium:xmlns"/>
+                </resourcetype>
+                <acl xml:base="https://demo.personium.io/app-timefiller-wakaba/__role/__/" xmlns:p="urn:x-personium:xmlns">
+                    <ace>
+                        <principal>
+                            <href>EventRead</href>
+                        </principal>
+                        <grant>
+                            <privilege>
+                                <read/>
+                            </privilege>
+                        </grant>
+                    </ace>
+                </acl>
+            </prop>
+        </propstat>
+    </response>
+</multistatus>

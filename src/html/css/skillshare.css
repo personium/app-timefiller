@@ -1,0 +1,874 @@
+/**
+ * Personium
+ * Copyright 2018 FUJITSU LIMITED
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * The followings should be shared among applications.
+ */
+
+* {
+  box-sizing: border-box;
+}
+
+/* ヘッダー */
+
+/* 共通 */
+
+header {
+  background-color: #09BBD3;
+  display: flex;
+}
+
+.header-title {
+  flex: 0 0 auto;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+#back_btn.black {
+  color: #5d5d5d;
+}
+
+#back_btn.white {
+  color: #ffffff;
+}
+
+#back_btn .icon {
+  height: 30px;
+  width: 30px;
+}
+
+header.top {
+  color: #ffffff;
+}
+
+header.top .header-left {
+  left: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  cursor: hand;
+}
+
+header.top .header-right {
+  right: 12px;
+  color: #ffffff;
+  cursor: pointer;
+  cursor: hand;
+}
+
+header.top>.header-title {
+  flex: 0 0 auto;
+  font-family: Segoe Script !important;
+  font-size: 26px;
+  font-weight: normal;
+}
+
+header.top .subtitle {
+  font-size: 12px;
+}
+
+header.top .icon {
+  height: 22px;
+  width: 22px;
+}
+
+header.schedule-list {
+  box-shadow: 0 0;
+}
+
+.sub-header {
+  position: absolute;
+  top: 4.0rem;
+  left: 0;
+  width: 100%;
+  background-color: #F6F7FB;
+  box-shadow: 0 3px 4px rgba(0, 0, 0, 0.2);
+  height: 2.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0px 10px;
+  color: #58595B;
+  z-index: 1;
+}
+
+.sub-header button {
+  flex: 0 0 auto;
+  border: none;
+  background: none;
+  color: #58595B;
+}
+
+.sub-header span {
+  flex: 1 1 auto;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+main {
+  flex: 1 1 auto;
+  overflow: auto;
+  z-index: 1;
+}
+
+main.schedule-list,
+main.plan-list {
+  padding-top: 6.5rem;
+  height: 100%;
+}
+
+.h-footer {
+  padding-bottom: 4.2rem;
+}
+
+main.event-list {
+  padding-top: 4.0rem;
+  height: 100%; 
+}
+
+.e-footer {
+  padding-bottom: 3.0rem; 
+}
+
+main .slide-area {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
+main .slide-area .list {
+  float: left;
+  width: 100%;
+  position: absolute;
+}
+
+.contents {
+  color: #ffffff;
+  height: 250px;
+  background-size: cover;
+  position: relative;
+  width: 100%;
+}
+
+.contents.new::before {
+  display: block;
+  content: "NEW";
+  top: 10px;
+  left: 10px;
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  color: #ffffff;
+  line-height: 38px;
+  text-align: center;
+  background: #ff3500;
+  font-size: 12px;
+}
+
+.contents-text {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, rgba(0, 0, 0, 0.5) 100%);
+  background-size: cover;
+  padding: 10px;
+  height: 100%;
+}
+
+.etc_area {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  font-size: 0.9rem;
+}
+
+.etc_area>.date {
+  flex: 1 1 auto;
+}
+
+.etc_area>.status {
+  flex: 1 1 auto;
+}
+
+.etc_area>.evaluation {
+  flex: 0 0 auto;
+}
+
+.evaluation>span {
+  margin-right: 5px;
+}
+
+.etc_area .icon {
+  height: 18px;
+  width: 18px;
+}
+
+.title-area {
+  flex: 0 0 auto;
+  font-size: 1.5rem;
+  font-weight: bold;
+  height: 75px;
+  overflow: hidden;
+}
+
+.list ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slider .list {
+  height: 100%;
+  width: calc(100vw + 1px);
+  float: left;
+}
+
+.slider .slide-set {
+  position: absolute;
+}
+
+.slider {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: relative;
+}
+
+main.schedule-list .list ul li {
+  border-bottom: 0;
+}
+
+.list ul li {
+  display: flex;
+  background: #fafafa;
+  border-bottom: 1px solid #969696;
+}
+
+.list ul li a {
+  width: 100%;
+}
+
+.list ul li .list-image {
+  flex: 0 0 auto;
+  position: relative;
+  display: flex;
+}
+
+.list ul li.time-list {
+  background-color: #E6E7E8;
+  padding-left: 45px;
+}
+
+.list ul li.list-footer {
+  background-color: #E6E7E8;
+  height: 30px;
+}
+
+.list ul li .list-image.new::before {
+  display: block;
+  content: "NEW";
+  top: 2px;
+  left: 2px;
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #ffffff;
+  line-height: 30px;
+  text-align: center;
+  background: #ff3500;
+  font-size: 8px;
+}
+
+.list ul li .list-text {
+  flex: 1 1 auto;
+  padding: 4px;
+  padding-left: 10px;
+  display: flex;
+  flex-direction: column;
+}
+
+.list ul li .list-text>.title {
+  flex: 1 1 auto;
+  color: #5d5d5d;
+  /* font-size: 18px; */
+  font-size: 1.5rem;
+  font-weight: bold;
+  position: relative;
+  overflow: hidden;
+  /* margin: auto 0; */
+}
+
+.list ul li .list-text .title .title-text {
+  display: table-cell;
+  padding-right: 30px;
+}
+
+.list ul li .list-text .title .delete-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  border: none;
+  background: none;
+  color: #5d5d5d;
+  line-height: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.list ul li .list-text>.title>.batch {
+  font-size: 0.95rem;
+  color: #ffffff;
+  padding: 0 8px;
+  border-radius: 5px;
+}
+
+.list ul li .list-text>.etc_area {
+  flex: 0 0 auto;
+  color: #757575;
+}
+
+.list ul li .list-thumbnail {
+  height: 100px;
+  width: 100px;
+  object-fit: cover;
+}
+
+.list ul li .list-thumbnail-xs {
+  width: 75px;
+  object-fit: cover;
+  text-align: center;
+  margin: auto;
+}
+
+.list ul li .list-thumbnail-xs.ic-thumbnail {
+  padding: 5px 20px;
+}
+
+.list ul li .list-thumbnail-xs svg {
+  fill: #707070;
+  display: block;
+}
+
+.list ul li .list-thumbnail-xs img {
+  border-radius: 5px;
+}
+
+.list ul li .list-thumbnail-s {
+  width: 75px;
+  object-fit: cover;
+  text-align: center;
+}
+
+.list ul li .list-thumbnail-m {
+  width: 90px;
+  object-fit: cover;
+  text-align: center;
+}
+
+.list ul li .list-thumbnail-s .list-thumbnail,
+.list ul li .list-thumbnail-m .list-thumbnail {
+  height: 100%;
+  width: 100%;
+}
+
+.list ul li.schedule-list-s {
+  height: 75px;
+}
+
+.list ul li.schedule-list-m {
+  height: 100px;
+}
+
+.list ul li.schedule-list-l {
+  height: 140px;
+}
+
+.list ul li.default-schedule {
+  background-color: #F1F2F2;
+}
+
+.list ul li.default-schedule .list-text {
+  border-left: 5px solid #6D6F71;
+}
+
+.list ul li.default-schedule .list-text .title {
+  display: table;
+  margin: auto 0;
+}
+
+.list ul li.confirm-schedule,
+.list ul li.pending-schedule,
+.list ul li.consideration-schedule {
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.2);
+  position: relative;
+}
+
+.list ul li.confirm-schedule.traffic,
+.list ul li.confirm-schedule.event,
+.list ul li.pending-schedule.traffic,
+.list ul li.pending-schedule.event {
+  background-color: #ffffff;
+}
+
+.list ul li.confirm-schedule.traffic .list-text {
+  border-left: 5px dotted #2979FF;
+}
+
+.list ul li.pending-schedule.traffic .list-text {
+  border-left: 5px dotted #BCBEC0;
+}
+
+.list ul li.default-schedule.traffic .list-text {
+  border-left: 5px dotted #6D6F71;
+}
+
+.list ul li.consideration-schedule.event .list-text {
+  border-left: 5px solid #EE632C;
+}
+
+.list ul li.pending-schedule.event .list-text {
+  border-left: 5px solid #BCBEC0;
+}
+
+.list ul li.confirm-schedule.event .list-text {
+  border-left: 5px solid #2979FF;
+}
+
+ul.plan-list-area .list-text {
+  border-left: 0 !important;
+}
+
+ul.plan-list-area li {
+  height: 100px;
+}
+
+.list ul li.confirm-schedule.event .title::after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-image: url(../img/joining.svg);
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100px;
+}
+
+.list ul li.consideration-schedule.event .title::after {
+  content: " ";
+  position: absolute;
+  right: 0;
+  top: 0;
+  background-image: url(../img/consider.svg);
+  background-repeat: no-repeat;
+  height: 100%;
+  width: 100px;
+}
+
+.list ul li.confirm-schedule.event svg.active {
+  color: #2979FF;
+}
+
+.list ul li.consideration-schedule.event svg.active {
+  color: #EE632C;
+}
+
+.reserved.batch {
+  background-color: #2979FF;
+}
+
+.pending.batch {
+  background-color: #6D6F71;
+}
+
+.plan-info-header {
+  background-color: #ffffff;
+}
+
+.plan-info-ic {
+  vertical-align: -2px;
+}
+
+.top-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background-image: url(../img/P-12.JPG);
+  background-size: cover;
+  background-repeat: no-repeat;
+  color: #ffffff;
+  height: 280px;
+  background-size: cover;
+  padding: 10px;
+  position: relative;
+  width: 100%;
+}
+
+.plan-info-place-title {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.place-map {
+  position: relative;
+  padding-bottom: 56.25%;
+  padding-top: 30px;
+  height: 0;
+  overflow: hidden;
+}
+
+.place-map img,
+.place-map iframe,
+.place-map object,
+.place-map embed {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.reference-skill {
+  background-color: #E6E7E8;
+  width: 100%;
+  padding: 15px;
+}
+
+footer {
+  flex: 0 0 auto;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding: 10px;
+  background-color: #fafafa;
+  z-index: 2;
+  box-shadow: 0px -3px 4px rgba(0, 0, 0, 0.2);
+}
+
+footer>button {
+  width: 20%;
+  background: none;
+  border: none;
+  color: #9c9c9c;
+}
+
+footer>button.current {
+  width: 20%;
+  background: none;
+  border: none;
+  color: #09BBD3;
+}
+
+footer>button>.icon {
+  height: 26px;
+}
+
+footer>button>.icon-text {
+  font-size: 12px;
+}
+
+.plan-info-top-content {
+  height: 250px;
+}
+
+.etc_area .icon-middle {
+  height: 18px;
+  width: 18px;
+}
+
+.etc_area .icon-large {
+  height: 25px;
+  width: 25px;
+}
+
+.plan-info-icon-text {
+  font-size: 1.2rem;
+  font-weight: bold;
+}
+
+.plan-info-icon-text>a {
+  text-decoration: underline !important;
+}
+
+.plan-article {
+  margin: 15px;
+}
+
+.plan-article>.etc_area>.date {
+  text-align: right;
+  margin: auto 0 0 0;
+}
+
+.plan-article .etc_area svg.fa-check-circle.active {
+  color: #2979FF;
+}
+
+.plan-article .etc_area svg.fa-star.active {
+  color: #EE632C;
+}
+
+.plan-info-title {
+  font-size: 1.4rem;
+  font-weight: bold;
+}
+
+.plan-info-text {
+  font-size: 1.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid #969696;
+}
+
+.plan-footer-btn {
+  border: 1px solid #5D5D5D;
+  color: #5D5D5D;
+  font-weight: bold;
+}
+
+.plan-footer-btn::before {
+  font-family: "Font Awesome 5 Free";
+  font-size: 1.2em;
+  vertical-align: 0px;
+  left: 0;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  padding-right: 10px;
+}
+
+.plan-star-btn::before,
+.plan-calendar-btn::before {
+  font-weight: 400;
+}
+
+.plan-star-btn::before {
+  content: "\f005";
+  font-weight: 400;
+  color: #EE632C;
+}
+
+.plan-check-btn::before {
+  content: "\f058";
+  font-weight: 400;
+  color: #2979FF;
+}
+
+.plan-star-btn.clicked::before {
+  content: "\f005";
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.plan-check-btn.clicked::before {
+  content: "\f058";
+  font-weight: 900;
+  color: #ffffff;
+}
+
+.plan-star-btn.active::before,
+.plan-calendar-btn.active::before {
+  font-weight: 900;
+}
+
+.plan-check-btn.clicked {
+  color: #ffffff;
+  background-color: #2979FF;
+  border: 1px solid #2979FF;
+}
+
+.plan-star-btn.clicked {
+  color: #ffffff;
+  background-color: #EE632C;
+  border: 1px solid #EE632C;
+}
+
+body.data-manager {
+  background-color: #F6F7FB;
+}
+
+.pn-list {
+  min-height: 60px;
+}
+
+.data-info {
+  padding: 10px;
+  width: 100%;
+  border-bottom: 1px solid #999999;
+}
+
+.data-info .title {
+  display: flex;
+}
+
+.header-app-icon {
+  margin-right: 30px;
+  width: 100%;
+}
+
+.header-app-icon img {
+  width: 35px;
+  margin: 0.43rem;
+  vertical-align: -15px;
+  border-radius: 5px;
+}
+
+.check-mark-left {
+  color: #D0D0D0;
+}
+
+.check-mark-left.checked {
+  color: #707070;
+}
+
+.check-mark-left.checked::before {
+  color: #2978FF;
+}
+
+.data-info .title .app-name {
+  font-size: 1.2rem;
+  margin: auto 0;
+}
+
+.data-info .title .app-icon {
+  margin-right: 10px;
+}
+
+.data-info .title .app-icon img {
+  width: 35px;
+  margin: 0.43rem;
+  border-radius: 5px;
+}
+
+ul.application li .pn-list .data-info {
+  border: 0;
+}
+
+.data-list-title {
+  padding: 10px;
+  border-bottom: 1px solid #999999;
+}
+
+footer .add-btn {
+  width: 100%;
+  text-align: center;
+  color: #2979FF;
+}
+
+.stamp-large {
+  width: 12rem;
+}
+
+.stamp-large {
+  position: absolute;
+  opacity: 0;
+}
+
+.consider-stamp,.joining-stamp{
+  display: none;
+}
+
+.animate {
+  animation: stamp 0.4s ease-in 1 forwards;
+}
+
+@keyframes stamp {
+  0% {
+    opacity: 0;
+    transform: translate(0px, 0px) scale(1.2) rotate(4deg);
+  }
+  60% {
+    opacity: 1.0;
+    transform: translate(0px, 0px) scale(1) rotate(5deg);
+  }
+  70% {
+    transform: translate(0px, 0px) scale(1) rotate(5deg);
+  }
+  75% {
+    transform: translate(4px, 4px) scale(1) rotate(5deg);
+  }
+  80% {
+    transform: translate(3px, -3px) scale(1) rotate(5deg);
+  }
+  85% {
+    transform: translate(-3px, 3px) scale(1) rotate(5deg);
+  }
+  90% {
+    transform: translate(-2px, -2px) scale(1) rotate(5deg);
+  }
+  95% {
+    transform: translate(2px, 2px) scale(1) rotate(5deg);
+  }
+  100% {
+    opacity: 1.0;
+    transform: translate(0px, 0px) scale(1) rotate(5deg);
+  }
+}
+
+.extcell-profile {
+  text-align: center;
+  padding: 20px;
+  border-bottom: 1px solid #999999;
+}
+
+/*User Profile Description Text*/
+
+.extcell-profile>.user-description {
+  text-align: left;
+  margin-top: 10px;
+}
+
+.role-icon {
+  margin: 0 10px;
+  color: #818181;
+}
+
+.role-img-area {
+  display: inline-block;
+}
+
+.arrow-to-img {
+  display: table-cell;
+  margin-bottom: 1px;
+  vertical-align: middle;
+  padding: 10px;
+}
+
+.my_icon {
+  background: url(../img/user-icon-03.png) center center no-repeat;
+}
+
+.link_icon {
+  background: url(../img/fujitsu-city@3x.png) center center no-repeat;
+}
+
+.user-icon-large {
+  width: 120px;
+  height: 120px;
+}
+
+.user-icon {
+  background-size: cover;
+  position: relative;
+  display: inline-block;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.user-icon>img {
+  overflow: hidden;
+  object-fit: cover;
+}

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/skillshare.js"></script>
+  <script>
+  $(function() {
+    let selectedEventId = location.search.match(/eventId=(.*?)(&|$)/);
+    if (_.isUndefined(selectedEventId) || _.isNull(selectedEventId)) {
+      eventId = "per-1";
+    } else {
+      eventId = selectedEventId[1] || "per-1";
+    }
+    moment.updateLocale('ja', {
+        weekdays: ["日曜日","月曜日","火曜日","水曜日","木曜日","金曜日","土曜日"],
+        weekdaysShort: ["日","月","火","水","木","金","土"],
+    });
+    getEventAPI(eventId).done(function(eventInfo) {
+      tempEvent = eventInfo;
+      getPlanningAPI().done(function(planningObj) {
+        _.each(planningObj.d.results, function(event, index, list) {
+          if (eventId == event.event_id) {
+            tempEvent.planStatus = event.planStatus;
+          }
+        });
+
+        console.log(tempEvent);
+        dispInfo(tempEvent);
+      }).fail(function() {
+        console.log(e);
+      })
+    })
+  });
+  </script>
+
+  <title>プラン詳細</title>
+</head>
+
+<body>
+  <header id="header-area" class="plan-info-header"></header>
+  <script id="header-template" type="text/x-handlebars-template">
+  <header class="plan-info-header">
+    <a class="header-btn pn-back-btn" href="index.html">
+      <div id="back_btn" class="pn-btn black">
+        <i class="fas fa-angle-left fa-2x icon"></i>
+      </div>
+    </a>
+
+    <div class="header-title">
+        <div class="title">
+          <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.05em;"> {{serviceName}}
+        </div>
+    </div>
+  </header>
+  </script>
+  <main id="main-area" class="h-footer"></main>
+  <script id="main-template" type="text/x-handlebars-template">
+    <div class="top-content plan-info-top-content" style="background-image: url({{image}});">
+      <svg class="stamp-large joining-stamp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87 64" style="top: 10px; right: 10px;">
+        <title>参加スタンプ</title>
+        <g id="Layouts">
+          <path fill="#2979FF" d="M25.08,34.12a20,20,0,0,1-5.93,6.95,23.1,23.1,0,0,0,6.63-4.58,12.47,12.47,0,0,0,1.84-2.37l4,1.37a29.44,29.44,0,0,1-4.52,4.74,29.81,29.81,0,0,1-6.78,4.29A9.35,9.35,0,0,0,17.81,42c-.61.45-1.13.77-2.18,1.45a14.11,14.11,0,0,0-3.29-3.26,19.12,19.12,0,0,0,6-4.12l-1.71.5c-1.34.39-2.81.89-4,1.37l-1.24-4.23a34.06,34.06,0,0,0,4-1l6-1.75a6.16,6.16,0,0,0,.18-1.34c-3.19,1-3.19,1-6.23,1.93-.5.15-.87.26-1.6.54l-1.65-3.88c1.05-.21,2.32-.51,4.49-1.15A21.64,21.64,0,0,0,18,22.57l5.37-.6c-.11.3-.11.3-.41,1-.35,1-.63,1.64-1,2.57,2-.59,4.34-1.34,6.23-2-.71-.33-1.06-.5-2-.92l3.14-2.88A48.59,48.59,0,0,1,37.72,24l-3.13,3.15,1.37-.4a32.23,32.23,0,0,0,4-1.37l1.24,4.23a33.7,33.7,0,0,0-4,1l-2.77.81a16.26,16.26,0,0,0,8.11.35,14.36,14.36,0,0,0-.54,5,22.17,22.17,0,0,1-13.3-3.63ZM36.36,37.3a28,28,0,0,1-5.62,6.18A38.56,38.56,0,0,1,21.45,49a9.77,9.77,0,0,0-2.86-2.84,31.69,31.69,0,0,0,10.84-6.6,13.85,13.85,0,0,0,2.9-3.49Zm5.41,1.62C39,43,38.21,44,36,46c-3.31,3.1-7.13,5.41-12.73,7.76a12.81,12.81,0,0,0-3.36-3.37c6.53-2.29,11-5.06,14.72-9.12a16.78,16.78,0,0,0,2.52-3.51ZM34.25,27.24c-1.44-1-1.44-1-2-1.34-1.57.63-3.37,1.29-5.46,2-.09.74-.11,1.11-.21,1.58Z"
+          />
+          <path fill="#2979FF" d="M53.18,18.16c1.71-.5,2.67-.82,3.67-1.21.2,1,.35,1.52.8,3.18C63,38.87,63,41,58.06,42.48c-.68.2-1.5.41-2.62.63a17.35,17.35,0,0,0-2.16-4.37,16.41,16.41,0,0,0,2.46-.38c1-.28,1.07-.62.77-2.66-.43-3.08-1.16-6-3.07-12.75l-1.62.47a47.17,47.17,0,0,1,1.57,12.14,29.58,29.58,0,0,1-1.63,9.54,17.78,17.78,0,0,0-4.9-3.56,22.22,22.22,0,0,0,1.49-7.23,37,37,0,0,0-1.21-9.51l-1.06.31a21.65,21.65,0,0,0-2.94,1l-1.41-4.79a24.83,24.83,0,0,0,3.47-.85l.81-.24-.49-1.68a28.24,28.24,0,0,0-1.11-3.19l5-1.48a18.57,18.57,0,0,0,.77,3.19c.19.76.27,1,.46,1.79Zm16.28,21L64.67,40.6a29.88,29.88,0,0,0-.87-3.66L58.15,17.71A26.41,26.41,0,0,0,57,14.49a27.61,27.61,0,0,0,3-.74l6.56-1.93a24.8,24.8,0,0,0,2.89-1,25.67,25.67,0,0,0,.8,3.31l5.56,18.92a25.47,25.47,0,0,0,1.32,3.8L72.28,38.3l-.66-2.24-2.83.83Zm-2-6.66,2.83-.83L66,16.8l-2.83.83Z"
+          />
+          <path fill="#2979FF" d="M20.88,63.39A14.4,14.4,0,0,1,7.08,53.06L1.41,33.78a14.39,14.39,0,0,1,9.74-17.84L62.76.78A14.37,14.37,0,0,1,80.6,10.52L86.27,29.8a14.37,14.37,0,0,1-9.74,17.84L24.92,62.8A14.31,14.31,0,0,1,20.88,63.39ZM66.81,6.19a8.35,8.35,0,0,0-2.36.34L12.85,21.69a8.38,8.38,0,0,0-5.67,10.4l5.66,19.28A8.38,8.38,0,0,0,23.23,57L74.84,41.89a8.37,8.37,0,0,0,5.67-10.4L74.85,12.21A8.39,8.39,0,0,0,66.81,6.19Z"
+          />
+        </g>
+      </svg>
+
+      <svg class="stamp-large consider-stamp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87 64" style="top: 10px; right: 10px;">
+        <title>検討スタンプ</title>
+        <g id="Layouts">
+          <path fill="#EE632C" d="M33.32,31.33l3.86-1.13a21,21,0,0,0,2.61-.9c.23,1.12.39,1.78.64,2.65l1.31,4.45a22.35,22.35,0,0,0,.83,2.36,26.55,26.55,0,0,0-2.9.72l-2.49.73a13,13,0,0,0,8.49,1.39A19.3,19.3,0,0,0,45,47a16.64,16.64,0,0,1-5.54-.91,13.06,13.06,0,0,1-4.68-2.58c-.88,3.57-2.56,5.79-6.35,8.29A15.49,15.49,0,0,0,24.75,48c3.39-1.7,4.71-3.07,5.65-5.85l-1.93.57a25.94,25.94,0,0,0-2.79,1c-.2-.92-.32-1.33-.54-2.07l-1.33-4.51a29,29,0,0,0-.24,4.13,11.52,11.52,0,0,1-2.27-2.31c.28.83.58,1.75,1,3.12l2,6.66a38.18,38.18,0,0,0,1.37,4l-4.88,1.43a39,39,0,0,0-1-4.07l-1.21-4.11c-.21-.72-.57-2.06-.8-3.08a20,20,0,0,1-.81,5.64,24.67,24.67,0,0,0-3.26-4.75,21.93,21.93,0,0,0,1.11-9.35l-.75.22a9.1,9.1,0,0,0-2,.75l-1.36-4.63a9,9,0,0,0,2.07-.44L13.8,30l-.59-2a23.44,23.44,0,0,0-1.15-3.21L17,23.32a23.75,23.75,0,0,0,.77,3.32l.59,2,.56-.17A6.6,6.6,0,0,0,20.27,28l.36,1.21a22.13,22.13,0,0,0,2.27-2.73A12.74,12.74,0,0,0,25.24,21l4.67-1.37A11.81,11.81,0,0,0,35,22.38a19.8,19.8,0,0,0,5.33.9,23.27,23.27,0,0,0-.73,5,21.78,21.78,0,0,1-3.77-.75l.51,1.74c-.54.13-1.08.25-2.26.6L33,30.18ZM28,31.64a22.27,22.27,0,0,0-2.22.72l-.48-1.62a29.33,29.33,0,0,1-2.14,2.39,21.71,21.71,0,0,0-2-2.14l.46,1.56a6.38,6.38,0,0,0-1.37.27l-.47.14a12.57,12.57,0,0,0,3.77,3.29c-.28-.83-.42-1.3-.66-1.9a26,26,0,0,0,2.6-.7l3.61-1.06-.34-1.15Zm3.91-5.54a13.77,13.77,0,0,1-3.11-2,15.56,15.56,0,0,1-1.34,3.27ZM28.15,36.73l.6,2.05,1.8-.53c-.16-.77-.23-1.12-.45-2.1Zm6.16-1.81c.23.88.28,1.17.48,2.09l2.27-.67-.6-2.05Z"
+          />
+          <path fill="#EE632C" d="M41.46,16.7A23.53,23.53,0,0,0,44.33,16l5.2-1.53a23.61,23.61,0,0,0,2.79-1l1.07,3.64c-.86.18-1.49.34-2.86.74l-5.2,1.53c-1.34.39-2,.63-2.8.92Zm.19,4.78a14.59,14.59,0,0,0,2.57-.58l7.65-2.25a25.42,25.42,0,0,0,2.49-.83L55.58,22a15.91,15.91,0,0,0-2.49.63l-7.72,2.27a20.21,20.21,0,0,0-2.48.87Zm2.65,4.76a16.32,16.32,0,0,0,1.88-.49l7.19-2.11a13.78,13.78,0,0,0,1.76-.58l1,3.52a15,15,0,0,0-1.79.46l-7.19,2.11a16.29,16.29,0,0,0-1.85.61Zm1.31,4.45a16.13,16.13,0,0,0,1.88-.49l7.16-2.1a14.28,14.28,0,0,0,1.79-.59l1,3.52a16.6,16.6,0,0,0-1.88.49l-7.16,2.1a15.67,15.67,0,0,0-1.79.59Zm4,14.9c-.19-1-.45-2.1-.74-3.09l-1.47-5a17.55,17.55,0,0,0-.8-2.27A22.71,22.71,0,0,0,49,34.61L56,32.53a10,10,0,0,0,1.9-.66A20.81,20.81,0,0,0,58.44,34L60,39.43c.29,1,.52,1.64.81,2.4l-4.48,1.32-.25-.84-2.3.68.38,1.28Zm3-6.25,2.43-.71L54.5,36.7l-2.43.71Zm21.12-5.76c.63,2.15.4,3.43-.69,4.33-.79.64-2.15,1.2-4.92,2-.75.22-1.35.36-2.61.67A19.72,19.72,0,0,0,63,36.12c1.74-.31,3.39-.66,4.48-1s1.41-.62,1.23-1.21L64.85,20.75l-4.51,1.33a36.77,36.77,0,0,0-3.71,1.29l-1.41-4.79a29.44,29.44,0,0,0,3.76-.9l4.57-1.34-.59-2a34.87,34.87,0,0,0-1.37-4l5.1-1.5a34.53,34.53,0,0,0,1,4.1l.59,2a23.28,23.28,0,0,0,2.93-1.06l1.4,4.76a27,27,0,0,0-3,.72ZM60.26,23.41A41.4,41.4,0,0,1,66.5,29.9l-3.61,3.7a34.73,34.73,0,0,0-5.95-6.91Z"
+          />
+          <path fill="#EE632C" d="M20.88,63.39A14.4,14.4,0,0,1,7.08,53.06L1.41,33.78a14.39,14.39,0,0,1,9.74-17.84L62.76.78A14.37,14.37,0,0,1,80.6,10.52L86.27,29.8a14.37,14.37,0,0,1-9.74,17.84L24.92,62.8A14.31,14.31,0,0,1,20.88,63.39ZM66.81,6.19a8.35,8.35,0,0,0-2.36.34L12.85,21.69a8.38,8.38,0,0,0-5.67,10.4l5.66,19.28A8.38,8.38,0,0,0,23.23,57L74.84,41.89a8.37,8.37,0,0,0,5.67-10.4L74.85,12.21A8.39,8.39,0,0,0,66.81,6.19Z"
+          />
+        </g>
+      </svg>
+    </div>
+    <div class="plan-article">
+      <div class="etc_area mb-3">
+        <div class="evaluation">
+          {{#if (eq planStatus "consideration")}}
+          <i class="fa fa-star fa-2x icon-middle plan-info-ic active"></i>
+          {{else}}
+          <i class="fa fa-star fa-2x icon-middle plan-info-ic"></i>
+          {{/if}}
+          <span class="plan-info-icon-text">
+            <a>25</a>
+          </span>
+          {{#if (eq planStatus "confirm")}}
+          <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic active"></i>
+          {{else}}
+          <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>
+          {{/if}}
+          <span class="plan-info-icon-text">
+            <a>123</a>
+          </span>
+        </div>
+        <div class="date text-right">{{postDate postDate}}</div>
+      </div>
+
+      <div class="plan-info-title">
+        {{title}}
+      </div>
+
+      <div class="plan-info-text">
+        {{detail}}
+        <br> 日時:{{eventDate start}}{{eventTime start}} ～ {{eventTime end}}
+        <br> {{recruiterLabel}} : {{recruiter}}
+      </div>
+
+      <div class="plan-info-place mb-2 mt-2">
+        <div class="plan-info-place-title mb-2">開催場所</div>
+        <div class="place-map mb-2">
+          <img src="{{mapImage}}" style="width: 100%;">
+        </div>
+        <div class="place-address  mb-2">
+          {{place}}
+          <br> 住所:〒{{postalCode}} {{address}}
+          <br> お問い合わせ:{{phoneNumber}}
+        </div>
+      </div>
+    </div>
+    <div class="reference-skill">
+      参照されたあなたのスキル:<br>
+      {{skills}}
+    </div>
+  
+  </script>
+
+  <script>
+      dispInfo = function(tempEvent) {
+        Handlebars.registerHelper({
+          'eq': function(v1, v2) {
+            return v1 == v2;
+          },
+          'postDate': function(date) {
+            return moment(date).format('YYYY/MM/DD(ddd) H:mm');
+          },
+          'eventDate': function(date) {
+            return moment(date).format('M/DD (ddd) ');
+          },
+          'eventTime': function(date) {
+            return moment(date).format('H:mm');
+          }
+        });
+        var source = $("#main-template").text();
+        var template = Handlebars.compile(source);
+        var html = template(tempEvent);
+        $("#main-area").html(html);
+
+        source = $("#header-template").text();
+        template = Handlebars.compile(source);
+        html = template(tempEvent);
+        $("#header-area").html(html);
+
+        if (tempEvent.planStatus === "confirm") {
+          $('.plan-check-btn').click();
+        } else if (tempEvent.planStatus === "consideration") {
+          $('.plan-star-btn').click();
+        }
+      }
+  </script>
+
+  <footer>
+    <button type="button" class="btn footer-btn plan-footer-btn plan-star-btn" data-label="検討する" data-label-ng="検討しない">検討する</button>
+    <button type="button" class="btn footer-btn plan-footer-btn plan-check-btn" data-label="参加する" data-label-ng="参加しない">参加する</button>
+  </footer>
+</body>
+
+</html>

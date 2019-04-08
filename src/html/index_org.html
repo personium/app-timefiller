@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
+  <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
+  <link rel="stylesheet" href="./css/personium.css">
+  <link rel="stylesheet" href="./css/skillshare.css">
+
+  <!-- Optional JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next/8.4.3/i18next.min.js"></script>
+  <script src="https://unpkg.com/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/i18next-browser-languagedetector/2.0.0/i18nextBrowserLanguageDetector.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-i18next/1.2.0/jquery-i18next.min.js"></script>
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="./js/jquery-3.2.1.min.js"></script>
+  <script src="./js/popper-1.12.9.min.js"></script>
+  <script src="./js/bootstrap-4.0.0.min.js"></script>
+  <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
+  <script src="./js/common.js"></script>
+  <script src="./js/app.js"></script>
+  <script src="./js/registerEvent.js"></script>
+  <script src="./js/skillshare.js"></script>
+  
+  <title>登録イベント一覧</title>
+</head>
+
+<body>
+  <header class="top schedule-list">
+    <div class="header-title">
+      <div class="title">登録イベント一覧</div>
+    </div>
+    <button class="header-btn pn-btn header-right"  onclick="javascript:location.href = 'event_info.html';">
+      新規作成
+    </button>
+  </header>
+
+  <main class="e-footer event-list">
+
+    <div class="slider">
+      <div class="slide-set">
+        <div class="list">
+          <ul id="plan-list" class="plan-list-area"></ul>
+          <ul id="not-plan-list" class="plan-list-area" style="display:none">
+            <li>
+              登録イベントはありません。
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+  <script id="plans-template" type="text/x-handlebars-template">
+    {{#each this}}
+    {{#if (dispPage pageType)}}
+     <a href="event_info.html?eventId={{__id}}">
+      <li class="{{planStatus}}-schedule event">
+        <div class="list-image">
+          <div class="list-thumbnail-m">
+            <img src="{{image}}" class="list-thumbnail">
+          </div>
+        </div>
+        <div class="list-text">
+          <div class="title">
+            {{title}}
+          </div>
+          <div class="etc_area">
+            <div class="status">
+              {{time startDate}}～{{time endDate}}
+            </div>
+            <div class="evaluation">
+              {{#if (eq planStatus "consideration")}}
+              <i class="fa fa-star fa-2x icon active"></i>
+              {{else}}
+              <i class="fa fa-star fa-2x icon"></i>
+              {{/if}}
+              <span>25</span>
+              {{#if (eq planStatus "confirm")}}
+              <i class="fas fa-check-circle fa-2x icon active"></i>
+              {{else}}
+              <i class="fas fa-check-circle fa-2x icon"></i>
+              {{/if}}
+              <span>123</span>
+            </div>
+          </div>
+        </div>
+      </li>
+    </a>
+    {{/if}}
+    {{/each}}
+  </script>
+
+  <footer class="schedule-list">
+    <button id="prev-btn">
+      <i class="fas fa-caret-left fa-2x icon"></i>
+    </button>
+    <span id="page"></span>
+    <button id="next-btn">
+      <i class="fas fa-caret-right fa-2x icon"></i>
+    </button>
+  </footer>
+
+  <script>
+      additionalCallback = function() {
+        var paramObj = {};
+        publishEvent();
+        paramObj.callback = function(odataObj) {
+          events = odataObj.d.results;
+          let cnt = 0;
+          _.each(events, function(event, index, list) {
+            event.pageType = Math.floor(cnt / PAGE_DISP_NUM) + 1;
+            cnt++;
+          })
+
+          setHandlebars();
+        }
+        getEventList(paramObj);
+      }
+
+      setHandlebars = function() {
+        dataCnt = events.length;
+        if (nowPage == 1) {
+          $('#prev-btn').css("color", "#DDDDDD");
+          $('#prev-btn').css("pointer-events", "none");
+        } else {
+          $('#prev-btn').css("color", "");
+          $('#prev-btn').css("pointer-events", "auto");
+        }
+        if (dataCnt <= (nowPage * PAGE_DISP_NUM)) {
+          $('#next-btn').css("color", "#DDDDDD");
+          $('#next-btn').css("pointer-events", "none");
+        } else {
+          $('#next-btn').css("color", "");
+          $('#next-btn').css("pointer-events", "auto");
+        }
+        $("#page").text(nowPage);
+
+        if (dataCnt > 0) {
+          $("#plan-list").show();
+          $("#not-plan-list").hide();
+        } else {
+          $("#plan-list").hide();
+          $("#not-plan-list").show();
+        }
+        
+        Handlebars.registerHelper({
+          'eq': function(v1, v2) {
+            return v1 == v2;
+          },
+          'time': function(date) {
+            return moment(date).format('H:mm');
+          },
+          'dispPage': function(type) {
+            return (nowPage == type);            
+          }
+        });
+        var source = $("#plans-template").text();
+        var template = Handlebars.compile(source);
+        var html = template(events);
+        $("#plan-list").html(html);
+      }
+
+      $('#prev-btn').off().click(function () {
+        nowPage--;
+        setHandlebars();
+      });
+
+      $('#next-btn').off().click(function () {
+        nowPage++;
+        setHandlebars();
+      });
+  </script>
+</body>
+
+</html>
