@@ -139,9 +139,13 @@ function getEventInfo() {
 	return result;
 }
 
-function updateEvent(eventInfo, id) {
+function updateEvent(eventInfo, updid) {
+	let id = updid;
 	// Event registration
 	updateEventAPI(eventInfo, id).done(function(data, text, response) {
+		if (data) {
+			id = data.d.results.__id;
+		}
 		let callback = function() {
 			let msgId = "glossary:eventMessage.regist";
 			if (id) {
@@ -152,7 +156,7 @@ function updateEvent(eventInfo, id) {
 				location.href = "index_org.html";
 			});
 		}
-		if (response.status == 204) {
+		if (response.status == 201 || response.status == 204) {
 			updateEventList(id, eventInfo).done(function() {
 				callback();
 			}).fail(function(e) {
