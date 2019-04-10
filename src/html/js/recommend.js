@@ -34,24 +34,37 @@ function getRecommendList(nowDate, callback) {
 
     // Create reccomend event
     let recommendSchedule = [];
-    // home
-    recommendSchedule.push({
-        "type": "home",
-        "planStatus": "confirm",
-        "title": "自宅",
-        "startDate": startMoment.toISOString(),
-        "endDate": moment(startMoment).add(30, "minutes").toISOString()
-    });
 
     // Calendar linkage
-    let cSchedule = [];
+    let cSchedule = {
+      "allday": [],
+      "oneday": []
+    };
     getPCalendarSchedule(startMoment.format("YYYY-MM-DD")).done(function(schedule) {
       cSchedule = schedule;
     }).fail(function(e) {
       console.log(e);
     }).always(function() {
-      // calendar
-      recommendSchedule = setRecommendSchedule(recommendSchedule, cSchedule);
+      // calendar:allday
+      if (cSchedule.allday.length > 0) {
+        $("#recommended-schedule").addClass("mask-event");
+        recommendSchedule.push({
+          "type": "allday",
+          "title": cSchedule.allday,
+        })
+      }
+
+      // home
+      recommendSchedule.push({
+          "type": "home",
+          "planStatus": "confirm",
+          "title": "自宅",
+          "startDate": startMoment.toISOString(),
+          "endDate": moment(startMoment).add(30, "minutes").toISOString()
+      });
+
+      // calendar:oneday
+      recommendSchedule = setRecommendSchedule(recommendSchedule, cSchedule.oneday);
 
       // Review / Participation
       recommendSchedule = setRecommendSchedule(recommendSchedule, todayPlanningList);

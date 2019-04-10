@@ -6,11 +6,23 @@
 	margin-right: 30px;
 }
 
-.ellipsis:before, .ellipsis:after {
+.mask-event .ellipsis:not(.not-mask):before,
+.mask-event .ellipsis:not(.not-mask):after {
+	background: #e9e9e9 !important;
+}
+
+.ellipsis:before,
+.ellipsis:after {
 	position: absolute;
 	background: #fafafa;
 }
-.consideration-schedule .ellipsis:before, .consideration-schedule .ellipsis:after {
+
+.mask-event .consideration-schedule .ellipsis:not(.not-mask):before,
+.mask-event .consideration-schedule .ellipsis:not(.not-mask):after {
+	background: #e9e9e9 !important;
+}
+.consideration-schedule .ellipsis:before,
+.consideration-schedule .ellipsis:after {
 	position: absolute;
 	background: #fafafa;
 }

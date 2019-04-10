@@ -254,6 +254,10 @@ main.schedule-list .list ul li {
   border-bottom: 0;
 }
 
+.mask-event li:not(.not-mask) {
+  background-color: #E9E9E9 !important;
+}
+
 .list ul li {
   display: flex;
   background: #fafafa;
@@ -268,6 +272,10 @@ main.schedule-list .list ul li {
   flex: 0 0 auto;
   position: relative;
   display: flex;
+}
+
+.mask-event li.time-list:not(.not-mask) {
+  background-color: #D5D6D7 !important;
 }
 
 .list ul li.time-list {
@@ -388,7 +396,7 @@ main.schedule-list .list ul li {
 }
 
 .list ul li.schedule-list-s {
-  height: 75px;
+  min-height: 75px;
 }
 
 .list ul li.schedule-list-m {
@@ -399,17 +407,29 @@ main.schedule-list .list ul li {
   height: 140px;
 }
 
+.mask-event li.default-schedule:not(.not-mask) {
+  background-color: #E0E1E1 !important;
+}
+
 .list ul li.default-schedule {
   background-color: #F1F2F2;
+  display: table;
 }
 
 .list ul li.default-schedule .list-text {
   border-left: 5px solid #6D6F71;
+  display: table-cell;
+  width: 100%;
 }
 
 .list ul li.default-schedule .list-text .title {
   display: table;
   margin: auto 0;
+}
+
+.list ul li.default-schedule .list-image {
+  display: table-cell;
+  vertical-align: middle;
 }
 
 .list ul li.confirm-schedule,
