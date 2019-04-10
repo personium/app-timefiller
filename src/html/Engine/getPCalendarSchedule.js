@@ -14,7 +14,10 @@ function(request){
         var aaat = appToken.access_token;
 
         // Definition of return variable
-        var calendarSchedule = [];
+        var calendarSchedule = {
+            "allday": [],
+            "oneday": []
+        };
 
         // Acquisition of token for Calendar Box access
         var url = params.p_target + "__token";
@@ -44,7 +47,7 @@ function(request){
         var sDate = dayMoment.startOf("day").toISOString();
         var eDate = dayMoment.endOf("day").toISOString();
         url = pcalBoxUrl + "OData/vevent?";
-        url += encodeURI("$top=1000&$filter=dtend ge datetimeoffset'"+sDate+"' and dtstart le datetimeoffset'"+eDate+"'&$orderby=dtstart desc");
+        url += encodeURI("$top=1000&$filter=dtend ge datetimeoffset'"+sDate+"' and dtstart le datetimeoffset'"+eDate+"'&$orderby=dtstart asc");
         var pcalDataRes = httpClient.get(url, headers);
         if (pcalDataRes.status == "403" || pcalDataRes.status == "404") {
             // Personium Calendar is not installed
@@ -71,53 +74,60 @@ function(request){
         var cTitle = []; // title
         var cSDate = ""; // event start date
         var cEDate = ""; // event end date
+        var no = 1;
         _.each(pcalData, function(data, index, list) {
-            if (cSDate == "") {
-                // First event
-                cTitle.push(data.summary);
-                cSDate  = data.dtstart;
-                cEDate = data.dtend;
+            if (data.allDay) {
+                calendarSchedule.allday.push(data.summary);
             } else {
-                var tempPrevDate = moment(cEDate);
-                var tempSDate = moment(data.dtstart);
-                if (tempPrevDate.isSameOrAfter(tempSDate)) {
-                    // Added title because event is duplicated
-                    cTitle.push(data.summary);
-                    var tempEDate = moment(data.dtend);
-                    if (tempPrevDate.isBefore(tempEDate)) {
-                        cEDate = data.dtend;
-                    }
-                } else {
-                    var schedule = {
-                        "__id": "calendar_event",
-                        "type": "calendar",
-                        "summary": cTitle,
-                        "startDate": cSDate,
-                        "endDate": cEDate,
-                        "image": pcalProfImage
-                    };
-                    calendarSchedule.push(schedule);
-
-                    cTitle = [];
-                    cTitle.push(data.summary);
+                if (cSDate == "") {
+                    // First event
+                    cTitle.push({"title":data.summary});
                     cSDate  = data.dtstart;
                     cEDate = data.dtend;
-                }
-            }            
+                } else {
+                    var tempPrevDate = moment(cEDate);
+                    var tempSDate = moment(data.dtstart);
+                    if (tempPrevDate.isSameOrAfter(tempSDate)) {
+                        // Added title because event is duplicated
+                        cTitle.push({"title":data.summary});
+                        var tempEDate = moment(data.dtend);
+                        if (tempPrevDate.isBefore(tempEDate)) {
+                            cEDate = data.dtend;
+                        }
+                    } else {
+                        var schedule = {
+                            "__id": "calendar_event" + no,
+                            "type": "calendar",
+                            "summary": cTitle,
+                            "startDate": cSDate,
+                            "endDate": cEDate,
+                            "image": pcalProfImage
+                        };
+                        calendarSchedule.oneday.push(schedule);
+                        no++;
+    
+                        cTitle = [];
+                        cTitle.push({"title":data.summary});
+                        cSDate  = data.dtstart;
+                        cEDate = data.dtend;
+                    }
+                }     
+            }       
         })
         if (cSDate != "") {
             var schedule = {
-                "__id": "calendar_event",
+                "__id": "calendar_event" + no,
                 "type": "calendar",
                 "summary": cTitle,
                 "startDate": cSDate,
                 "endDate": cEDate,
                 "image": pcalProfImage
             };
-            calendarSchedule.push(schedule);
+            calendarSchedule.oneday.push(schedule);
         }
 
         return personium.createResponse(200, calendarSchedule);
+
     } catch (e) {
         return personium.createErrorResponse(e);
     }

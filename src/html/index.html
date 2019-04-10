@@ -82,6 +82,27 @@
 
           <script id="recommended-template" type="text/x-handlebars-template">
             {{#each this}}
+            
+            {{#if (eq type "allday")}}
+            <li class="time-list not-mask">
+              <div class="list-text">
+                終日イベント
+              </div>
+            </li>
+            <li class="default-schedule schedule-list-s not-mask">
+              <div class='list-image'>
+                <div class='list-thumbnail-xs'>
+                </div>
+              </div>
+              <div class="list-text">
+                {{title}}
+              </div>
+            </li>
+            <li class="time-list not-mask">
+              <div class="list-text">
+              </div>
+            </li>
+            {{/if}}
 
             {{#if (eq type "home")}}
             <!-- Start from home -->
@@ -145,9 +166,11 @@
                 </div>
               </div>
               <div class="list-text">
+                {{#each summary}}
                 <div class="title">
-                  {{summary}}
+                  ・{{title}}
                 </div>
+                {{/each}}
               </div>
             </li>
             <li class="time-list">
