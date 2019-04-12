@@ -17,31 +17,20 @@ function(request){
             uuid = uuidRes[0].__id;
         }
 
-        // Information setting
-        var propList = {};
-        propList['event_id'] = params.eventId;
-        propList['cellUrl'] = params.cellUrl;
-        propList['startDate'] = params.startDate;
-        propList['endDate'] = params.endDate;
-        propList['title'] = params.title;
-        propList['image'] = params.image;
-        propList['serviceImage'] = params.serviceImage;
-        propList['serviceName'] = params.serviceName;
+        var resMsg = "delete success";
         if (uuid) {
-            // If uuid can be obtained
-            // Update data
-            odataEntity.merge(
-                uuid,
-                propList,
-                "*"
-            );
+            var httpClient = new _p.extension.HttpClient();
+            var delUrl = accInfo.APP_CELL_URL + "__/OData/EventList" + "('" + uuid + "')";
+            var headers = {
+                "Accept": "application/json",
+                "Authorization": "Bearer " + cell.getToken().access_token
+            }
+            var res = httpClient.delete(delUrl, headers);
         } else {
-            // If uuid can not be acquired
-            // Create New
-            odataEntity.create(propList);
+            resMsg = "Target does not exist";
         }
         
-        return personium.createResponse(200, "success");
+        return personium.createResponse(200, resMsg);
     } catch (e) {
         return personium.createErrorResponse(e);
     }
