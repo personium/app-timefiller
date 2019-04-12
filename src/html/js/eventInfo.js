@@ -1,3 +1,6 @@
+let profName = "";
+let profImage = "";
+
 $(function () {
     let selectedEventId = location.search.match(/eventId=(.*?)(&|$)/);
     if (_.isUndefined(selectedEventId) || _.isNull(selectedEventId)) {
@@ -26,6 +29,11 @@ $(function () {
     }
 
     $("#cellUrl").val(Common.getCellUrl());
+
+    Common.getProfile(Common.getCellUrl(), function(data){
+    	profName = data.dispName;
+    	profImage = data.dispImage;
+    })
 })
 
 function disableControl(disabled) {
@@ -78,10 +86,12 @@ function deleteEvent() {
 	Common.showConfirmDialog("glossary:eventMessage.confirmDelete", function() {
 		$("#modal-common #b-common-cancel").hide();
 		deleteVEventAPI(id).done(function() {
-			let msgId = "glossary:eventMessage.delete";
-			Common.openCommonDialog(msgId, "glossary:eventMessage.back", function() {
-				location.href = "index_org.html";
-			});
+			deleteEventList(id).done(function() {
+				let msgId = "glossary:eventMessage.delete";
+				Common.openCommonDialog(msgId, "glossary:eventMessage.back", function() {
+					location.href = "index_org.html";
+				});
+			})
 		}).fail(function(e) {
 			console.log(e);
 		});
@@ -133,7 +143,9 @@ function getEventInfo() {
 		startDate: "/Date(" + moment(start).valueOf() + ")/",
 		endDate: "/Date(" + moment(end).valueOf() + ")/",
 		address: $("#address").val(),
-		mapImage: "https://app-timefiller-wakaba.demo.personium.io/__/html/diy/img/map/34.66746-135.81908.png"
+		mapImage: "https://app-timefiller-wakaba.demo.personium.io/__/html/diy/img/map/34.66746-135.81908.png",
+		serviceImage: profImage,
+		serviceName: profName
 	};
 
 	return result;
@@ -148,7 +160,7 @@ function updateEvent(eventInfo, updid) {
 		}
 		let callback = function() {
 			let msgId = "glossary:eventMessage.regist";
-			if (id) {
+			if (updid) {
 				msgId = "glossary:eventMessage.update";
 			}
 			// Registration success modal
@@ -212,12 +224,30 @@ function deleteVEventAPI(id) {
  		cellUrl: Common.getCellUrl(),
  		startDate: eventInfo.startDate,
  		endDate: eventInfo.endDate,
- 		summary: eventInfo.title,
- 		image: eventInfo.image
+ 		title: eventInfo.title,
+ 		image: eventInfo.image,
+ 		serviceName: eventInfo.serviceName,
+ 		serviceImage: eventInfo.serviceImage
  	}
  	return $.ajax({
  		type: "POST",
  		url: Common.getAppCellUrl() + "__/html/Engine/registerEventList",
+ 		data: temp,
+ 		headers: {
+            'Accept':'application/json',
+            'Authorization':'Bearer ' + Common.getToken()
+        }
+ 	})
+ }
+
+ function deleteEventList(id) {
+ 	let temp = {
+ 		eventId: id,
+ 		cellUrl: Common.getCellUrl()
+ 	}
+ 	return $.ajax({
+ 		type: "POST",
+ 		url: Common.getAppCellUrl() + "__/html/Engine/deleteEventList",
  		data: temp,
  		headers: {
             'Accept':'application/json',
