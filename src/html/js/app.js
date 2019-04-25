@@ -392,7 +392,7 @@ function initOpenLayer(mapId, lon, lat) {
 
   // Draw destination marker on map
   var imgElement = document.createElement('img');
-  imgElement.setAttribute("src", "https://app-timefiller-wakaba.demo.personium.io/__/html/img/map-pin.png");
+  imgElement.setAttribute("src", APP_URL + "__/html/img/map-pin.png");
   var marker = new ol.Overlay({
     element: imgElement,
     position: ol.proj.fromLonLat([lon, lat]),
