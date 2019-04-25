@@ -106,7 +106,7 @@
 
   <script>
       $(function() {
-        nowMoment = moment("2018-03-18T09:00:00+09:00");
+        nowMoment = moment(sessionStorage.day);;
         $("#title-date").text(nowMoment.format('M/DD(ddd)'));
         var paramObj = {};
         paramObj.callback = function(odataObj) {

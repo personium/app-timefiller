@@ -325,7 +325,7 @@ footer {
 }
 
 .add-event li {
-    min-height: 35px;
+    min-height: 20px;
 }
 
 .separate-li {
@@ -338,7 +338,7 @@ footer {
 }
 
 .event-info-title {
-    width: 7.0rem;
+    width: 9.0rem;
     margin: auto 0px;
     padding: .375rem .75rem;
 }
@@ -461,7 +461,7 @@ input:checked+label::after {
 }
 
 .no-footer{
-    padding-bottom: 0px;
+    padding-bottom: 5px;
 }
 
 .text-btn{

@@ -72,13 +72,16 @@ function getRecommendList(nowDate, callback) {
       // Other
       recommendSchedule = setRecommendSchedule(recommendSchedule, planList);
       let lastHomeEndMoment = moment(recommendSchedule[recommendSchedule.length - 1].endDate);
-      recommendSchedule.push(getMove());
-      recommendSchedule.push({
+      var homePlan = {
           "type": "home",
           "planStatus": "confirm",
           "title": "自宅",
           "startDate": lastHomeEndMoment.add(30, "minutes").toISOString()
-      });
+      }
+      if (checkLonLat(recommendSchedule, homePlan, recommendSchedule.length - 1)) {
+        recommendSchedule.push(getMove());
+      }
+      recommendSchedule.push(homePlan);
   
       if ((typeof callback !== "undefined") && $.isFunction(callback)) {
         callback(recommendSchedule);
@@ -98,8 +101,8 @@ function setRecommendSchedule(resultList, list) {
     if (grepList.length <= 0) {
       // Get Start date and time of Scheduled Registration Event
       let planStartMoment = moment(plan.startDate);
-      // Get the end date and time of scheduled registration event (provisionally, add 30 minutes travel time)
-      let planEndMoment = moment(plan.endDate).add(30, "minutes");
+      // Get the end date and time of scheduled registration event
+      let planEndMoment = moment(plan.endDate);
       let tempPrevCnt = 0;
       let tempPrevRes = null;
       let resCnt = 0;
@@ -111,9 +114,41 @@ function setRecommendSchedule(resultList, list) {
         if (res.endDate) {
           // Get start date and time of scheduled event
           let resStartMoment = moment(res.startDate);
-          if (resStartMoment.isSameOrAfter(planEndMoment)) {
+          let tempPlanEndMoment = moment(planEndMoment);
+          if (res.longitude && res.latitude) {
+            // Calculate travel time if latitude / longitude is registered to the next event of the event to be inserted
+            let lon = plan.longitude;
+            let lat = plan.latitude;
+            if (!lon || !lat) {
+              // If there is no latitude / longitude in the event to be inserted, use the previous latitude / longitude
+              for (var i = tempPrevCnt; i >= 0; i--) {
+                if (result[i].longitude && result[i].latitude) {
+                  lon = result[i].longitude;
+                  lat = result[i].latitude;
+                  break;
+                }
+              }
+            }
+            // Get travel time (minutes)
+            let addMinutes = getTravelTime(res.longitude, res.latitude, lon, lat);
+            tempPlanEndMoment = moment(planEndMoment).add(addMinutes, "minutes");
+          }
+          if (resStartMoment.isSameOrAfter(tempPlanEndMoment)) {
             if (tempPrevRes) {
-              let prevResEndMoment = moment(tempPrevRes.endDate).add(30, "minutes");
+              let prevResEndMoment = moment(tempPrevRes.endDate);
+              if (plan.longitude && plan.latitude) {
+                // Calculate the travel time if latitude / longitude is registered for the event to be inserted
+                let prevLonLatIndex = tempPrevCnt;
+                // Get last latitude and longitude
+                for (var i = tempPrevCnt; i >= 0; i--) {
+                  if (result[i].longitude && result[i].latitude) {
+                    prevLonLatIndex = i;
+                    break;
+                  }
+                }
+                let addMinutes = getTravelTime(result[prevLonLatIndex].longitude, result[prevLonLatIndex].latitude, plan.longitude, plan.latitude);
+                prevResEndMoment = moment(tempPrevRes.endDate).add(addMinutes, "minutes");
+              }
               if (prevResEndMoment.isSameOrBefore(planStartMoment)) {
                 // Add an event if time is available to insert in the schedule list
                 pushCnt = resCnt;
@@ -137,18 +172,48 @@ function setRecommendSchedule(resultList, list) {
       if (!skipFlg) {
         if (pushCnt >= 0) {
           // Add an event at the end of the schedule
-          result.splice(pushCnt-1, 0, plan);
-          result.splice(pushCnt-1, 0, getMove());
+          result.splice(pushCnt, 0, plan);
+          if (checkLonLat(result, plan, pushCnt)) {
+            result.splice(pushCnt, 0, getMove());
+          }
         } else if (tempPrevRes && moment(tempPrevRes.endDate).add(30, "minutes").isSameOrBefore(planStartMoment)) {
-          // Insert an event
-          result.push(getMove());
           result.push(plan);
+          // Insert an event
+          if (checkLonLat(result, plan, result.length - 1)) {
+            result.splice(result.length - 1, 0, getMove());
+          }
+          
         }
       }
     }
   })
 
   return result;
+}
+
+/**
+ * Find moving time from start point to end point(minutes)
+ * (Unmounted: fixed for 30 minutes)
+ */
+function getTravelTime(stLon, stLat, edLon, edLat) {
+  return 30;
+}
+
+/**
+ * Check the latitude and longitude of the event to determine the need for travel time
+ */
+function checkLonLat(resultList, plan, index) {
+  if (!resultList[index-1]) {
+    return false;
+  }
+
+  if (plan.type != "home") { //　Interim: type = "home" needs to be moved
+    if (!plan.longitude || !plan.latitude) {
+      return false;
+    }
+  }
+
+  return true;
 }
 
 // Acquisition of movement event
