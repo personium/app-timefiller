@@ -38,6 +38,8 @@
         <Property Name='mapImage' Type='Edm.String' Nullable='true'/>
         <Property Name='serviceImage' Type='Edm.String' Nullable='true'/>
         <Property Name='serviceName' Type='Edm.String' Nullable='true'/>
+        <Property Name='longitude' Type='Edm.Double' Nullable='true'/>
+        <Property Name='latitude' Type='Edm.Double' Nullable='true'/>
       </EntityType>
     </Schema>
   </edmx:DataServices>

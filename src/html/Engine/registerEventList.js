@@ -27,6 +27,8 @@ function(request){
         propList['image'] = params.image;
         propList['serviceImage'] = params.serviceImage;
         propList['serviceName'] = params.serviceName;
+        propList['latitude'] = params.latitude;
+        propList['longitude'] = params.longitude;
         if (uuid) {
             // If uuid can be obtained
             // Update data

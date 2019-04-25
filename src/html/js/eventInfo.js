@@ -58,6 +58,8 @@ function setEvent(data) {
 	$("#dtend_date").val(endMoment.format("YYYY-MM-DD"));
 	$("#dtend_time").val(endMoment.format("HH:mm"));
 	$("#address").val(data.address);
+	$("#latitude").val(data.latitude);
+	$("#longitude").val(data.longitude);
 }
 
 function addEvent() {
@@ -143,9 +145,10 @@ function getEventInfo() {
 		startDate: "/Date(" + moment(start).valueOf() + ")/",
 		endDate: "/Date(" + moment(end).valueOf() + ")/",
 		address: $("#address").val(),
-		mapImage: "https://app-timefiller-wakaba.demo.personium.io/__/html/diy/img/map/34.66746-135.81908.png",
 		serviceImage: profImage,
-		serviceName: profName
+		serviceName: profName,
+		latitude: $("#latitude").val(),
+		longitude: $("#longitude").val()
 	};
 
 	return result;
@@ -213,8 +216,6 @@ function deleteVEventAPI(id) {
     });
 };
 
-
-
 /**********************
    Engine
  **********************/
@@ -227,7 +228,9 @@ function deleteVEventAPI(id) {
  		title: eventInfo.title,
  		image: eventInfo.image,
  		serviceName: eventInfo.serviceName,
- 		serviceImage: eventInfo.serviceImage
+ 		serviceImage: eventInfo.serviceImage,
+ 		latitude: eventInfo.latitude,
+ 		longitude: eventInfo.longitude
  	}
  	return $.ajax({
  		type: "POST",
@@ -249,6 +252,24 @@ function deleteVEventAPI(id) {
  		type: "POST",
  		url: Common.getAppCellUrl() + "__/html/Engine/deleteEventList",
  		data: temp,
+ 		headers: {
+            'Accept':'application/json',
+            'Authorization':'Bearer ' + Common.getToken()
+        }
+ 	})
+ }
+
+ /*
+  * return: {"lng": 値, "lat": 値}
+  */
+ function getLngLat(address) {
+ 	let tmp = {
+ 		address: address
+ 	}
+ 	return $.ajax({
+ 		type: "POST",
+ 		url: Common.getAppCellUrl() + "__/html/Engine/getLngLat",
+ 		data: tmp,
  		headers: {
             'Accept':'application/json',
             'Authorization':'Bearer ' + Common.getToken()

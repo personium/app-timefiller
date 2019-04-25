@@ -121,6 +121,7 @@ Common.prevAdditionalCallback = function(cellUrl, token) {
             Common.setInfo(boxUrl);
             // define your own additionalCallback for each App/screen
             if ((typeof additionalCallback !== "undefined") && $.isFunction(additionalCallback)) {
+                Common.setRefreshTimer();
                 additionalCallback();
             }
         })
