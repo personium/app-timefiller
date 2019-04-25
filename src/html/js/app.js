@@ -478,20 +478,3 @@ function deletePlanningAPI(id) {
         }
     });
 };
-
-/*
- * open street map Function
- */
- function MapInit(lon, lat){
-   //body内のMapCanvas要素読み込み
-   map = new OpenLayers.Map("MapCanvas");
-   //マップAPI読み込み
-   var mapnik = new OpenLayers.Layer.OSM();
-   map.addLayer(mapnik); //MapCanvas要素にAPIセット
-   var lonLat = new OpenLayers.LonLat(139.75, 35.69) //LonLat(経度, 緯度)
-     .transform(
-       new OpenLayers.Projection("EPSG:4326"), 
-       new OpenLayers.Projection("EPSG:900913")
-     );
-   map.setCenter(lonLat, 12); //12はズームサイズ
- }
