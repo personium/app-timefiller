@@ -37,7 +37,17 @@
 <script>
   additionalCallback = function() {
     targetCellName = sessionStorage.cellname;
-    nowMoment = moment("2018-03-18T09:00:00+09:00");
+    if (!sessionStorage.day) {
+      sessionStorage.day = moment().format("YYYY/MM/DD");
+    }
+    let searchParams = new URLSearchParams(location.search);
+    if (searchParams.get("day")) {
+      if (moment(searchParams.get("day")).isValid()) {
+        sessionStorage.day = searchParams.get("day");
+      }
+      
+    }
+    nowMoment = moment(sessionStorage.day);
     $("#today").text(nowMoment.format('M/DD(ddd)'));
     getRecommendList(nowMoment.toISOString(), createList);
 
