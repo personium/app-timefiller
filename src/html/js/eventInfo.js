@@ -50,7 +50,7 @@ function chgSave() {
 function setEvent(data) {
 	$("#event-title").val(data.title);
 	$("#event-image").val(data.image);
-	$("#description").val(data.detail);
+	$("#description").val(data.description);
 	let startMoment = moment(data.startDate);
 	$("#dtstart_date").val(startMoment.format("YYYY-MM-DD"));
 	$("#dtstart_time").val(startMoment.format("HH:mm"));
@@ -141,7 +141,7 @@ function getEventInfo() {
 		id: "personium",
 		title: $("#event-title").val(),
 		image: $("#event-image").val(),
-		detail: $("#description").val(),
+		description: $("#description").val(),
 		startDate: "/Date(" + moment(start).valueOf() + ")/",
 		endDate: "/Date(" + moment(end).valueOf() + ")/",
 		address: $("#address").val(),
