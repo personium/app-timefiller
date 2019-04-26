@@ -19,8 +19,9 @@
         <Property Name='__published' Type='Edm.DateTime' Nullable='false' DefaultValue='SYSUTCDATETIME()' />
         <Property Name='__updated' Type='Edm.DateTime' Nullable='false' DefaultValue='SYSUTCDATETIME()' />
         <Property Name='id' Type='Edm.String' Nullable='false'/>
+        <Property Name='title' Type='Edm.String' Nullable='true'/>
         <Property Name='summary' Type='Edm.String' Nullable='true'/>
-        <Property Name='detail' Type='Edm.String' Nullable='true'/>
+        <Property Name='description' Type='Edm.String' Nullable='true'/>
         <Property Name='startDate' Type='Edm.DateTime' Nullable='true'/>
         <Property Name='endDate' Type='Edm.DateTime' Nullable='true'/>
         <Property Name='recruitmentNumber' Type='Edm.Int32' Nullable='true'/>
@@ -28,14 +29,13 @@
         <Property Name='place' Type='Edm.String' Nullable='true'/>
         <Property Name='address' Type='Edm.String' Nullable='true'/>
         <Property Name='image' Type='Edm.String' Nullable='true'/>
+        <Property Name='thumbnailUrl' Type='Edm.String' Nullable='true'/>
         <Property Name='postDate' Type='Edm.DateTime' Nullable='true'/>
         <Property Name='postalCode' Type='Edm.String' Nullable='true'/>
         <Property Name='phoneNumber' Type='Edm.String' Nullable='true'/>
-        <Property Name='skills' Type='Edm.String' Nullable='true' CollectionKind='List'/>
+        <Property Name='keywords' Type='Edm.String' Nullable='true' CollectionKind='List'/>
         <Property Name='recruiter' Type='Edm.String' Nullable='true'/>
         <Property Name='recruiterLabel' Type='Edm.String' Nullable='true'/>
-        <Property Name='title' Type='Edm.String' Nullable='true'/>
-        <Property Name='mapImage' Type='Edm.String' Nullable='true'/>
         <Property Name='serviceImage' Type='Edm.String' Nullable='true'/>
         <Property Name='serviceName' Type='Edm.String' Nullable='true'/>
         <Property Name='longitude' Type='Edm.Double' Nullable='true'/>
