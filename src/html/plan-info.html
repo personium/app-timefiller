@@ -131,7 +131,9 @@
             <a>123</a>
           </span>
         </div>
-        <div class="date text-right">{{postDate postDate}}</div>
+        {{#if postDate}}
+        <div class="date text-right">掲載日：{{postDate postDate}}</div>
+        {{/if}}
       </div>
 
       <div class="plan-info-title">
@@ -143,24 +145,44 @@
         <br>
         日時:{{eventDate startDate}}{{eventTime startDate}} ～ {{eventTime endDate}}
         <br>
-        {{recruiterLabel}} : {{recruiter}}
+        {{#if recruiterLabel}}
+          {{#if recruiter}}
+            {{recruiterLabel}} : {{recruiter}}
+          {{/if}}
+        {{/if}}
       </div>
 
       <div class="plan-info-place mb-2 mt-2">
-        <div class="plan-info-place-title mb-2">開催場所</div>
+        {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
+          <div class="plan-info-place-title mb-2">開催場所</div>
+        {{/if}}
         <div class="mb-2" id="mapImage" style="height:350px;">
         </div>
         <div class="place-address  mb-2">
-          {{place}}
-          <br> 住所:〒{{postalCode}} {{address}}
-          <br> お問い合わせ:{{phoneNumber}}
+          {{#if place}}
+            {{place}}
+            <br>
+          {{/if}}
+          {{#if address}}
+            住所:
+            {{#if postalCode}}
+              〒{{postalCode}}
+            {{/if}}
+            {{address}}
+          {{/if}}
+          <br>
+          {{#if phoneNumber}}
+            お問い合わせ:{{phoneNumber}}
+          {{/if}}
         </div>
       </div>
     </div>
+    {{#if keywords}}
     <div class="reference-skill">
       参照されたキーワード:<br>
       {{keywords}}
     </div>
+    {{/if}}
   </script>
 
   <script>
@@ -177,6 +199,13 @@
           },
           'eventTime': function(date) {
             return moment(date).format('H:mm');
+          },
+          'Venue': function(place, postalCode, address, lat, lon, phoneNumber) {
+            if (place || postalCode || address || lat || lon || phoneNumber) {
+              return true;
+            } else {
+              return false;
+            }
           }
         });
         var source = $("#main-template").text();
@@ -204,8 +233,8 @@
   </script>
 
   <footer>
-    <button type="button" class="btn footer-btn plan-footer-btn plan-star-btn" data-label="検討する">検討する</button>
-    <button type="button" class="btn footer-btn plan-footer-btn plan-check-btn" data-label="参加する">参加する</button>
+    <button type="button" class="btn full-footer-btn plan-footer-btn plan-star-btn" data-label="検討する">検討する</button>
+    <!--<button type="button" class="btn footer-btn plan-footer-btn plan-check-btn" data-label="参加する">参加する</button>-->
   </footer>
 </body>
 
