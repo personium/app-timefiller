@@ -146,10 +146,14 @@ function getEventInfo() {
 		endDate: "/Date(" + moment(end).valueOf() + ")/",
 		address: $("#address").val(),
 		serviceImage: profImage,
-		serviceName: profName,
-		latitude: $("#latitude").val(),
-		longitude: $("#longitude").val()
+		serviceName: profName
 	};
+	if ($("#latitude").val()) {
+		result.latitude = $("#latitude").val();
+	}
+	if ($("#longitude").val()) {
+		result.longitude = $("#longitude").val();
+	}
 
 	return result;
 }
