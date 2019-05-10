@@ -57,9 +57,13 @@ function setEvent(data) {
 	let endMoment = moment(data.endDate);
 	$("#dtend_date").val(endMoment.format("YYYY-MM-DD"));
 	$("#dtend_time").val(endMoment.format("HH:mm"));
+	$("#postalCode").val(data.postalCode);
 	$("#address").val(data.address);
 	$("#latitude").val(data.latitude);
 	$("#longitude").val(data.longitude);
+	$("#recruiter").val(data.recruiter);
+	$("#phoneNumber").val(data.phoneNumber);
+	$("#keywords").val(data.keywords);
 }
 
 function addEvent() {
@@ -144,9 +148,14 @@ function getEventInfo() {
 		description: $("#description").val(),
 		startDate: "/Date(" + moment(start).valueOf() + ")/",
 		endDate: "/Date(" + moment(end).valueOf() + ")/",
+		postalCode: $("#postalCode").val(),
 		address: $("#address").val(),
 		serviceImage: profImage,
-		serviceName: profName
+		serviceName: profName,
+		recruiterLabel: "依頼者",
+		recruiter: $("#recruiter").val(),
+		phoneNumber: $("#phoneNumber").val(),
+		keywords: $("#keywords").val().split(",")
 	};
 	if ($("#latitude").val()) {
 		result.latitude = $("#latitude").val();
@@ -196,6 +205,8 @@ function updateEventAPI(tempEvent, id) {
 	if (id) {
 		method = "PUT";
 		__id = "('"+id+"')";
+	} else {
+		tempEvent.postDate = "/Date(" + moment().valueOf() + ")/";
 	}
 
 	return $.ajax({
