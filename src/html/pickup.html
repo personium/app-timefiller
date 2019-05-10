@@ -22,6 +22,10 @@
   <script src="./js/popper-1.12.9.min.js"></script>
   <script src="./js/bootstrap-4.0.0.min.js"></script>
   <script defer src="./js/fontawesome-5.0.8.all.js"></script>
+  <script src="./common/underscore/underscore-min.js"></script>
+  <script src="./common/handlebars/handlebars.min.js"></script>
+  <script src="./common/moment/min/moment.min.js"></script>
+  <script src="./common/moment/locale/ja.js" charset="UTF-8"></script>
   <script src="./js/common.js"></script>
   <script src="./js/app.js"></script>
 
@@ -34,290 +38,107 @@
       <div class="title">ピックアップ</div>
     </div>
   </header>
-
   <main class="h-footer">
-
-
     <div class="list">
-      <ul>
+      <ul id="pickup-list"></ul>
+      <ul id="not-pickup-list" style="display:none">
         <li>
-          <a>
-            <div class="contents" style="background-image: url(./img/P-01.JPG);">
-              <div class="contents-text">
-                <div class="title-area">
-                  郷土料理づくりワークショップに参加しませんか？
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【NHL】 5/19
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>200</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>123</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
+          イベントはありません。
         </li>
-        <li>
-          <a>
-            <div class="contents" style="background-image: url(./img/P-02.JPG);">
-              <div class="contents-text">
-                <div class="title-area">
-                  こども工作ワークショップの講師を募集しています。
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【京都市伏見区】 5/20
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>59</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>98</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-03.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  絵画教室の先生を探しています。色鉛筆で風景画を描き…
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【京都市おえかきクラブ】 2018/5/21
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>300</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>79</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-04.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  着付けができる方、いませんか？お茶会で着物を着たい…
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【さちこさん】 5/21
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>60</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>55</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-05.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  訪日外国人のツアーガイドを募集しています。英語が話…
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【NPO法人京都風土記】 5/21
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>39</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>43</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-06.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  合気道経験者募集。<br>
-                  合気道愛好会をよろしくお…
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【合気道愛好会】 5/23
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>20</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>25</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-07.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  ガーデニング初心者講座やります。参加者募集中!!
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【フラワーショップぐりーん】 5/24
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>59</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>27</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-08.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  梅小路公園の掃除をしませんか？
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【下京区自治会】 5/25
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>230</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>57</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-09.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  犬が大きくなったので小屋を作ってくれる方を探してい…
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【山田太郎】 5/25
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>20</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>8</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-10.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                 着付けができる方、いませんか？お茶会で着物を着たい!
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【kyo-chan】 5/31
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>5</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>12</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-11.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  お茶会をしませんか?美味しい茶菓子も食べられます☆
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【茶華道部】 6/1
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>8</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>30</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
-        <li>
-          <a>
-            <div class="contents" style="background-image:url(./img/P-12.JPG)">
-              <div class="contents-text">
-                <div class="title-area">
-                  元プロゴルファーによるゴルフレッスン
-                </div>
-                <div class="etc_area">
-                  <div class="date">
-                    【宇治カントリークラブ】 6/1
-                  </div>
-                  <div class="evaluation">
-                    <i class="fa fa-star fa-2x icon"></i>
-                    <span>20</span>
-                    <i class="fas fa-calendar-check fa-2x icon"></i>
-                    <span>24</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </a>
-        </li>
-
       </ul>
     </div>
   </main>
+  <script id="pickups-template" type="text/x-handlebars-template">
+    {{#each this}}
+    <li>
+      <a>
+        <div class="contents" style="background-image: url({{image}});">
+          <div class="contents-text">
+            <div class="title-area">
+              {{title}}
+            </div>
+            <div class="etc_area">
+              <div class="date">
+                【{{serviceName}}】 {{eventDate startDate}}
+              </div>
+              <div class="evaluation">
+                <i class="fa fa-star fa-2x icon"></i>
+                <span>{{star starCount}}</span>
+                <i class="fas fa-calendar-check fa-2x icon"></i>
+                <span>123</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </a>
+    </li>
+    {{/each}}
+  </script>
+
+  <script>
+      $(function() {
+        let searchParams = new URLSearchParams(location.search);
+        if (searchParams.get("day")) {
+          if (moment(searchParams.get("day")).isValid()) {
+            sessionStorage.day = searchParams.get("day");
+          }
+        }
+        nowMoment = moment(sessionStorage.day);
+
+        var paramObj = {};
+        paramObj.callback = function(odataObj) {
+          planList = odataObj.d.results;
+          getPlanningAPI().done(function(planningObj) {
+            events = planList;
+            _.each(planningObj.d.results, function(p_event, p_index, p_list) {
+              _.every(events, function(event) {
+                if (p_event.event_id == event.__id) {
+                  event.planStatus = p_event.planStatus;
+                  return false;
+                }
+                return true;
+              })
+            });
+
+            console.log(events);
+          }).fail(function() {
+            console.log(e);
+          }).always(function() {
+            setHandlebars();
+          })
+        }
+        paramObj.startDate = nowMoment.toISOString();
+        paramObj.top = 10;
+        paramObj.orderby = "starCount desc, startDate asc, endDate desc";
+        getSortedEvents(paramObj);
+      });
+
+      setHandlebars = function() {
+        if (events.length == 0) {
+          $("#plan-list").hide();
+          $("#not-plan-list").show();
+        } else {
+          Handlebars.registerHelper({
+            'eq': function(v1, v2) {
+              return v1 == v2;
+            },
+            'eventDate': function(date) {
+              return moment(date).format('M/DD');
+            },
+            'star': function(count) {
+              if (!count) {
+                return 0;
+              }
+              return count;
+            }
+          });
+          var source = $("#pickups-template").text();
+          var template = Handlebars.compile(source);
+          var html = template(events);
+          $("#pickup-list").html(html);
+        }
+      }
+  </script>
 
   <footer>
       <button onclick="javascript:location.href = 'index.html';">
@@ -336,10 +157,11 @@
           <i class="fas fa-star fa-2x icon"></i>
           <div class="icon-text">検討中</div>
         </button>
-        <button>
+<!--        <button>
           <i class="fas fa-check-circle fa-2x icon"></i>
           <div class="icon-text">参加一覧</div>
         </button>
+-->
   </footer>
 </body>
 

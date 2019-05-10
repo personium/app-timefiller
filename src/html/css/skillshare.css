@@ -206,7 +206,7 @@ main .slide-area .list {
 }
 
 .etc_area>.evaluation {
-  flex: 0 0 auto;
+  flex: 0.1 0 auto;
 }
 
 .evaluation>span {

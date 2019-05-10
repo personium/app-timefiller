@@ -38,9 +38,11 @@
 
 <body>
   <header class="top schedule-list">
-    <button class="header-btn pn-back-btn pn-btn" onclick="javascript:location.href = 'index_org.html';">
-        <i id="back_btn" class="fas fa-angle-left fa-2x header-ic-01"></i>
-    </button>
+    <a class="header-btn pn-back-btn" href="index_org.html">
+      <div id="back_btn" class="pn-btn black">
+        <i class="fas fa-angle-left fa-2x icon"></i>
+      </div>
+    </a>
     <div class="header-title">
       <div class="title">イベント管理</div>
     </div>
@@ -97,6 +99,14 @@
 
       <li class="separate-li"></li>
       <li class="event-info-li">
+        <div class="event-info-title">郵便番号</div>
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input id="postalCode" type="text" class="form-control" aria-label="郵便番号" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
         <div class="event-info-title">イベント開催地</div>
         <div class="event-date-setting">
           <div class="input-group" style="width:100%;">
@@ -130,6 +140,7 @@
           </div>
         </div>
       </li>
+<!--
       <li class="event-info-li">
         <div class="event-info-title">WebサイトURL</div>
         <div class="event-date-setting">
@@ -138,7 +149,24 @@
           </div>
         </div>
       </li>
-
+-->
+      <li class="event-info-li">
+        <div class="event-info-title">依頼者</div>
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="recruiter" aria-label="依頼者" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+      <li class="event-info-li">
+        <div class="event-info-title">問い合わせ先番号</div>
+        <div class="event-date-setting">
+          <div class="input-group" style="width:100%;">
+            <input type="text" class="form-control" id="phoneNumber" aria-label="問い合わせ先番号" aria-describedby="basic-addon2">
+          </div>
+        </div>
+      </li>
+<!--
       <li class="separate-li"></li>
       <li class="event-info-li">
         <div class="event-info-title">現在参加者数</div>
@@ -156,13 +184,13 @@
           </div>
         </div>
       </li>
-
+-->
       <li class="separate-li"></li>
       <li class="event-info-li">
-        <div class="event-info-title">タグ</div>
+        <div class="event-info-title">キーワード</div>
         <div class="event-date-setting">
           <div class="input-group" style="width:100%;">
-            <input type="text" class="form-control" id="tag" aria-label="タグ" aria-describedby="basic-addon2">
+            <input type="text" class="form-control" id="keywords" aria-label="キーワード" aria-describedby="basic-addon2">
           </div>
         </div>
       </li>

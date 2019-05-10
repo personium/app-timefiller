@@ -39,6 +39,10 @@ function getSortedEvents(paramObj) {
     "$top": 1000,
     "$orderby": "startDate asc, endDate desc"
   }
+  if (paramObj.orderby) {
+    query.$orderby = paramObj.orderby;
+  }
+
   let filter = "";
   if (paramObj.startDate && paramObj.endDate) {
     filter = "startDate ge datetimeoffset'"+paramObj.startDate+"' and endDate le datetimeoffset'"+paramObj.endDate+"'";
@@ -49,6 +53,10 @@ function getSortedEvents(paramObj) {
   }
   if (filter) {
     query.$filter = filter;
+  }
+
+  if (paramObj.top) {
+    query.$top = paramObj.top;
   }
   let queryStr = $.param(query);
   let queryUrl = urlOData + "?" + queryStr;

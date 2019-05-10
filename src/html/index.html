@@ -53,12 +53,14 @@
 
     $('#prev-btn').off().click(function () {
       nowMoment.add(-1,"day");
+      sessionStorage.day = nowMoment.format("YYYY/MM/DD");
       $("#today").text(nowMoment.format('M/DD(ddd)'));
       getRecommendList(nowMoment.toISOString(), createList);
     });
 
     $('#next-btn').off().click(function () {
       nowMoment.add(1,"day");
+      sessionStorage.day = nowMoment.format("YYYY/MM/DD");
       $("#today").text(nowMoment.format('M/DD(ddd)'));
       getRecommendList(nowMoment.toISOString(), createList);
     });
@@ -250,7 +252,7 @@
                     {{else}}
                     <i class="fa fa-star fa-2x icon"></i>
                     {{/if}}
-                    <span>25</span>
+                    <span>{{star starCount}}</span>
                     {{#if (eq planStatus "confirm")}}
                     <i class="fas fa-check-circle fa-2x icon active"></i>
                     {{else}}
@@ -378,6 +380,12 @@
                         "</div>",
                       "</li>"].join("")
                     )
+                  },
+                  'star': function(count) {
+                    if (!count) {
+                      return 0;
+                    }
+                    return count;
                   }
                 });
                 var source = $("#recommended-template").text();

@@ -120,7 +120,7 @@
           <i class="fa fa-star fa-2x icon-middle plan-info-ic"></i>
           {{/if}}
           <span class="plan-info-icon-text">
-            <a>25</a>
+            <a>{{star starCount}}</a>
           </span>
           {{#if (eq planStatus "confirm")}}
           <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic active"></i>
@@ -206,6 +206,12 @@
             } else {
               return false;
             }
+          },
+          'star': function(count) {
+            if (!count) {
+              return 0;
+            }
+            return count;
           }
         });
         var source = $("#main-template").text();
