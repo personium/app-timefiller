@@ -892,3 +892,33 @@ footer .add-btn {
   overflow: hidden;
   object-fit: cover;
 }
+
+@media print, screen and (max-width: 599px) and (min-width: 480px) {
+  .plan-info-top-content {
+    height: 310px;
+  }
+}
+
+@media print, screen and (max-width: 719px) and (min-width: 600px) {
+  .plan-info-top-content {
+    height: 390px;
+  }
+}
+
+@media print, screen and (max-width: 839px) and (min-width: 720px) {
+  .plan-info-top-content {
+    height: 460px;
+  }
+}
+
+@media print, screen and (max-width: 959px) and (min-width: 840px) {
+  .plan-info-top-content {
+    height: 540px;
+  }
+}
+
+@media print, screen and (min-width: 960px) {
+  .plan-info-top-content {
+    height: 620px;
+  }
+}
