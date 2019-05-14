@@ -172,6 +172,9 @@ function setRecommendSchedule(resultList, list) {
       if (!skipFlg) {
         if (pushCnt >= 0) {
           // Add an event at the end of the schedule
+          if (result[pushCnt - 1].type == "transportation") {
+            pushCnt--;
+          }
           result.splice(pushCnt, 0, plan);
           if (checkLonLat(result, plan, pushCnt)) {
             result.splice(pushCnt, 0, getMove());

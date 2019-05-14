@@ -79,7 +79,10 @@
 
       <div class="header-title">
         <div class="title">
-          <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.05em;"> {{serviceName}}
+          {{#if serviceImage}}
+            <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.05em;"> 
+          {{/if}}
+          {{serviceName}}
         </div>
       </div>
     </header>
@@ -125,11 +128,13 @@
           {{#if (eq planStatus "confirm")}}
           <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic active"></i>
           {{else}}
-          <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>
+          <!--<i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>-->
           {{/if}}
+          <!--
           <span class="plan-info-icon-text">
             <a>123</a>
           </span>
+          -->
         </div>
         {{#if postDate}}
         <div class="date text-right">掲載日：{{postDate postDate}}</div>
