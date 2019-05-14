@@ -554,6 +554,7 @@ Common.startOAuth2 = function(callback) {
 };
 
 Common.refreshToken = function(callback) {
+    console.log("refresh token");
     let cellUrl = Common.getCellUrl();
     Common.getAppAuthToken(cellUrl).done(function(appToken) {
         Common.getProtectedBoxAccessToken(appToken.access_token, cellUrl).done(function(appCellToken) {

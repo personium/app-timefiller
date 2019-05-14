@@ -36,9 +36,10 @@
 </head>
 <script>
   additionalCallback = function() {
+    sessionStorage.screen = "index";
     targetCellName = sessionStorage.cellname;
     if (!sessionStorage.day) {
-      sessionStorage.day = moment().format("YYYY/MM/DD");
+      sessionStorage.day = moment().format("YYYY-MM-DD");
     }
     let searchParams = new URLSearchParams(location.search);
     if (searchParams.get("day")) {
@@ -53,14 +54,14 @@
 
     $('#prev-btn').off().click(function () {
       nowMoment.add(-1,"day");
-      sessionStorage.day = nowMoment.format("YYYY/MM/DD");
+      sessionStorage.day = nowMoment.format("YYYY-MM-DD");
       $("#today").text(nowMoment.format('M/DD(ddd)'));
       getRecommendList(nowMoment.toISOString(), createList);
     });
 
     $('#next-btn').off().click(function () {
       nowMoment.add(1,"day");
-      sessionStorage.day = nowMoment.format("YYYY/MM/DD");
+      sessionStorage.day = nowMoment.format("YYYY-MM-DD");
       $("#today").text(nowMoment.format('M/DD(ddd)'));
       getRecommendList(nowMoment.toISOString(), createList);
     });
@@ -174,7 +175,11 @@
             <li class="default-schedule schedule-list-s">
               <div class="list-image">
                 <div class="list-thumbnail-s">
-                  <img src="{{image}}" class="list-thumbnail">
+                  {{#if thumbnailUrl}}
+                    <img src="{{thumbnailUrl}}" class="list-thumbnail">
+                  {{else}}
+                    <img src="{{image}}" class="list-thumbnail">
+                  {{/if}}
                 </div>
               </div>
               <div class="list-text">
@@ -215,7 +220,9 @@
                 </div>
                 <div class="etc_area">
                   <div class="status">
-                    <img src="{{serviceImage}}" alt="car" style="width: 18px; height: 18px; vertical-align: -.20em;">
+                    {{#if serviceImage}}
+                      <img src="{{serviceImage}}" alt="car" style="width: 18px; height: 18px; vertical-align: -.20em;">
+                    {{/if}}
                     <span>【{{serviceName}}】</span>
                   </div>
                 </div>
@@ -244,7 +251,10 @@
                 </p></div>
                 <div class="etc_area">
                   <div class="status">
-                    <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.25em;"><span>【{{serviceName}}】</span>
+                    {{#if serviceImage}}
+                      <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.25em;">
+                    {{/if}}
+                    <span>【{{serviceName}}】</span>
                   </div>
                   <div class="evaluation">
                     {{#if (eq planStatus "consideration")}}
@@ -256,9 +266,9 @@
                     {{#if (eq planStatus "confirm")}}
                     <i class="fas fa-check-circle fa-2x icon active"></i>
                     {{else}}
-                    <i class="fas fa-check-circle fa-2x icon"></i>
+                    <!--<i class="fas fa-check-circle fa-2x icon"></i>-->
                     {{/if}}
-                    <span>123</span>
+                    <!--<span>123</span>-->
                   </div>
                 </div>
               </div>
@@ -409,10 +419,11 @@ console.log(recommendedSchedule);
       <i class="fas fa-calendar-alt fa-2x icon"></i>
       <div class="icon-text">おすすめ</div>
     </button>
-    <button>
+<!--    <button>
       <i class="fa fa-bullhorn fa-2x icon"></i>
       <div class="icon-text">ピックアップ</div>
     </button>
+-->
     <button onclick="javascript:sessionStorage.removeItem('planStatus');location.href = 'plan.html';">
       <i class="fas fa-clipboard fa-2x icon"></i>
       <div class="icon-text">プラン一覧</div>
