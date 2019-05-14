@@ -33,7 +33,7 @@
 
 <body class="data-manager">
   <header class="top">
-    <a class="header-btn pn-back-btn" onclick="backPrevScreen();">
+    <a class="header-btn pn-back-btn" href="data_manager.html">
       <div id="back_btn" class="pn-btn white">
         <i class="fas fa-angle-left fa-2x icon"></i>
       </div>
@@ -67,14 +67,6 @@
             $("#data-manager-role").html(html);
           });
           });
-          
-          function backPrevScreen() {
-            if (sessionStorage.screen) {
-              location.href = sessionStorage.screen + ".html";
-            } else {
-              location.href = "index.html";
-            }
-          }
       </script>
 
       <div class="user-description">
