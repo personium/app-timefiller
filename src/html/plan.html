@@ -180,9 +180,8 @@
             return moment(date).format('H:mm');
           },
           'ff_date': function(date) {
-            // For FF2018 May 18th
             let dateFF = nowMoment;
-            if (dateFF.isSame(moment(date), 'day')) {
+            if (date && dateFF.isSame(moment(date), 'day')) {
               return true;
             } else {
               dataCnt--;
