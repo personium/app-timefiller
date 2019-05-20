@@ -655,6 +655,7 @@ footer>button>.icon-text {
 
 .plan-info-text {
   font-size: 1.2rem;
+  padding-top: 1.2rem;
   padding-bottom: 1.2rem;
   border-bottom: 1px solid #969696;
 }
