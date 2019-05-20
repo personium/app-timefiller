@@ -195,6 +195,7 @@ main .slide-area .list {
   display: flex;
   flex-direction: row;
   font-size: 0.9rem;
+  width: 70%;
 }
 
 .etc_area>.date {
@@ -206,7 +207,8 @@ main .slide-area .list {
 }
 
 .etc_area>.evaluation {
-  flex: 0.1 0 auto;
+  position:absolute;
+  right: 20px;
 }
 
 .evaluation>span {
@@ -252,6 +254,10 @@ main .slide-area .list {
 
 main.schedule-list .list ul li {
   border-bottom: 0;
+}
+
+.event {
+  position:relative;
 }
 
 .mask-event li:not(.not-mask) {

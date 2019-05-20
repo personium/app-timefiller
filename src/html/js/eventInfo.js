@@ -152,7 +152,7 @@ function getEventInfo() {
 		address: $("#address").val(),
 		serviceImage: profImage,
 		serviceName: profName,
-		recruiterLabel: "依頼者",
+		recruiterLabel: "主催者",
 		recruiter: $("#recruiter").val(),
 		phoneNumber: $("#phoneNumber").val(),
 		keywords: $("#keywords").val().split(",")

@@ -72,7 +72,7 @@
     {{#if (ff_date startDate)}}
      <a href="plan-info.html?eventId={{__id}}">
       <li class="{{planStatus}}-schedule event">
-        <div class="list-image">
+        <div class="list-image" style="width:30%;">
           <div class="list-thumbnail-m">
             {{#if thumbnailUrl}}
               <img src="{{thumbnailUrl}}" class="list-thumbnail">
@@ -81,13 +81,13 @@
             {{/if}}
           </div>
         </div>
-        <div class="list-text">
+        <div class="list-text" style="width:70%;">
           <div class="title">
             {{title}}
           </div>
           <div class="etc_area">
-            <div class="status">
-              {{time startDate}}～{{time endDate}}
+            <div class="status text-hidden">
+              {{time startDate}}～{{time endDate}} {{address}}　{{recruiter}}
             </div>
             <div class="evaluation">
               {{#if (eq planStatus "consideration")}}
