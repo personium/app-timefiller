@@ -38,7 +38,7 @@
     <div class="header-title">
       <div class="title">プラン一覧</div>
     </div>
-    <button id="setting_btn" class="header-btn pn-btn header-right"  onclick="javascript:location.href = 'data_manager.html';">
+    <button id="setting_btn" class="header-btn pn-btn header-right" style="display:none;" onclick="javascript:location.href = 'data_manager.html';">
       <i class="fas fa-cog fa-2x icon"></i>
     </button>
   </header>
@@ -113,6 +113,7 @@
 
   <script>
       $(function() {
+        $("#setting_btn").show();
         sessionStorage.screen = "plan";
         let searchParams = new URLSearchParams(location.search);
         if (searchParams.get("day")) {

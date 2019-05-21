@@ -36,6 +36,8 @@
 </head>
 <script>
   additionalCallback = function() {
+    $("#setting_btn").show();
+
     sessionStorage.screen = "index";
     targetCellName = sessionStorage.cellname;
     if (!sessionStorage.day) {
@@ -72,7 +74,7 @@
     <div class="header-title">
       <div class="title">おすすめスケジュール</div>
     </div>
-    <button id="setting_btn" class="header-btn pn-btn header-right"  onclick="javascript:location.href = 'data_manager.html';">
+    <button id="setting_btn" class="header-btn pn-btn header-right" style="display:none;" onclick="javascript:location.href = 'data_manager.html';">
       <i class="fas fa-cog fa-2x icon"></i>
     </button>
   </header>
