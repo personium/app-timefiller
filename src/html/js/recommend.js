@@ -108,7 +108,7 @@ function filterByKeywords(planList, keywords) {
         return _.contains(event.keywords, keyword);
       });
     } else {
-      return true;
+      return false;
     }
   });
 }
