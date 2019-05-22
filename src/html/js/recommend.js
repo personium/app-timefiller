@@ -14,12 +14,12 @@ function getRecommendList(nowDate, callback) {
   $.when(
     getAPI(queryUrl, Common.getToken()),
     getPlanningAPI(),
-    getMyDataAPI()
-  ).done(function(planObj, planningObj, myData) {
+    getMyDataAPI('interests.json')
+  ).done(function(planObj, planningObj, myInterests) {
     // TODO Handle Error Response
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
-    const myKeywords = myData[0].keywords;
+    const myKeywords = myInterests[0].keywords;
     // List of plans being considered / participated on the relevant day
     let todayPlanningList = [];
     // Merge the acquired list

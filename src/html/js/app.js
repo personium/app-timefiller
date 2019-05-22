@@ -451,10 +451,11 @@ function getPlanningAPI(event_id) {
     });
 };
 
-function getMyDataAPI() {
+function getMyDataAPI(filename) {
+  const querystring = {'filename': filename};
   return $.ajax({
-    type: "POST",
-    url: APP_URL + "__/html/Engine/getMyData",
+    type: "GET",
+    url: Common.getBoxUrl() + "Engine/data?" + $.param(querystring),
     headers: {
       'Accept':'application/json',
       'Authorization':'Bearer ' + Common.getToken()
