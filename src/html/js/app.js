@@ -451,6 +451,17 @@ function getPlanningAPI(event_id) {
     });
 };
 
+function getMyDataAPI() {
+  return $.ajax({
+    type: "POST",
+    url: APP_URL + "__/html/Engine/getMyData",
+    headers: {
+      'Accept':'application/json',
+      'Authorization':'Bearer ' + Common.getToken()
+    }
+  });
+}
+
 /*
  * POST or PUT
  */
