@@ -20,15 +20,22 @@ const MAX_PLANLIST_SIZE = 10;
 $(function() {
   $("#setting_btn").show();
   sessionStorage.screen = "plan";
-  let searchParams = new URLSearchParams(location.search);
-  if (searchParams.get("day")) {
-    if (moment(searchParams.get("day")).isValid()) {
-      sessionStorage.day = searchParams.get("day");
-    }
+  setTargetDay();
+  displayPlanningList();
+});
+
+function setTargetDay() {
+  const searchParams = new URLSearchParams(location.search);
+  const day = searchParams.get("day");
+  if (day && moment(day).isValid()) {
+    sessionStorage.day = day;
   }
+}
+
+function displayPlanningList() {
   nowMoment = moment(sessionStorage.day);
   $("#title-date").text(nowMoment.format('M/DD(ddd)'));
-  var paramObj = {
+  const paramObj = {
     'startDate': nowMoment.startOf("day").add(8,"hour").toISOString(),
     'endDate': nowMoment.endOf("day").toISOString()
   };
@@ -50,7 +57,7 @@ $(function() {
       });
   }
   getSortedEvents(paramObj);
-});
+}
 
 function createPlanList(orgPlanList, keywords, maxSize) {
   let ret = filterByKeywords(orgPlanList, keywords);
