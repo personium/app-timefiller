@@ -33,6 +33,53 @@ function getProfileFromSession(callback) {
   Common.getProfile(Common.getCellUrl(), callback);
 };
 
+function selectAttributes() {
+    $.ajax({
+        type: "GET",
+        url: Common.getBoxUrl() + "Engine/data?filename=interests.json",
+        headers: {
+            'Authorization': 'Bearer ' + Common.getToken(),
+            'Accept':'application/json'
+        }
+    }).done(function(data){
+        if (!_.isEmpty(data.keywords)) {
+            $('#not-change-bg-check-list li.pn-check-list').each(function(){
+                if (_.contains(data.keywords, $(this).data('keyword'))) {
+                    $(this).click();
+                }
+            });
+        }
+    });
+}
+
+function setAttributes() {
+    let currentInterests = _.map(
+        $('#not-change-bg-check-list li.checked'),
+        function(item) {
+            return $(item).data("keyword");
+        }
+    );
+    
+    $.ajax({
+        type: "POST",
+        url: Common.getBoxUrl() + "Engine/data",
+        headers: {
+            'Accept':'application/json',
+            'Authorization':'Bearer ' + Common.getToken()
+        },
+        data: JSON.stringify({
+            filename: "interests.json",
+            contents: {
+                keywords: currentInterests
+            }
+        })
+    }).done(function(){
+        location.href = 'data_manager.html';
+    });
+    
+    
+};
+
 function getSortedEvents(paramObj) {
   let urlOData = APP_URL + "__/OData/EventList";
   let query = {
