@@ -20,7 +20,7 @@ function getRecommendList(nowDate, callback) {
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
     const myKeywords = myInterests[0].keywords;
-    if (!_.isEmpty(myKeywords)) {
+    if (!_.isUndefined(myKeywords)) {
       sessionStorage.keywords = JSON.stringify(myKeywords);
     }
     // List of plans being considered / participated on the relevant day
