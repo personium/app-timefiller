@@ -103,7 +103,7 @@ function getRecommendList(nowDate, callback) {
 // Filter planlist by keywords
 function filterByKeywords(planList, keywords) {
   return _.filter(planList, function(event) {
-    if (keywords !== undefined && keywords.length > 0) {
+    if (!_.isEmpty(keywords)) {
       return _.some(keywords, function(keyword) {
         return _.contains(event.keywords, keyword);
       });
