@@ -463,6 +463,19 @@ function getMyDataAPI(filename) {
   });
 }
 
+// Filter planlist by keywords
+function filterByKeywords(planList, keywords) {
+  return _.filter(planList, function(event) {
+    if (!_.isEmpty(keywords)) {
+      return _.some(keywords, function(keyword) {
+        return _.contains(event.keywords, keyword);
+      });
+    } else {
+      return false;
+    }
+  });
+}
+
 /*
  * POST or PUT
  */
