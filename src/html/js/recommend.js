@@ -13,10 +13,13 @@ function getRecommendList(nowDate, callback) {
   // Get plan list and list under consideration
   $.when(
     getAPI(queryUrl, Common.getToken()),
-    getPlanningAPI()
-  ).done(function(planObj, planningObj) {
+    getPlanningAPI(),
+    getMyDataAPI('interests.json')
+  ).done(function(planObj, planningObj, myInterests) {
+    // TODO Handle Error Response
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
+    const myKeywords = myInterests[0].keywords;
     // List of plans being considered / participated on the relevant day
     let todayPlanningList = [];
     // Merge the acquired list
@@ -69,8 +72,13 @@ function getRecommendList(nowDate, callback) {
       // Review / Participation
       recommendSchedule = setRecommendSchedule(recommendSchedule, todayPlanningList);
       
+      // Plan list related to my keywords
+      const filteredPlanList = filterByKeywords(planList, myKeywords);
+      recommendSchedule = setRecommendSchedule(recommendSchedule, filteredPlanList);
+
       // Other
       recommendSchedule = setRecommendSchedule(recommendSchedule, planList);
+      
       let lastHomeEndMoment = moment(recommendSchedule[recommendSchedule.length - 1].endDate);
       var homePlan = {
           "type": "home",
@@ -90,6 +98,19 @@ function getRecommendList(nowDate, callback) {
   }).fail(function(e) {
     console.log(e);
   })
+}
+
+// Filter planlist by keywords
+function filterByKeywords(planList, keywords) {
+  return _.filter(planList, function(event) {
+    if (!_.isEmpty(keywords)) {
+      return _.some(keywords, function(keyword) {
+        return _.contains(event.keywords, keyword);
+      });
+    } else {
+      return false;
+    }
+  });
 }
 
 // Add the corresponding event to the schedule list

@@ -451,6 +451,18 @@ function getPlanningAPI(event_id) {
     });
 };
 
+function getMyDataAPI(filename) {
+  const querystring = {'filename': filename};
+  return $.ajax({
+    type: "GET",
+    url: Common.getBoxUrl() + "Engine/data?" + $.param(querystring),
+    headers: {
+      'Accept':'application/json',
+      'Authorization':'Bearer ' + Common.getToken()
+    }
+  });
+}
+
 /*
  * POST or PUT
  */
