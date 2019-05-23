@@ -29,48 +29,54 @@ $(function() {
   var paramObj = {};
   paramObj.callback = function(odataObj) {
     planList = odataObj.d.results;
-    getPlanningAPI().done(function(planningObj) {
-      if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
-        $("title").text("プラン一覧");
-        $("#planList").addClass("current");
-        $("#considerationList").removeClass("current");
-        events = planList;
-        _.each(planningObj.d.results, function(p_event, p_index, p_list) {
-          _.every(events, function(event) {
-            if (p_event.event_id == event.__id) {
-              event.planStatus = p_event.planStatus;
-              return false;
-            }
-            return true;
-          })
-        });
-      } else {
-        $("title").text("検討中一覧");
-        $(".header-title .title").text("検討中一覧");
-        $("#considerationList").addClass("current");
-        $("#planList").removeClass("current");
-        planStatus = sessionStorage.planStatus;
-        events = planningObj.d.results;
-        _.each(events, function(p_event, p_index, p_list) {
-          _.every(planList, function(event) {
-            if (planStatus == p_event.planStatus && p_event.event_id == event.__id) {
-              $.extend(p_event, event);
-              return false;
-            }
-            return true;
-          })
-        });
-      }
-
-      console.log(events);
-    }).fail(function() {
-      console.log(e);
-    }).always(function() {
-      setHandlebars();
-    })
+    getPlanningAPI()
+      .done(setPlanList)
+      .fail(function() {
+        console.log(e);
+      })
+      .always(function() {
+        setHandlebars();
+      });
   }
   getSortedEvents(paramObj);
 });
+
+function setPlanList(planningObj) {
+  if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
+    $("title").text("プラン一覧");
+    $("#planList").addClass("current");
+    $("#considerationList").removeClass("current");
+    events = planList;
+    _.each(planningObj.d.results, function(p_event, p_index, p_list) {
+      _.every(events, function(event) {
+        if (p_event.event_id == event.__id) {
+          event.planStatus = p_event.planStatus;
+          return false;
+        }
+        return true;
+      })
+    });
+  } else {
+    $("title").text("検討中一覧");
+    $(".header-title .title").text("検討中一覧");
+    $("#considerationList").addClass("current");
+    $("#planList").removeClass("current");
+    planStatus = sessionStorage.planStatus;
+    events = planningObj.d.results;
+    _.each(events, function(p_event, p_index, p_list) {
+      _.every(planList, function(event) {
+        if (planStatus == p_event.planStatus && p_event.event_id == event.__id) {
+          $.extend(p_event, event);
+          return false;
+        }
+        return true;
+      })
+    });
+  }
+
+  console.log(events);
+
+}
 
 setHandlebars = function() {
   dataCnt = events.length;
