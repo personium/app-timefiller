@@ -15,6 +15,8 @@
  * limitations under the License.
  */
 
+const MAX_PLANLIST_SIZE = 10;
+
 $(function() {
   $("#setting_btn").show();
   sessionStorage.screen = "plan";
@@ -26,9 +28,18 @@ $(function() {
   }
   nowMoment = moment(sessionStorage.day);
   $("#title-date").text(nowMoment.format('M/DD(ddd)'));
-  var paramObj = {};
+  var paramObj = {
+    'startDate': nowMoment.startOf("day").add(8,"hour").toISOString(),
+    'endDate': nowMoment.endOf("day").toISOString()
+  };
   paramObj.callback = function(odataObj) {
-    planList = odataObj.d.results;
+    if (sessionStorage.keywords) {
+      const keywords = sessionStorage.keywords.split(',');
+      planList = createPlanList(odataObj.d.results, keywords, MAX_PLANLIST_SIZE)
+    } else {
+      planList = _.sample(odataObj.d.results, MAX_PLANLIST_SIZE);
+    }
+    planList = _.sortBy(planList, 'startDate');
     getPlanningAPI()
       .done(setPlanList)
       .fail(function() {
@@ -40,6 +51,16 @@ $(function() {
   }
   getSortedEvents(paramObj);
 });
+
+function createPlanList(orgPlanList, keywords, maxSize) {
+  let ret = filterByKeywords(orgPlanList, keywords);
+  ret = _.sample(ret, maxSize);
+  if (ret.length <= maxSize) {
+    const ext = _.sample(orgPlanList, maxSize - ret.length);
+    ret = _.union(ret, ext);
+  }
+  return ret;
+}
 
 function setPlanList(planningObj) {
   if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
