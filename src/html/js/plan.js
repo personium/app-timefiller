@@ -41,7 +41,7 @@ function displayPlanningList() {
   };
   paramObj.callback = function(odataObj) {
     if (sessionStorage.keywords) {
-      const keywords = sessionStorage.keywords.split(',');
+      const keywords = JSON.parse(sessionStorage.keywords);
       planList = createPlanList(odataObj.d.results, keywords, MAX_PLANLIST_SIZE)
     } else {
       planList = _.sample(odataObj.d.results, MAX_PLANLIST_SIZE);
