@@ -20,6 +20,9 @@ function getRecommendList(nowDate, callback) {
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
     const myKeywords = myInterests[0].keywords;
+    if (!_.isEmpty(myKeywords)) {
+      sessionStorage.keywords = myKeywords.join(',');
+    }
     // List of plans being considered / participated on the relevant day
     let todayPlanningList = [];
     // Merge the acquired list
@@ -98,19 +101,6 @@ function getRecommendList(nowDate, callback) {
   }).fail(function(e) {
     console.log(e);
   })
-}
-
-// Filter planlist by keywords
-function filterByKeywords(planList, keywords) {
-  return _.filter(planList, function(event) {
-    if (!_.isEmpty(keywords)) {
-      return _.some(keywords, function(keyword) {
-        return _.contains(event.keywords, keyword);
-      });
-    } else {
-      return false;
-    }
-  });
 }
 
 // Add the corresponding event to the schedule list
