@@ -3,35 +3,178 @@
         <href>personium-localbox:/</href>
         <propstat>
             <prop>
+                <creationdate>2019-05-21T07:13:22.692+0000</creationdate>
+                <getlastmodified>Tue, 21 May 2019 07:13:22 GMT</getlastmodified>
                 <resourcetype>
                     <collection/>
                 </resourcetype>
-                <acl xml:base="https://demo.personium.io/app-timefiller-wakaba/__role/__/" xmlns:p="urn:x-personium:xmlns">
-                </acl>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
             </prop>
+            <status>HTTP/1.1 200 OK</status>
         </propstat>
     </response>
     <response>
         <href>personium-localbox:/OData</href>
         <propstat>
             <prop>
+                <creationdate>2019-05-21T07:13:22.881+0000</creationdate>
+                <getlastmodified>Tue, 21 May 2019 07:13:22 GMT</getlastmodified>
                 <resourcetype>
                     <collection/>
                     <p:odata xmlns:p="urn:x-personium:xmlns"/>
                 </resourcetype>
-                <acl xml:base="https://demo.personium.io/app-timefiller-wakaba/__role/__/" xmlns:p="urn:x-personium:xmlns">
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns">
                     <ace>
                         <principal>
                             <href>EventRead</href>
                         </principal>
                         <grant>
                             <privilege>
-                                <read/>
+                                <D:read xmlns:D="DAV:"/>
                             </privilege>
                         </grant>
                     </ace>
                 </acl>
             </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/MyData</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-21T07:16:27.681+0000</creationdate>
+                <getlastmodified>Tue, 21 May 2019 07:16:27 GMT</getlastmodified>
+                <resourcetype>
+                    <collection/>
+                </resourcetype>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns">
+                    <ace>
+                        <principal>
+                            <href>EventRead</href>
+                        </principal>
+                        <grant>
+                            <privilege>
+                                <D:read xmlns:D="DAV:"/>
+                            </privilege>
+                        </grant>
+                    </ace>
+                </acl>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/MyData/interests.json</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-21T07:20:58.678+0000</creationdate>
+                <getcontentlength>53</getcontentlength>
+                <getcontenttype>application/json</getcontenttype>
+                <getlastmodified>Thu, 23 May 2019 07:31:22 GMT</getlastmodified>
+                <resourcetype/>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-21T07:17:46.462+0000</creationdate>
+                <getlastmodified>Wed, 22 May 2019 07:23:37 GMT</getlastmodified>
+                <resourcetype>
+                    <collection/>
+                    <p:service xmlns:p="urn:x-personium:xmlns"/>
+                </resourcetype>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns">
+                    <ace>
+                        <principal>
+                            <href>EventRead</href>
+                        </principal>
+                        <grant>
+                            <privilege>
+                                <exec xmlns="" xmlns:ns3="DAV:"/>
+                            </privilege>
+                        </grant>
+                    </ace>
+                </acl>
+                <p:service language="JavaScript" subject="" xmlns:p="urn:x-personium:xmlns" xmlns:D="DAV:" xmlns:Z="http://www.w3.com/standards/z39.50/">
+                    <p:path name="data" src="data.js"/>
+                </p:service>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine/__src</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-21T07:17:46.472+0000</creationdate>
+                <getlastmodified>Tue, 21 May 2019 07:17:46 GMT</getlastmodified>
+                <resourcetype>
+                    <collection/>
+                </resourcetype>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine/__src/underscore.js</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-22T07:11:14.442+0000</creationdate>
+                <getcontentlength>58343</getcontentlength>
+                <getcontenttype>text/javascript</getcontenttype>
+                <getlastmodified>Wed, 22 May 2019 07:11:14 GMT</getlastmodified>
+                <resourcetype/>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine/__src/acc_info.js</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-22T07:36:08.410+0000</creationdate>
+                <getcontentlength>629</getcontentlength>
+                <getcontenttype>text/javascript</getcontenttype>
+                <getlastmodified>Wed, 22 May 2019 07:36:08 GMT</getlastmodified>
+                <resourcetype/>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine/__src/data.js</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-22T07:22:35.162+0000</creationdate>
+                <getcontentlength>2257</getcontentlength>
+                <getcontenttype>text/javascript</getcontenttype>
+                <getlastmodified>Thu, 23 May 2019 07:28:30 GMT</getlastmodified>
+                <resourcetype/>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
+        </propstat>
+    </response>
+    <response>
+        <href>personium-localbox:/Engine/__src/personium.js</href>
+        <propstat>
+            <prop>
+                <creationdate>2019-05-22T07:10:51.691+0000</creationdate>
+                <getcontentlength>9140</getcontentlength>
+                <getcontenttype>text/javascript</getcontenttype>
+                <getlastmodified>Wed, 22 May 2019 07:10:51 GMT</getlastmodified>
+                <resourcetype/>
+                <acl xml:base="https://dixonsiu.demo.personium.io/__role/timefiller/" xmlns:p="urn:x-personium:xmlns"/>
+            </prop>
+            <status>HTTP/1.1 200 OK</status>
         </propstat>
     </response>
 </multistatus>

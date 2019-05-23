@@ -1,7 +1,1 @@
-{
-  "Roles": [
-    {
-      "Name": "EventRead"
-    }
-  ]
-}
+{"Roles":[{"Name":"EventRead"}]}
