@@ -47,7 +47,7 @@ function getRedirectUrl(cellUrl, state) {
     
     return [cellUrl, "__authz?", paramsStr].join('');
 };
-
+var _ = require("underscore")._;
 var personium = require("personium").personium;
 var jsSHA = require("sha_dev2").jsSHA;
 var moment = require("moment").moment;

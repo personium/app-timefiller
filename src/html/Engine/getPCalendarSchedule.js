@@ -149,7 +149,6 @@ function getAppToken(p_target) {
 var APP_CELL_URL = "https://app-personium-calendar.demo.personium.io/";
 var APP_USER_ID = "***";
 var APP_USER_PASS = "***";
-
+var _ = require("underscore")._;
 var personium = require("personium").personium;
 var moment = require("moment").moment;
-var _ = require("underscore")._;

@@ -142,6 +142,6 @@ function getEventInfo(eventCellBoxUrl, token) {
 }
 
 var httpClient = new _p.extension.HttpClient();
-
+var _ = require("underscore")._;
 var personium = require("personium").personium;
 var accInfo = require("acc_info").accInfo;
