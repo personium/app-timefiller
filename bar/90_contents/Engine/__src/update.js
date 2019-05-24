@@ -24,17 +24,17 @@ function(request) {
         };
 
         // Only support GET & POST for now
-        personium.validateRequestMethod(["GET", "POST"], request);
+        reqLib.personium.validateRequestMethod(["GET", "POST"], request);
         
         var response, result;
 
         switch(request.method) {
             case "GET":
                 // Validate query in URL
-                var query = personium.parseQuery(request);
-                personium.setAllowedKeys(["filename"]);
-                personium.setRequiredKeys(["filename"]);
-                personium.validateKeys(query);
+                var query = reqLib.personium.parseQuery(request);
+                reqLib.personium.setAllowedKeys(["filename"]);
+                reqLib.personium.setRequiredKeys(["filename"]);
+                reqLib.personium.validateKeys(query);
                 
                 // Profile JSON
                 var jsonStr = getFile(query);
@@ -44,15 +44,15 @@ function(request) {
                 break;
             case "POST":
                 // Validate parameters
-                var params = personium.parseBodyAsJSON(request);
+                var params = reqLib.personium.parseBodyAsJSON(request);
                 
                 result = _updateAttr(params);
                 break;
         }
         
-        return personium.createResponse(200, result);
+        return reqLib.personium.createResponse(200, result);
     } catch(e) {
-        return personium.createErrorResponse(e);
+        return reqLib.personium.createErrorResponse(e);
     }
 };
 
@@ -65,4 +65,5 @@ var getFile = function (query) {
  * In order to use helpful functions, you need to "require" the library.
  */
 var _ = require("underscore")._;
-var personium = require("personium").personium;
+var reqLib = {};
+reqLib.personium = require("personium").personium;
