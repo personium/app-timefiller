@@ -53,7 +53,7 @@ function selectAttributes() {
 }
 
 function setAttributes() {
-    let currentInterests = _.map(
+    const currentInterests = _.map(
         $('#not-change-bg-check-list li.checked'),
         function(item) {
             return $(item).data("keyword");
