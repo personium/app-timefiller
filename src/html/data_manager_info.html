@@ -77,82 +77,82 @@
 
     <div id="not-change-bg-check-list">
       <ul>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="キッズ" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>キッズ</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="スポーツ" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>スポーツ</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="アウトドア" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>アウトドア</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="音楽" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>音楽</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="映画" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>映画</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="読書" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>読書</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="ゲーム" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>ゲーム</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="コンピュータ" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>コンピュータ</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="アート" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>アート</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="ビジネス" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>ビジネス</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="科学" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>科学</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="美容" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>美容</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="料理" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>料理</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="グルメ" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>グルメ</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="旅行" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>旅行</span>
           </div>
         </li>
-        <li class="pn-check-list check-position-l check-mark-left">
+        <li data-keyword="ペット" class="pn-check-list check-position-l check-mark-left">
           <div class="pn-list pn-list-no-arrow">
             <span>ペット</span>
           </div>
@@ -162,14 +162,12 @@
   </main>
   <script>
     $(function() {
-      let tempProfile = getProfileFromSession();
-      $('#not-change-bg-check-list li.pn-check-list:nth-child(1)').click();
-      $('#not-change-bg-check-list li.pn-check-list:nth-child(2)').click();
+        selectAttributes();
     });
   </script>
 
   <footer>
-    <button type="button" class="btn add-btn" onclick="javascript:location.href = 'data_manager.html';">登録</button>
+    <button type="button" class="btn add-btn" onclick="setAttributes()">登録</button>
   </footer>
 </body>
 
