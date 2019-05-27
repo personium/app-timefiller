@@ -63,8 +63,8 @@ function getStateFromCookie(request) {
         return "";
     }
 };
-
+var _ = require("underscore")._;
 var personium = require("personium").personium;
 var jsSHA = require("sha_dev2").jsSHA;
 var moment = require("moment").moment;
-var _ = require("underscore")._;
+

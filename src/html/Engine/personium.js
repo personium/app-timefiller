@@ -1,9 +1,8 @@
-exports.personium = (function() {
+exports.personium = (function(_) {
     var personium = personium || {};
     var _allowedKeys = [];
     var _requiredKeys = [];
     
-    var _ = require("underscore")._;
     var accInfo = require("acc_info").accInfo;
     var _appCellAdminInfo = accInfo.APP_CELL_ADMIN_INFO;
     var _refererList = [accInfo.APP_CELL_URL];
@@ -166,7 +165,7 @@ exports.personium = (function() {
             var hasRequiredInfo = _.every(
                 _requiredKeys,
                 function(element, index, list){
-                    return _.has(params, element) && !_.isEmpty(params[element]) && params[element] !== "undefined";
+                    return _.has(params, element) && _.isNumber(params[element]) || (!_.isEmpty(params[element]) && params[element] !== "undefined");
                 }
             );
             
@@ -204,8 +203,15 @@ exports.personium = (function() {
 
     personium.httpPOSTMethod = function (url, headers, contentType, body, httpCodeExpected) {
         var httpClient = new _p.extension.HttpClient();
-        var response = httpClient.post(url, headers, contentType, body);
-        var httpCode = parseInt(response.status);
+        var response = null;
+        var httpCode;
+        try {
+            response = httpClient.post(url, headers, contentType, body);
+            httpCode = parseInt(response.status);
+        } catch(e) {
+            // Sometimes SSL certificate issue raises exception
+            httpCode = 500;
+        }
         if (httpCode === 500) {
             // retry
             var ignoreVerification = {"IgnoreHostnameVerification": true};
@@ -233,16 +239,16 @@ exports.personium = (function() {
     personium.createErrorResponse = function(e) {
         var tempErrorCode = e.code;
         // System error
-        if (_.isError(e)) {
-            return personium.createResponse(500, e);
-        }
+        // if (_.isError(e)) {
+            // return personium.createResponse(500, e);
+        // }
 
-        var tempErrorMessage;
+        var tempErrorMessage = e.message;
         try {
             // Convert to JSON so that response header can be properly configured ("Content-Type":"application/json").
             tempErrorMessage = JSON.parse(e.message);
         } catch(e) {
-            tempErrorMessage = e.message;
+            tempErrorMessage = tempErrorMessage;
         }
         if (_.isUndefined(tempErrorCode) || _.isNull(tempErrorCode) || tempErrorCode == 0) {
             return personium.createResponse(500, tempErrorMessage);
@@ -262,4 +268,4 @@ exports.personium = (function() {
     };
     
     return personium;
-}());
+}(_));

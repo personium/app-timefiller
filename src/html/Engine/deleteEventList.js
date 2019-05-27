@@ -35,6 +35,6 @@ function(request){
         return personium.createErrorResponse(e);
     }
 }
-
+var _ = require("underscore")._;
 var personium = require("personium").personium;
 var accInfo = require("acc_info").accInfo;
