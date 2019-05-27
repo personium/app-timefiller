@@ -22,6 +22,21 @@ $(function() {
   sessionStorage.screen = "plan";
   setTargetDay();
   displayPlanningList();
+
+  // Set up next / previous button when ready
+  $('#prev-btn').off().click(function () {
+    nowMoment.add(-1,"day");
+    sessionStorage.day = nowMoment.format("YYYY-MM-DD");
+    $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+    displayPlanningList();
+  });
+  
+  $('#next-btn').off().click(function () {
+    nowMoment.add(1,"day");
+    sessionStorage.day = nowMoment.format("YYYY-MM-DD");
+    $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+    displayPlanningList();
+  });
 });
 
 function setTargetDay() {
@@ -108,8 +123,15 @@ function setPlanList(planningObj) {
 
 setHandlebars = function() {
   dataCnt = events.length;
-  $("#plan-list").show();
-  $("#not-plan-list").hide();
+  // If there is no event, display a message to that effect
+  if (dataCnt > 0) {
+    $("#plan-list").show();
+    $("#not-plan-list").hide();
+  } else {
+    $("#plan-list").hide();
+    $("#not-plan-list").show();
+  }
+  
   Handlebars.registerHelper({
     'eq': function(v1, v2) {
       return v1 == v2;
@@ -124,6 +146,7 @@ setHandlebars = function() {
       } else {
         dataCnt--;
         if (dataCnt == 0) {
+          // If there is no event on the day, display a message that there is no event
           $("#plan-list").hide();
           $("#not-plan-list").show();
         }
@@ -142,17 +165,3 @@ setHandlebars = function() {
   var html = template(events);
   $("#plan-list").html(html);
 }
-
-$('#prev-btn').off().click(function () {
-  nowMoment.add(-1,"day");
-  sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-  $("#title-date").text(nowMoment.format('M/DD(ddd)'));
-  setHandlebars();
-});
-
-$('#next-btn').off().click(function () {
-  nowMoment.add(1,"day");
-  sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-  $("#title-date").text(nowMoment.format('M/DD(ddd)'));
-  setHandlebars();
-});
