@@ -170,30 +170,15 @@ function getEventInfo() {
 function updateEvent(eventInfo, updid) {
 	let id = updid;
 	// Event registration
-	updateEventAPI(eventInfo, id).done(function(data, text, response) {
-		if (data) {
-			id = data.d.results.__id;
+	updateEventAPI(eventInfo, updid).done(function(data, text, response) {
+		let msgId = "glossary:eventMessage.regist";
+		if (updid) {
+			msgId = "glossary:eventMessage.update";
 		}
-		let callback = function() {
-			let msgId = "glossary:eventMessage.regist";
-			if (updid) {
-				msgId = "glossary:eventMessage.update";
-			}
-			// Registration success modal
-			Common.openCommonDialog(msgId, "glossary:eventMessage.back", function() {
-				location.href = "index_org.html";
-			});
-		}
-		if (response.status == 201 || response.status == 204) {
-			updateEventList(id, eventInfo).done(function() {
-				callback();
-			}).fail(function(e) {
-				console.log(e);
-			});
-		} else {
-			callback();
-		}
-		
+		// Registration success modal
+		Common.openCommonDialog(msgId, "glossary:eventMessage.back", function() {
+			location.href = "index_org.html";
+		});
 	}).fail(function(e) {
 		console.log(e);
 	});
@@ -234,30 +219,6 @@ function deleteVEventAPI(id) {
 /**********************
    Engine
  **********************/
- function updateEventList(id, eventInfo) {
- 	let temp = {
- 		eventId: id,
- 		cellUrl: Common.getCellUrl(),
- 		startDate: eventInfo.startDate,
- 		endDate: eventInfo.endDate,
- 		title: eventInfo.title,
- 		image: eventInfo.image,
- 		serviceName: eventInfo.serviceName,
- 		serviceImage: eventInfo.serviceImage,
- 		latitude: eventInfo.latitude,
- 		longitude: eventInfo.longitude
- 	}
- 	return $.ajax({
- 		type: "POST",
- 		url: Common.getAppCellUrl() + "__/html/Engine/registerEventList",
- 		data: temp,
- 		headers: {
-            'Accept':'application/json',
-            'Authorization':'Bearer ' + Common.getToken()
-        }
- 	})
- }
-
  function deleteEventList(id) {
  	let temp = {
  		eventId: id,
