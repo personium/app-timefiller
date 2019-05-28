@@ -1,66 +1,54 @@
+/*
+ * Call this engine script regularly to update the organization Cell's event list.
+ */
 function(request) {
     try {
-        var _updateAttr = function(params){
-            var path = "MyData/" + params.filename;
-            var jsonObj = params.contents;
-            var profile = {
-                status: "failed"
-            };
-            if (!_.isEmpty(jsonObj)) {
-                _p.localbox().put({
-                    path: path,
-                    data: JSON.stringify(jsonObj),
-                    contentType: "application/json",
-                    charset: "utf-8",
-                    etag: "*"
-                });
+        var list, result;
+        var requestUrl = "";
 
-                var jsonStr = getFile({filename: params.filename});
-                profile.contents = JSON.parse(jsonStr);
-                profile.status = "succeed";
-            };
-
-            return profile;
-        };
-
-        // Only support GET & POST for now
-        personium.validateRequestMethod(["GET", "POST"], request);
+        /*
+         * Test dummy data
+         */
+        //list = getData(requestUrl);
+        list = [
+            {
+                pid: "5ab92fbd924341818ac25aac47676d68",
+                id: "test-personium",
+                startDate: toPersoniumDatetimeFormatTZ("2019-05-28 09:30:00", "Asia/Tokyo")
+            }
+        ];
         
-        var response, result;
-
-        switch(request.method) {
-            case "GET":
-                // Validate query in URL
-                var query = personium.parseQuery(request);
-                personium.setAllowedKeys(["filename"]);
-                personium.setRequiredKeys(["filename"]);
-                personium.validateKeys(query);
-                
-                // Profile JSON
-                var jsonStr = getFile(query);
-                var profile = JSON.parse(jsonStr);
-                response = profile;
-                result = response;
-                break;
-            case "POST":
-                // Validate parameters
-                var params = personium.parseBodyAsJSON(request);
-                
-                result = getData(params);
-                result = convertData(result);
-                registerEntry(result);
-                break;
-        }
+        _.each(list, function(element, index, list) {
+            var data = convertData(element);
+            updateTableEntry(data);
+        });
         
-        return personium.createResponse(200, result);
+        return personium.createResponse(200, "Succeed in updating events.");
     } catch(e) {
         return personium.createErrorResponse(e);
     }
 };
 
-var getFile = function (query) {   
-    //OData Service Collection of the App Cell this script is running on
-    return _p.localbox().getString('MyData/'+ query.filename);
+var getData = function (requestUrl) {
+    var url = requestUrl; // API that get data from other server
+    var headers = {'Accept':'application/json'};
+    var httpCodeExpected = 200;
+    
+    return personium.httpGETMethod(url, headers, httpCodeExpected)
+};
+
+/*
+ * Implement this function to convert retrieved data to the format of Events table.
+ */
+var convertData = function (rawData) {
+    var newData = {};
+    newData.__id = rawData.pid;
+    return _.extend(newData, rawData);
+};
+
+var toPersoniumDatetimeFormatTZ = function(str, timezone){
+    var newdate = moment.tz(str, timezone);
+    return "/Date(" + newdate.valueOf() + ")/";
 };
 
 // tableName == 'Events'
@@ -75,62 +63,30 @@ var getTable = function (tableName) {
     */
 };
 
-var getEntry = function(params) {
+var getEntry = function(data) {
     var table = getTable('Events');
-    return table.retrieve(params.pid);
-};
-
-var registerEntry = function(params) {
-    var table = getTable('Events');
-    params.__id = params.pid;
-    var obj;
-    try {
-        obj = getReply(params);
-        var oldRawData = JSON.parse(obj.rawData);
-        var newRawData = JSON.parse(params.rawData);
-        var point = calculatePoints(oldRawData, newRawData);
-        
-        // Update rawData with merged information
-        params.rawData = JSON.stringify(_.extend(oldRawData, newRawData));
-        obj = table.merge(obj.__id, params, "*");
-        
-        // get the final merged reply
-        obj = getReply(params);
-        obj.point = point;
-    } catch(e) {
-        obj = table.create(params);
-        obj.point = calculatePoints({}, JSON.parse(params.rawData))
-    }
-    return obj;
-};
-
-var getData = function () {
-    var httpClient = new _p.extension.HttpClient();
-    var httpCode, response;
-
-    // Get Data
-    try {
-        var url = params.url;
-        var headers = {'Accept':'application/json'};
-        response = httpClient.get(url, headers);
-    } catch (e) {
-        // System exception
-        return createResponse(500, e);
-    }
-    httpCode = parseInt(response.status);
-    // Get API usually returns HTTP code 200
-    if (httpCode !== 200) {
-        // Personium exception
-        return createResponse(httpCode, response.body);
-    }
-    var profileJson = JSON.parse(response.body);
+    return table.retrieve(data.pid);
 };
 
 /*
- * Implement this function to convert retrieved data to the format of Events table.
+ * Register a new entry or modified current entry.
  */
-var convertData = function (rawData) {
-    
+var updateTableEntry = function(data) {
+    var table = getTable('Events');
+    data.__id = data.pid;
+    var obj;
+    try {
+        obj = getEntry(data);
+
+        obj = table.merge(obj.__id, data, "*");
+        
+        // get the final merged reply
+        obj = getEntry(data);
+    } catch(e) {
+        // Create a new entry
+        obj = table.create(data);
+    }
+    return obj;
 };
     
 /*
@@ -138,3 +94,5 @@ var convertData = function (rawData) {
  */
 var _ = require("underscore")._;
 var personium = require("personium").personium;
+var moment = require("moment").moment;
+moment = require("moment_timezone_with_data").mtz;

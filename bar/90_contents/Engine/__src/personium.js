@@ -231,6 +231,37 @@ exports.personium = (function(_) {
         }
         return JSON.parse(response.body);
     };
+    
+    personium.httpGETMethod = function (url, headers, httpCodeExpected) {
+        var httpClient = new _p.extension.HttpClient();
+        var response = null;
+        var httpCode;
+        try {
+            response = httpClient.get(url, headers);
+            httpCode = parseInt(response.status);
+        } catch(e) {
+            // Sometimes SSL certificate issue raises exception
+            httpCode = 500;
+        }
+        if (httpCode === 500) {
+            // retry
+            var ignoreVerification = {"IgnoreHostnameVerification": true};
+            httpClient = new _p.extension.HttpClient(ignoreVerification);
+            response = httpClient.get(url, headers);
+            httpCode = parseInt(response.status);
+        }
+        if (httpCode !== httpCodeExpected) {
+            // Personium exception
+            var err = [
+                "io.personium.client.DaoException: ",
+                httpCode,
+                ",",
+                response.body
+            ].join("");
+            throw new _p.PersoniumException(err);
+        }
+        return JSON.parse(response.body);
+    };
 
     /*
      * There is no way to differentiate system error or Personium Exception.
