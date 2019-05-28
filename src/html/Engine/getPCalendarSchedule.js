@@ -10,7 +10,7 @@ function(request){
         personium.validateKeys(params);
 
         // Get app cell token
-        var appToken = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(params.p_target);
+        var appToken = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(params.p_target).getToken();
         var aaat = appToken.access_token;
 
         // Definition of return variable
