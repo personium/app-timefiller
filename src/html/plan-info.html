@@ -86,7 +86,7 @@
   </script>
   <main id="main-area" class="h-footer"></main>
   <script id="main-template" type="text/x-handlebars-template">
-    <div class="top-content plan-info-top-content" style="background-image: url({{image}});">
+    <div class="top-content plan-info-top-content" style="background-image: url({{noImage image}});">
       <svg class="stamp-large joining-stamp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87 64" style="top: 10px; right: 10px;">
         <title>参加スタンプ</title>
         <g id="Layouts">
@@ -217,6 +217,13 @@
               return 0;
             }
             return count;
+          },
+          'noImage': function(image) {
+            if (image) {
+              return image;
+            } else {
+              return Common.getAppCellUrl() + "__/html/img/no_image.jpg";
+            }
           }
         });
         var source = $("#main-template").text();

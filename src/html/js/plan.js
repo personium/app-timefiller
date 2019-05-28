@@ -158,6 +158,9 @@ setHandlebars = function() {
         return 0;
       }
       return count;
+    },
+    'noImage': function() {
+      return Common.getAppCellUrl() + "__/html/img/no_image_thumbnail.jpg";
     }
   });
   var source = $("#plans-template").text();

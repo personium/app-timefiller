@@ -180,7 +180,11 @@
                   {{#if thumbnailUrl}}
                     <img src="{{thumbnailUrl}}" class="list-thumbnail">
                   {{else}}
-                    <img src="{{image}}" class="list-thumbnail">
+                    {{#if image}}
+                      <img src="{{image}}" class="list-thumbnail">
+                    {{else}}
+                      <img src="{{noImage image}}" class="list-thumbnail">
+                    {{/if}}
                   {{/if}}
                 </div>
               </div>
@@ -244,7 +248,15 @@
             <li class="{{planStatus}}-schedule event schedule-list-m">
               <div class="list-image">
                 <div class="list-thumbnail-s">
-                  <img src="{{image}}" class="list-thumbnail">
+                  {{#if thumbnailUrl}}
+                    <img src="{{thumbnailUrl}}" class="list-thumbnail">
+                  {{else}}
+                    {{#if image}}
+                      <img src="{{image}}" class="list-thumbnail">
+                    {{else}}
+                      <img src="{{noImage image}}" class="list-thumbnail">
+                    {{/if}}
+                  {{/if}}                
                 </div>
               </div>
               <div class="list-text">
@@ -293,7 +305,15 @@
             <li class="{{planStatus}}-schedule event schedule-list-m">
               <div class="list-image">
                 <div class="list-thumbnail-s">
-                  <img src="{{image}}" class="list-thumbnail">
+                  {{#if thumbnailUrl}}
+                    <img src="{{thumbnailUrl}}" class="list-thumbnail">
+                  {{else}}
+                    {{#if image}}
+                      <img src="{{image}}" class="list-thumbnail">
+                    {{else}}
+                      <img src="{{noImage image}}" class="list-thumbnail">
+                    {{/if}}
+                  {{/if}}
                 </div>
               </div>
               <div class="list-text">
@@ -398,6 +418,9 @@
                       return 0;
                     }
                     return count;
+                  },
+                  'noImage': function() {
+                    return Common.getAppCellUrl() + "__/html/img/no_image_thumbnail.jpg";
                   }
                 });
                 var source = $("#recommended-template").text();
