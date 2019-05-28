@@ -1,5 +1,5 @@
 function getRecommendList(nowDate, callback) {
-  let urlOData = APP_URL + "__/OData/EventList";
+  let urlOData = Common.getAppCellUrl() + "__/OData/EventList";
   let startMoment = moment(nowDate).startOf("day").add(8,"hour");
   let endMoment = moment(nowDate).endOf("day");
   let query = {

@@ -10,7 +10,7 @@ function(request){
         personium.validateKeys(params);
 
         // Get app cell token
-        var appToken = getAppToken(params.p_target);
+        var appToken = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(params.p_target);
         var aaat = appToken.access_token;
 
         // Definition of return variable
@@ -23,7 +23,7 @@ function(request){
         var url = params.p_target + "__token";
         var headers = {'Accept': 'application/json'};
         var contentType = "application/x-www-form-urlencoded";
-        var body = "grant_type=refresh_token&refresh_token=" + params.refToken + "&client_id=" + APP_CELL_URL + "&client_secret=" + aaat;
+        var body = "grant_type=refresh_token&refresh_token=" + params.refToken + "&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + aaat;
         var httpClient = new _p.extension.HttpClient();
         var pcalRes = httpClient.post(url, headers, contentType, body);
         var pcalToken = JSON.parse(pcalRes.body);
@@ -58,7 +58,7 @@ function(request){
 
         // get calendarCell image
         var pcalProfImage = "";
-        url = APP_CELL_URL + "__/profile.json";
+        url = accInfo.COOP_APP_CELL_URL + "__/profile.json";
         headers = {
             "Accept": "application/json",
         };
@@ -133,22 +133,7 @@ function(request){
     }
 }
 
-// Get app cell token
-function getAppToken(p_target) {
-    var ret;
-    var appCell = _p.as({
-        cellUrl: APP_CELL_URL,
-        userId: APP_USER_ID,
-        password: APP_USER_PASS 
-    }).cell(p_target);
-    ret = appCell.getToken();
-    return ret;
-}
-
-// Personium Calendar Cell Info
-var APP_CELL_URL = "https://app-personium-calendar.demo.personium.io/";
-var APP_USER_ID = "***";
-var APP_USER_PASS = "***";
 var _ = require("underscore")._;
 var personium = require("personium").personium;
 var moment = require("moment").moment;
+var accInfo = require("acc_info").accInfo;
