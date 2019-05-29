@@ -41,7 +41,6 @@ function(request){
                 if (infoRes.status == "200") {
                     var infoBody = JSON.parse(infoRes.body);
                     var infoList = infoBody.d.results;
-
                     for (var j = 0; j < infoList.length; j++) {
                         var info = infoList[j];
                         uuidRes = odataEntity.query().filter("event_id eq '" + info.__id + "' and cellUrl eq '" + cellUrl + "'").select('__id').run().d.results;
@@ -132,16 +131,23 @@ function getBoxUrl(eventCellUrl, token) {
 
 // Get event details
 function getEventInfo(eventCellBoxUrl, token) {
-    var url = eventCellBoxUrl + "OData/Events?$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
+    var url = eventCellBoxUrl + "OData/Events";
+    var filter = "$filter=startDate%20ge%20datetimeoffset'" + moment().startOf("day").toISOString() + "'";
+    var select = "$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
+    var top = "$top=10000";
+    var inlinecount = "$inlinecount=allpages";
+    var orderBy = "$orderby=__updated%20asc";
+    var queryUrl = url + "?" + filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy;
     var headers = {
         "Accept": "application/json",
         "Authorization": "Bearer " + token
     }
-    var infoRes = httpClient.get(url, headers);
+    var infoRes = httpClient.get(queryUrl, headers);
     return infoRes;
 }
 
 var httpClient = new _p.extension.HttpClient();
+var moment = require("moment").moment;
 var _ = require("underscore")._;
 var personium = require("personium").personium;
 var accInfo = require("acc_info").accInfo;
