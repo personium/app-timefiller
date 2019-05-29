@@ -53,7 +53,7 @@ var toPersoniumDatetimeFormatTZ = function(str, timezone){
 
 // tableName == 'Events'
 var getTable = function (tableName) {
-    return _p.localbox().odata('OData').entitySet(tableName);
+    return _p.as('serviceSubject').cell().box().odata('OData').entitySet(tableName);
     
     /*
     var accInfo = require("acc_info").accInfo;
