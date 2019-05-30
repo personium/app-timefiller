@@ -4,7 +4,7 @@ function getRecommendList(nowDate, callback) {
   let endMoment = moment(nowDate).endOf("day");
   let query = {
     "$top": 1000,
-    "$filter": "endDate ge datetimeoffset'"+startMoment.toISOString()+"' and startDate le datetimeoffset'"+endMoment.toISOString()+"'",
+    "$filter": "startDate gt datetimeoffset'"+startMoment.toISOString()+"' and startDate le datetimeoffset'"+endMoment.toISOString()+"'",
     "$orderby": "startDate asc, endDate desc"
   }
   
