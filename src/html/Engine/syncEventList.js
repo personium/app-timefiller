@@ -132,7 +132,7 @@ function getBoxUrl(eventCellUrl, token) {
 // Get event details
 function getEventInfo(eventCellBoxUrl, token) {
     var url = eventCellBoxUrl + "OData/Events";
-    var filter = "$filter=startDate%20ge%20datetimeoffset'" + moment().startOf("day").toISOString() + "'";
+    var filter = "$filter=startDate%20ge%20datetimeoffset'" + moment.tz("Asia/Tokyo").startOf("day").toISOString() + "'";
     var select = "$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
     var top = "$top=10000";
     var inlinecount = "$inlinecount=allpages";
@@ -148,6 +148,7 @@ function getEventInfo(eventCellBoxUrl, token) {
 
 var httpClient = new _p.extension.HttpClient();
 var moment = require("moment").moment;
+moment = require("moment_timezone_with_data").mtz;
 var _ = require("underscore")._;
 var personium = require("personium").personium;
 var accInfo = require("acc_info").accInfo;
