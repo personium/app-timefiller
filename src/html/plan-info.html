@@ -148,8 +148,10 @@
       </div>
 -->
       <div class="plan-info-text">
-        {{description}}
-        <br>
+        {{#each (indention description)}}
+          {{this}}
+          <br>
+        {{/each}}
         日時:{{eventDate startDate}}{{eventTime startDate}} ～ {{eventTime endDate}}
         <br>
         {{#if recruiterLabel}}
@@ -162,30 +164,30 @@
         {{/if}}
       </div>
 
-      <div class="plan-info-place mb-2 mt-2">
-        {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
-          <div class="plan-info-place-title mb-2">開催場所</div>
-        {{/if}}
-        <div class="mb-2" id="mapImage" style="height:350px;">
-        </div>
-        <div class="place-address  mb-2">
-          {{#if place}}
-            {{place}}
-            <br>
-          {{/if}}
-          {{#if address}}
-            住所:
-            {{#if postalCode}}
-              〒{{postalCode}}
+      {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
+        <div class="plan-info-place mb-2 mt-2">
+            <div class="plan-info-place-title mb-2">開催場所</div>
+          <div class="mb-2" id="mapImage" style="height:350px;">
+          </div>
+          <div class="place-address  mb-2">
+            {{#if place}}
+              {{place}}
+              <br>
             {{/if}}
-            {{address}}
-          {{/if}}
-          <br>
-          {{#if phoneNumber}}
-            お問い合わせ:{{phoneNumber}}
-          {{/if}}
+            {{#if address}}
+              住所:
+              {{#if postalCode}}
+                〒{{postalCode}}
+              {{/if}}
+              {{address}}
+            {{/if}}
+            <br>
+            {{#if phoneNumber}}
+              お問い合わせ:{{phoneNumber}}
+            {{/if}}
+          </div>
         </div>
-      </div>
+      {{/if}}
     </div>
     {{#if keywords}}
     <div class="reference-skill">
@@ -229,6 +231,13 @@
             } else {
               return Common.getAppCellUrl() + "__/html/img/no_image.jpg";
             }
+          },
+          indention: function(str) {
+            // Replace line feed code
+            str = str.replace(/\r\n/g, '\\n');
+            str = str.replace(/\r/g, '\\n');
+            str = str.replace(/\n/g, '\\n');
+            return str.split("\\n");
           }
         });
         var source = $("#main-template").text();
