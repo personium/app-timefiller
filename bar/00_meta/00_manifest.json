@@ -1,6 +1,6 @@
 {
     "bar_version": "2",
     "box_version": "1",
-    "default_path": "app",
+    "default_path": "timefiller",
     "schema": "https://app-timefiller-wakaba.demo.personium.io/"
 }
