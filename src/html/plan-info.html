@@ -134,7 +134,12 @@
           -->
         </div>
         {{#if postDate}}
-        <div class="date text-right">掲載日：{{postDate postDate}}</div>
+        <div>
+          {{#if serviceImage}}
+            <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.05em;"> 
+          {{/if}}
+          {{serviceName}}
+        </div>
         {{/if}}
       </div>
 <!--
