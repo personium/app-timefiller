@@ -550,6 +550,10 @@ ul.plan-list-area li {
   font-size: 1.2rem;
 }
 
+.plan-info-place {
+  border-top: 1px solid #969696;
+}
+
 .place-map {
   position: relative;
   padding-bottom: 56.25%;
@@ -657,7 +661,6 @@ footer>button>.icon-text {
   font-size: 1.2rem;
   padding-top: 1.2rem;
   padding-bottom: 1.2rem;
-  border-bottom: 1px solid #969696;
 }
 
 .plan-footer-btn {

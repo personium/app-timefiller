@@ -7,7 +7,6 @@ readRoleName = "EventRead";
 
 function getEventList(paramObj) {
 	let urlOData = Common.getBoxUrl() + 'OData/Events';
-	//let urlOData = "https://app-timefiller-wakaba.demo.personium.io/__/" + 'OData/Events';
 	let query = {
 		"$top": 1000,
 		"$orderby": "startDate asc, endDate desc"
@@ -25,7 +24,7 @@ function getEventList(paramObj) {
 
 function publishEvent() {
 	let createFlg = 2; // 0:Not required 1:Role assignment 2:Create external cell
-	Common.getExtCellRoleList(APP_URL).done(function(data) {
+	Common.getExtCellRoleList(Common.getAppCellUrl()).done(function(data) {
 		console.log(data);
 		let res = data.d.results;
 		createFlg = 1;
@@ -42,19 +41,19 @@ function publishEvent() {
 		switch(createFlg) {
 			case 1:
 				// Role grant
-				Common.restAddExtCellLinkRoleAPI(APP_URL, Common.getBoxName(), readRoleName).fail(function(e) {
+				Common.restAddExtCellLinkRoleAPI(Common.getAppCellUrl(), Common.getBoxName(), readRoleName).fail(function(e) {
 					console.log(e);
 				});
 				break;
 			case 2:
 				// Role creation after creating an external cell
 				let jsonData = {
-					"Url": APP_URL
+					"Url": Common.getAppCellUrl()
 				}
 				// Create external cell
 				Common.restCreateExtCellAPI(Common.getCellUrl(), Common.getToken(), jsonData).done(function() {
 					// Role grant
-					Common.restAddExtCellLinkRoleAPI(APP_URL, Common.getBoxName(), readRoleName).fail(function(e) {
+					Common.restAddExtCellLinkRoleAPI(Common.getAppCellUrl(), Common.getBoxName(), readRoleName).fail(function(e) {
 						console.log(e);
 					});
 				}).fail(function(e) {
