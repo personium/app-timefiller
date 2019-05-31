@@ -57,7 +57,7 @@ function displayPlanningList() {
   paramObj.callback = function(odataObj) {
     if (sessionStorage.keywords) {
       const keywords = JSON.parse(sessionStorage.keywords);
-      planList = createPlanList(odataObj.d.results, keywords, MAX_PLANLIST_SIZE)
+      planList = createRecommendedList(odataObj.d.results, keywords, MAX_PLANLIST_SIZE)
     } else {
       planList = _.sample(odataObj.d.results, MAX_PLANLIST_SIZE);
     }
@@ -74,7 +74,7 @@ function displayPlanningList() {
   getSortedEvents(paramObj);
 }
 
-function createPlanList(orgPlanList, keywords, maxSize) {
+function createRecommendedList(orgPlanList, keywords, maxSize) {
   let ret = filterByKeywords(orgPlanList, keywords);
   ret = _.sample(ret, maxSize);
   if (ret.length <= maxSize) {
