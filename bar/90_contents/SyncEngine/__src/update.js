@@ -10,11 +10,12 @@ function(request) {
          * Test dummy data
          */
         //list = getData(requestUrl);
+        var currentDatetime = moment.tz("Asia/Tokyo");
         list = [
             {
-                pid: "5ab92fbd924341818ac25aac47676d68",
-                id: "test-personium",
-                startDate: toPersoniumDatetimeFormatTZ("2019-05-28 09:30:00", "Asia/Tokyo")
+                id: "5ab92fbd924341818ac25aac47676d68",
+                description: "Personium " + currentDatetime.format(),
+                postDate: toPersoniumDatetimeFormatTZ("2019-05-28 09:30:00", "Asia/Tokyo")
             }
         ];
         
@@ -42,7 +43,7 @@ var getData = function (requestUrl) {
  */
 var convertData = function (rawData) {
     var newData = {};
-    newData.__id = rawData.pid;
+    newData.__id = rawData.id;
     return _.extend(newData, rawData);
 };
 
@@ -53,7 +54,7 @@ var toPersoniumDatetimeFormatTZ = function(str, timezone){
 
 // tableName == 'Events'
 var getTable = function (tableName) {
-    return _p.localbox().odata('OData').entitySet(tableName);
+    return _p.as('serviceSubject').cell().box().odata('OData').entitySet(tableName);
     
     /*
     var accInfo = require("acc_info").accInfo;
@@ -65,7 +66,7 @@ var getTable = function (tableName) {
 
 var getEntry = function(data) {
     var table = getTable('Events');
-    return table.retrieve(data.pid);
+    return table.retrieve(data.id);
 };
 
 /*
@@ -73,7 +74,7 @@ var getEntry = function(data) {
  */
 var updateTableEntry = function(data) {
     var table = getTable('Events');
-    data.__id = data.pid;
+    data.__id = data.id;
     var obj;
     try {
         obj = getEntry(data);

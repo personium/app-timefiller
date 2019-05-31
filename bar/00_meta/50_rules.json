@@ -1,0 +1,11 @@
+{
+    "Rules": [
+        {
+            "Action": "exec",
+            "EventExternal": false,
+            "EventObject": "10",
+            "EventType": "timer.periodic",
+            "TargetUrl": "personium-localbox:/SyncEngine/update"
+        }
+    ]
+}
