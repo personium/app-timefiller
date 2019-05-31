@@ -74,16 +74,6 @@ function displayPlanningList() {
   getSortedEvents(paramObj);
 }
 
-function createRecommendedList(orgPlanList, keywords, maxSize) {
-  let ret = filterByKeywords(orgPlanList, keywords);
-  ret = _.sample(ret, maxSize);
-  if (ret.length <= maxSize) {
-    const ext = _.sample(orgPlanList, maxSize - ret.length);
-    ret = _.union(ret, ext);
-  }
-  return ret;
-}
-
 function setPlanList(planningObj) {
   if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
     $("title").text("プラン一覧");

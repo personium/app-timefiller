@@ -510,6 +510,17 @@ function getMyDataAPI(filename) {
   });
 }
 
+// Create recommended list using keywords
+function createRecommendedList(orgPlanList, keywords, maxSize) {
+  let ret = filterByKeywords(orgPlanList, keywords);
+  ret = _.sample(ret, maxSize);
+  if (ret.length <= maxSize) {
+    const ext = _.sample(orgPlanList, maxSize - ret.length);
+    ret = _.union(ret, ext);
+  }
+  return ret;
+}
+
 // Filter planlist by keywords
 function filterByKeywords(planList, keywords) {
   return _.filter(planList, function(event) {
