@@ -78,7 +78,11 @@
             {{#if thumbnailUrl}}
               <img src="{{thumbnailUrl}}" class="list-thumbnail">
             {{else}}
-              <img src="{{image}}" class="list-thumbnail">
+              {{#if image}}
+                <img src="{{image}}" class="list-thumbnail">
+              {{else}}
+                <img src="{{noImage image}}" class="list-thumbnail">
+              {{/if}}
             {{/if}}
           </div>
         </div>

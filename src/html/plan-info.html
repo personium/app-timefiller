@@ -77,8 +77,8 @@
         </div>
       </a>
 
-      <div class="header-title">
-        <div class="title">
+      <div class="header-title" style="width: 80%;margin-left: 15px;">
+        <div class="title text-hidden" title={{title}}>
           {{title}}
         </div>
       </div>
@@ -86,7 +86,7 @@
   </script>
   <main id="main-area" class="h-footer"></main>
   <script id="main-template" type="text/x-handlebars-template">
-    <div class="top-content plan-info-top-content" style="background-image: url({{image}});">
+    <div class="top-content plan-info-top-content" style="background-image: url({{noImage image}});">
       <svg class="stamp-large joining-stamp" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 87 64" style="top: 10px; right: 10px;">
         <title>参加スタンプ</title>
         <g id="Layouts">
@@ -134,7 +134,12 @@
           -->
         </div>
         {{#if postDate}}
-        <div class="date text-right">掲載日：{{postDate postDate}}</div>
+        <div>
+          {{#if serviceImage}}
+            <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.05em;"> 
+          {{/if}}
+          {{serviceName}}
+        </div>
         {{/if}}
       </div>
 <!--
@@ -143,8 +148,10 @@
       </div>
 -->
       <div class="plan-info-text">
-        {{description}}
-        <br>
+        {{#each (indention description)}}
+          {{this}}
+          <br>
+        {{/each}}
         日時:{{eventDate startDate}}{{eventTime startDate}} ～ {{eventTime endDate}}
         <br>
         {{#if recruiterLabel}}
@@ -157,30 +164,30 @@
         {{/if}}
       </div>
 
-      <div class="plan-info-place mb-2 mt-2">
-        {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
-          <div class="plan-info-place-title mb-2">開催場所</div>
-        {{/if}}
-        <div class="mb-2" id="mapImage" style="height:350px;">
-        </div>
-        <div class="place-address  mb-2">
-          {{#if place}}
-            {{place}}
-            <br>
-          {{/if}}
-          {{#if address}}
-            住所:
-            {{#if postalCode}}
-              〒{{postalCode}}
+      {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
+        <div class="plan-info-place mb-2 mt-2">
+            <div class="plan-info-place-title mb-2">開催場所</div>
+          <div class="mb-2" id="mapImage" style="height:350px;">
+          </div>
+          <div class="place-address  mb-2">
+            {{#if place}}
+              {{place}}
+              <br>
             {{/if}}
-            {{address}}
-          {{/if}}
-          <br>
-          {{#if phoneNumber}}
-            お問い合わせ:{{phoneNumber}}
-          {{/if}}
+            {{#if address}}
+              住所:
+              {{#if postalCode}}
+                〒{{postalCode}}
+              {{/if}}
+              {{address}}
+            {{/if}}
+            <br>
+            {{#if phoneNumber}}
+              お問い合わせ:{{phoneNumber}}
+            {{/if}}
+          </div>
         </div>
-      </div>
+      {{/if}}
     </div>
     {{#if keywords}}
     <div class="reference-skill">
@@ -217,6 +224,20 @@
               return 0;
             }
             return count;
+          },
+          'noImage': function(image) {
+            if (image) {
+              return image;
+            } else {
+              return Common.getAppCellUrl() + "__/html/img/no_image.jpg";
+            }
+          },
+          indention: function(str) {
+            // Replace line feed code
+            str = str.replace(/\r\n/g, '\\n');
+            str = str.replace(/\r/g, '\\n');
+            str = str.replace(/\n/g, '\\n');
+            return str.split("\\n");
           }
         });
         var source = $("#main-template").text();

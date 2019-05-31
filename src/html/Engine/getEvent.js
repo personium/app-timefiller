@@ -9,7 +9,7 @@ function(request){
         personium.setRequiredKeys(['id']);
         personium.validateKeys(params);
 
-        var appCell = getAppCell();
+        var appCell = _p.as(accInfo.APP_CELL_ADMIN_INFO).cell();
         var odata = appCell.box().odata("OData");
 
         var results = {};
@@ -47,7 +47,7 @@ function(request){
 
 // Get Transcell Token
 function getTranscellToken(eventCellUrl, refToken) {
-    var url = APP_CELL_URL + "__token";
+    var url = accInfo.APP_CELL_URL + "__token";
     var headers = {
         'Accept':'application/json'
     }
@@ -64,7 +64,7 @@ function getBoxAccessToken(eventCellUrl, refToken, aaat) {
         'Accept':'application/json'
     }
     var contentType = "application/x-www-form-urlencoded";
-    var body = "grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + refToken + "&client_id=" + APP_CELL_URL + "&client_secret=" + aaat;
+    var body = "grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&assertion=" + refToken + "&client_id=" + accInfo.APP_CELL_URL + "&client_secret=" + aaat;
     var boxAccessTokenRes = httpClient.post(url, headers, contentType, body);
     return JSON.parse(boxAccessTokenRes.body);
 }
@@ -104,20 +104,8 @@ function getEventInfo(eventCellBoxUrl, id, token) {
     return infoRes;
 }
 
-function getAppCell() {
-    var ret;
-    var appCell = _p.as({
-        cellUrl: APP_CELL_URL,
-        userId: APP_USER_ID,
-        password: APP_USER_PASS 
-    }).cell();
-    return appCell;
-}
-
-var APP_CELL_URL = "https://app-timefiller-wakaba.demo.personium.io/";
-var APP_USER_ID = "***";
-var APP_USER_PASS = "***";
 var httpClient = new _p.extension.HttpClient();
 var _ = require("underscore")._;
 var personium = require("personium").personium;
 var moment = require("moment").moment;
+var accInfo = require("acc_info").accInfo;

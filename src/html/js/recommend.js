@@ -1,10 +1,10 @@
 function getRecommendList(nowDate, callback) {
-  let urlOData = APP_URL + "__/OData/EventList";
+  let urlOData = Common.getAppCellUrl() + "__/OData/EventList";
   let startMoment = moment(nowDate).startOf("day").add(8,"hour");
   let endMoment = moment(nowDate).endOf("day");
   let query = {
     "$top": 1000,
-    "$filter": "endDate ge datetimeoffset'"+startMoment.toISOString()+"' and startDate le datetimeoffset'"+endMoment.toISOString()+"'",
+    "$filter": "startDate gt datetimeoffset'"+startMoment.toISOString()+"' and startDate le datetimeoffset'"+endMoment.toISOString()+"'",
     "$orderby": "startDate asc, endDate desc"
   }
   
@@ -183,7 +183,7 @@ function setRecommendSchedule(resultList, list) {
       if (!skipFlg) {
         if (pushCnt >= 0) {
           // Add an event at the end of the schedule
-          if (result[pushCnt - 1].type == "transportation") {
+          if (result[pushCnt - 1] && result[pushCnt - 1].type == "transportation") {
             pushCnt--;
           }
           result.splice(pushCnt, 0, plan);
