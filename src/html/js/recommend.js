@@ -1,4 +1,4 @@
-const MAX_PLANLIST_SIZE = 10;
+const MAX_PLANLIST_SIZE = 15;
 
 function getRecommendList(nowDate, callback) {
   let urlOData = Common.getAppCellUrl() + "__/OData/EventList";
@@ -82,7 +82,7 @@ function getRecommendList(nowDate, callback) {
       recommendSchedule = setRecommendSchedule(recommendSchedule, recommendedPlanList);
 
       // Other
-      const sampledPlanList = _.sample(planList, MAX_PLANLIST_SIZE);
+      const sampledPlanList = _.sample(filterByContent(planList), MAX_PLANLIST_SIZE);
       recommendSchedule = setRecommendSchedule(recommendSchedule, sampledPlanList);
       
       let lastHomeEndMoment = moment(recommendSchedule[recommendSchedule.length - 1].endDate);

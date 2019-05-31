@@ -514,16 +514,16 @@ function getMyDataAPI(filename) {
 function createRecommendedList(orgPlanList, keywords, maxSize) {
   console.log('===originalList===');
   console.log(orgPlanList);
-  const keywordFiltered = filterByKeywords(orgPlanList, keywords);
-  console.log('===keywordFiltered===');
-  console.log(keywordFiltered);
-  const contentFiltered = filterByContent(keywordFiltered);
+  const contentFiltered = filterByContent(orgPlanList);
   console.log('===contentFiltered===');
   console.log(contentFiltered);
+  const keywordFiltered = filterByKeywords(contentFiltered, keywords);
+  console.log('===keywordFiltered===');
+  console.log(keywordFiltered);
   console.log('===========================');
-  let ret = _.sample(contentFiltered, maxSize);
+  let ret = _.sample(keywordFiltered, maxSize);
   if (ret.length <= maxSize) {
-    const ext = _.sample(keywordFiltered, maxSize - ret.length);
+    const ext = _.sample(contentFiltered, maxSize - ret.length);
     ret = _.union(ret, ext);
   }
   return ret;
@@ -532,7 +532,7 @@ function createRecommendedList(orgPlanList, keywords, maxSize) {
 // Filter planlist by title, image and description
 function filterByContent(orgPlanList) {
   return _.filter(orgPlanList, function(event) {
-    return event.title && event.image;
+    return (!_.isEmpty(event.title) && !_.isEmpty(event.image));
   });
 }
 
@@ -541,7 +541,9 @@ function filterByKeywords(planList, keywords) {
   return _.filter(planList, function(event) {
     if (!_.isEmpty(keywords)) {
       return _.some(keywords, function(keyword) {
-        return _.contains(event.keywords, keyword);
+        return _.some(event.keywords, function(eventKeyword) {
+          return (eventKeyword.indexOf(keyword) != -1);
+        })
       });
     } else {
       return false;
