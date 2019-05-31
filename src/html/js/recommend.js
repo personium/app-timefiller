@@ -1,3 +1,5 @@
+const MAX_PLANLIST_SIZE = 10;
+
 function getRecommendList(nowDate, callback) {
   let urlOData = Common.getAppCellUrl() + "__/OData/EventList";
   let startMoment = moment(nowDate).startOf("day").add(8,"hour");
@@ -75,12 +77,13 @@ function getRecommendList(nowDate, callback) {
       // Review / Participation
       recommendSchedule = setRecommendSchedule(recommendSchedule, todayPlanningList);
       
-      // Plan list related to my keywords
-      const filteredPlanList = filterByKeywords(planList, myKeywords);
-      recommendSchedule = setRecommendSchedule(recommendSchedule, filteredPlanList);
+      // Recommended plan list using my keywords
+      const recommendedPlanList = createRecommendedList(planList, myKeywords, MAX_PLANLIST_SIZE);
+      recommendSchedule = setRecommendSchedule(recommendSchedule, recommendedPlanList);
 
       // Other
-      recommendSchedule = setRecommendSchedule(recommendSchedule, planList);
+      const sampledPlanList = _.sample(planList, MAX_PLANLIST_SIZE);
+      recommendSchedule = setRecommendSchedule(recommendSchedule, sampledPlanList);
       
       let lastHomeEndMoment = moment(recommendSchedule[recommendSchedule.length - 1].endDate);
       var homePlan = {
