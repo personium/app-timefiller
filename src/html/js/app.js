@@ -512,13 +512,28 @@ function getMyDataAPI(filename) {
 
 // Create recommended list using keywords
 function createRecommendedList(orgPlanList, keywords, maxSize) {
-  let ret = filterByKeywords(orgPlanList, keywords);
-  ret = _.sample(ret, maxSize);
+  console.log('===originalList===');
+  console.log(orgPlanList);
+  const keywordFiltered = filterByKeywords(orgPlanList, keywords);
+  console.log('===keywordFiltered===');
+  console.log(keywordFiltered);
+  const contentFiltered = filterByContent(keywordFiltered);
+  console.log('===contentFiltered===');
+  console.log(contentFiltered);
+  console.log('===========================');
+  let ret = _.sample(contentFiltered, maxSize);
   if (ret.length <= maxSize) {
-    const ext = _.sample(orgPlanList, maxSize - ret.length);
+    const ext = _.sample(keywordFiltered, maxSize - ret.length);
     ret = _.union(ret, ext);
   }
   return ret;
+}
+
+// Filter planlist by title, image and description
+function filterByContent(orgPlanList) {
+  return _.filter(orgPlanList, function(event) {
+    return event.title && event.image;
+  });
 }
 
 // Filter planlist by keywords
