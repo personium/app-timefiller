@@ -87,10 +87,20 @@ function getRecommendList(nowDate, callback) {
           "type": "home",
           "planStatus": "confirm",
           "title": "自宅",
-          "startDate": lastHomeEndMoment.add(30, "minutes").toISOString()
+          "startDate": lastHomeEndMoment.toISOString()
       }
-      if (checkLonLat(recommendSchedule, homePlan, recommendSchedule.length - 1)) {
-        recommendSchedule.push(getMove());
+      let resultIndex = checkLonLat(recommendSchedule, homePlan, recommendSchedule.length - 1);
+      if (resultIndex) {
+        homePlan.startDate = lastHomeEndMoment.add(
+            getTravelTime(
+              recommendSchedule[resultIndex].longitude
+            , recommendSchedule[resultIndex].latitude
+            , homePlan.longitude
+            , homePlan.latitude
+            )
+          , "minutes"
+        ).toISOString();
+        recommendSchedule.push(getMove(homePlan, recommendSchedule[resultIndex]));
       }
       recommendSchedule.push(homePlan);
   
@@ -187,14 +197,16 @@ function setRecommendSchedule(resultList, list) {
             pushCnt--;
           }
           result.splice(pushCnt, 0, plan);
-          if (checkLonLat(result, plan, pushCnt)) {
-            result.splice(pushCnt, 0, getMove());
+          let resultIndex = checkLonLat(result, plan, pushCnt);
+          if (resultIndex) {
+            result.splice(pushCnt, 0, getMove(plan, result[resultIndex]));
           }
         } else if (tempPrevRes && moment(tempPrevRes.endDate).add(30, "minutes").isSameOrBefore(planStartMoment)) {
           result.push(plan);
           // Insert an event
-          if (checkLonLat(result, plan, result.length - 1)) {
-            result.splice(result.length - 1, 0, getMove());
+          let resultIndex = checkLonLat(result, plan, result.length - 1);
+          if (resultIndex) {
+            result.splice(result.length - 1, 0, getMove(plan, result[resultIndex]));
           }
           
         }
@@ -217,21 +229,33 @@ function getTravelTime(stLon, stLat, edLon, edLat) {
  * Check the latitude and longitude of the event to determine the need for travel time
  */
 function checkLonLat(resultList, plan, index) {
-  if (!resultList[index-1]) {
+  if (!resultList[index]) {
     return false;
   }
 
-  if (plan.type != "home") { //　Interim: type = "home" needs to be moved
-    if (!plan.longitude || !plan.latitude) {
-      return false;
+  if (!plan.longitude || !plan.latitude) {
+    return false;
+  }
+
+  let moveTargetIndex = null;
+  for (var i = index; i >= 0; i--) {
+    if (resultList[i].longitude && resultList[i].latitude) {
+      if (resultList[i].longitude != plan.longitude 
+        || resultList[i].latitude != plan.latitude) {
+        moveTargetIndex = i;
+      }
+      break;
     }
   }
 
-  return true;
+  return moveTargetIndex;
 }
 
-// Acquisition of movement event
-function getMove() {
+/*
+ * Calculate movement distance between events from latitude and longitude and return movement event
+ * TODO:Currently not implemented
+ */
+function getMove(plan, resultPlan) {
   return {
     "type": "transportation",
     "title": "移動",
