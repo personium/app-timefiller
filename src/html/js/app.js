@@ -510,12 +510,40 @@ function getMyDataAPI(filename) {
   });
 }
 
+// Create recommended list using keywords
+function createRecommendedList(orgPlanList, keywords, maxSize) {
+  console.log('===originalList===');
+  console.log(orgPlanList);
+  const contentFiltered = filterByContent(orgPlanList);
+  console.log('===contentFiltered===');
+  console.log(contentFiltered);
+  const keywordFiltered = filterByKeywords(contentFiltered, keywords);
+  console.log('===keywordFiltered===');
+  console.log(keywordFiltered);
+  console.log('===========================');
+  let ret = _.sample(keywordFiltered, maxSize);
+  if (ret.length <= maxSize) {
+    const ext = _.sample(contentFiltered, maxSize - ret.length);
+    ret = _.union(ret, ext);
+  }
+  return ret;
+}
+
+// Filter planlist by title, image and description
+function filterByContent(orgPlanList) {
+  return _.filter(orgPlanList, function(event) {
+    return (!_.isEmpty(event.title) && !_.isEmpty(event.image));
+  });
+}
+
 // Filter planlist by keywords
 function filterByKeywords(planList, keywords) {
   return _.filter(planList, function(event) {
     if (!_.isEmpty(keywords)) {
       return _.some(keywords, function(keyword) {
-        return _.contains(event.keywords, keyword);
+        return _.some(event.keywords, function(eventKeyword) {
+          return (eventKeyword.indexOf(keyword) != -1);
+        })
       });
     } else {
       return false;
