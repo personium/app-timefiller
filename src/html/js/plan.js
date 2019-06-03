@@ -55,13 +55,7 @@ function displayPlanningList() {
     'endDate': nowMoment.endOf("day").toISOString()
   };
   paramObj.callback = function(odataObj) {
-    if (sessionStorage.keywords) {
-      const keywords = JSON.parse(sessionStorage.keywords);
-      planList = createRecommendedList(odataObj.d.results, keywords, MAX_PLANLIST_SIZE)
-    } else {
-      planList = _.sample(odataObj.d.results, MAX_PLANLIST_SIZE);
-    }
-    planList = _.sortBy(planList, 'startDate');
+    planList = odataObj.d.results;
     getPlanningAPI()
       .done(setPlanList)
       .fail(function() {
@@ -79,7 +73,14 @@ function setPlanList(planningObj) {
     $("title").text("プラン一覧");
     $("#planList").addClass("current");
     $("#considerationList").removeClass("current");
-    events = planList;
+    if (sessionStorage.keywords) {
+      const keywords = JSON.parse(sessionStorage.keywords);
+      events = createRecommendedList(planList, keywords, MAX_PLANLIST_SIZE)
+    } else {
+      events = _.sample(planList, MAX_PLANLIST_SIZE);
+    }
+    events = _.sortBy(events, 'startDate');
+
     _.each(planningObj.d.results, function(p_event, p_index, p_list) {
       _.every(events, function(event) {
         if (p_event.event_id == event.__id) {
