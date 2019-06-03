@@ -43,7 +43,7 @@ function(request){
         var pcalBoxUrl = pcalBox.Url;
 
         // get Calendar Event
-        var dayMoment = moment(params.targetDay);
+        var dayMoment = moment.tz(params.targetDay, TZ);
         var sDate = dayMoment.startOf("day").toISOString();
         var eDate = dayMoment.endOf("day").toISOString();
         url = pcalBoxUrl + "OData/vevent?";
@@ -85,12 +85,12 @@ function(request){
                     cSDate  = data.dtstart;
                     cEDate = data.dtend;
                 } else {
-                    var tempPrevDate = moment(cEDate);
-                    var tempSDate = moment(data.dtstart);
+                    var tempPrevDate = moment.tz(cEDate, TZ);
+                    var tempSDate = moment.tz(data.dtstart, TZ);
                     if (tempPrevDate.isSameOrAfter(tempSDate)) {
                         // Added title because event is duplicated
                         cTitle.push({"title":data.summary});
-                        var tempEDate = moment(data.dtend);
+                        var tempEDate = moment.tz(data.dtend, TZ);
                         if (tempPrevDate.isBefore(tempEDate)) {
                             cEDate = data.dtend;
                         }
@@ -133,7 +133,17 @@ function(request){
     }
 }
 
+/*
+ * In order to use helpful functions, you need to "require" the library.
+ */
 var _ = require("underscore")._;
 var personium = require("personium").personium;
 var moment = require("moment").moment;
+moment = require("moment_timezone_with_data").mtz;
 var accInfo = require("acc_info").accInfo;
+
+/*
+ * Variables
+ */
+var API_INFO = accInfo.API_INFO;
+var TZ = API_INFO.tz;

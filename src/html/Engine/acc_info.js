@@ -9,6 +9,8 @@ exports.accInfo = (function() {
     var coopAppCellUrl = 'https://app-personium-calendar.demo.personium.io/';
     var coopUserId = '***';
     var coopUserPass = '***';
+    
+    var tz = 'Asia/Tokyo';
 
     /*
      * End of your Personium app configurations
@@ -30,6 +32,9 @@ exports.accInfo = (function() {
         userId: coopUserId,
         password: coopUserPass
     };
+    accInfo.API_INFO = {
+        tz: tz
+    }
 
     return accInfo;
 }());
