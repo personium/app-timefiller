@@ -68,7 +68,9 @@ function getRecommendList(nowDate, callback) {
           "planStatus": "confirm",
           "title": "自宅",
           "startDate": startMoment.toISOString(),
-          "endDate": moment(startMoment).add(30, "minutes").toISOString()
+          "endDate": moment(startMoment).add(30, "minutes").toISOString(),
+          "longitude": 9999, // Interim
+          "latitude": 9999 // Interim
       });
 
       // calendar:oneday
@@ -86,14 +88,17 @@ function getRecommendList(nowDate, callback) {
       recommendSchedule = setRecommendSchedule(recommendSchedule, sampledPlanList);
       
       let lastHomeEndMoment = moment(recommendSchedule[recommendSchedule.length - 1].endDate);
-      var homePlan = {
+      let homePlan = {
           "type": "home",
           "planStatus": "confirm",
           "title": "自宅",
-          "startDate": lastHomeEndMoment.toISOString()
+          "startDate": lastHomeEndMoment.toISOString(),
+          "longitude": 9999, // Interim
+          "latitude": 9999 // Interim
       }
+      let sectionEvent = getSection();
       let resultIndex = checkLonLat(recommendSchedule, homePlan, recommendSchedule.length - 1);
-      if (resultIndex) {
+      if (resultIndex != null) {
         homePlan.startDate = lastHomeEndMoment.add(
             getTravelTime(
               recommendSchedule[resultIndex].longitude
@@ -103,8 +108,9 @@ function getRecommendList(nowDate, callback) {
             )
           , "minutes"
         ).toISOString();
-        recommendSchedule.push(getMove(homePlan, recommendSchedule[resultIndex]));
+        sectionEvent = getMove(homePlan, recommendSchedule[resultIndex]);
       }
+      recommendSchedule.push(sectionEvent);
       recommendSchedule.push(homePlan);
   
       if ((typeof callback !== "undefined") && $.isFunction(callback)) {
@@ -196,22 +202,30 @@ function setRecommendSchedule(resultList, list) {
       if (!skipFlg) {
         if (pushCnt >= 0) {
           // Add an event at the end of the schedule
-          if (result[pushCnt - 1] && result[pushCnt - 1].type == "transportation") {
+          if (result[pushCnt - 1] && (result[pushCnt - 1].type == "transportation" || result[pushCnt - 1].type == "section")) {
             pushCnt--;
           }
-          result.splice(pushCnt, 0, plan);
+          let sectionEvent = getSection();
           let resultIndex = checkLonLat(result, plan, pushCnt);
-          if (resultIndex) {
-            result.splice(pushCnt, 0, getMove(plan, result[resultIndex]));
+          if (resultIndex != null) {
+            sectionEvent = getMove(plan, result[resultIndex]);
           }
-        } else if (tempPrevRes && moment(tempPrevRes.endDate).add(30, "minutes").isSameOrBefore(planStartMoment)) {
-          result.push(plan);
+          result.splice(pushCnt, 0, plan);
+          result.splice(pushCnt, 0, sectionEvent);
+        } else {
+          let addMinutes = 0;
           // Insert an event
+          let sectionEvent = getSection();
           let resultIndex = checkLonLat(result, plan, result.length - 1);
-          if (resultIndex) {
-            result.splice(result.length - 1, 0, getMove(plan, result[resultIndex]));
+          if (resultIndex != null) {
+            sectionEvent = getMove(plan, result[resultIndex]);
+            addMinutes = getTravelTime(result[resultIndex].longitude, result[resultIndex].latitude, plan.longitude, plan.latitude);
           }
-          
+
+          if (tempPrevRes && moment(tempPrevRes.endDate).add(addMinutes, "minutes").isSameOrBefore(planStartMoment)) {
+            result.push(plan);
+            result.splice(result.length - 1, 0, sectionEvent);
+          }
         }
       }
     }
@@ -229,15 +243,23 @@ function getTravelTime(stLon, stLat, edLon, edLat) {
 }
 
 /**
+ * Find moving distance from start point to end point (minutes)
+ * (Unmounted: fixed for 300M)
+ */
+function getTravelDistance(stLon, stLat, edLon, edLat) {
+  return "約300M";
+}
+
+/**
  * Check the latitude and longitude of the event to determine the need for travel time
  */
 function checkLonLat(resultList, plan, index) {
   if (!resultList[index]) {
-    return false;
+    return null;
   }
 
   if (!plan.longitude || !plan.latitude) {
-    return false;
+    return null;
   }
 
   let moveTargetIndex = null;
@@ -254,6 +276,12 @@ function checkLonLat(resultList, plan, index) {
   return moveTargetIndex;
 }
 
+function getSection() {
+  return {
+    "type": "section"
+  };
+}
+
 /*
  * Calculate movement distance between events from latitude and longitude and return movement event
  * TODO:Currently not implemented
@@ -262,7 +290,12 @@ function getMove(plan, resultPlan) {
   return {
     "type": "transportation",
     "title": "移動",
-    "distance": "約300M"
+    "distance": getTravelDistance(
+                resultPlan.longitude
+              , resultPlan.latitude
+              , plan.longitude
+              , plan.latitude
+            )
   };
 }
 
