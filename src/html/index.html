@@ -206,6 +206,11 @@
             {{/if}}
 
             <!-- Transportation -->
+            {{#if (eq type "section")}}
+            {{{section_html this}}}
+            {{/if}}
+
+            <!-- Transportation -->
             {{#if (eq type "transportation")}}
             {{{transportation_html this}}}
             {{/if}}
@@ -389,6 +394,29 @@
                     // For FF2018 May 18th
                     let dateFF = nowMoment;
                     return dateFF.isSame(moment(date), 'day');
+                  },
+                  'section_html': function(object) {
+                    let title = Handlebars.escapeExpression(object.title);
+                    let distance = Handlebars.escapeExpression(object.distance);
+                    return new Handlebars.SafeString(
+                      [
+                      "<li class='default-schedule traffic schedule-list-xs'>",
+                        "<div class='list-image'>",
+                          "<div class='list-thumbnail-xs'>",
+                          "</div>",
+                        "</div>",
+                        "<div class='list-text'>",
+                          "<div class='title'>",
+                            title,
+                          "</div>",
+                          "<div class='etc_area'>",
+                            "<div class='status'>",
+                              distance,
+                            "</div>",
+                          "</div>",
+                        "</div>",
+                      "</li>"].join("")
+                    )
                   },
                   'transportation_html': function(object) {
                     let title = Handlebars.escapeExpression(object.title);
