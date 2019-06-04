@@ -401,6 +401,10 @@ main.schedule-list .list ul li {
   width: 100%;
 }
 
+.list ul li.schedule-list-xs {
+  min-height: 35px;
+}
+
 .list ul li.schedule-list-s {
   min-height: 75px;
 }
