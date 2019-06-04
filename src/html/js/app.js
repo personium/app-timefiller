@@ -74,6 +74,7 @@ function setAttributes() {
             }
         })
     }).done(function(){
+        sessionStorage.keywords = JSON.stringify(currentInterests);
         location.href = 'data_manager.html';
     });
     
