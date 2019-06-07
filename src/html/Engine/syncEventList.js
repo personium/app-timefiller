@@ -1,8 +1,13 @@
-// Login
+/*
+ * When using this engine, please use the account with the following authority for accInfo.APP_CELL_ADMIN_INFO.
+ * ・Read / write to "__/MyData"
+ * ・Read / write to "__/OData"
+ * ・auth-read
+ * ・social-read
+ */
 function(request){
     try {
         var startDateTime = new Date();
-        //personium.validateRequestMethod(["POST"], request);
 
         var cell = dc.as(accInfo.APP_CELL_ADMIN_INFO).cell();
 
@@ -204,13 +209,13 @@ function getEventInfo(eventCellBoxUrl, token, targetUpdate) {
     var url = eventCellBoxUrl + "OData/Events";
     var filter = "";
     if (targetUpdate) {
-        filter += "$filter=__updated%20ge%20datetimeoffset'" + moment.tz(targetUpdate, "Asia/Tokyo").toISOString() + "'";
+        filter = "$filter=__updated ge datetimeoffset'" + moment.tz(targetUpdate, "Asia/Tokyo").toISOString() + "'";
     }
     var select = "$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
     var top = "$top=10000";
     var inlinecount = "$inlinecount=allpages";
     var orderBy = "$orderby=__updated%20asc";
-    var queryUrl = url + "?" + filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy;
+    var queryUrl = url + "?" + encodeURI(filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy);
     var headers = {
         "Accept": "application/json",
         "Authorization": "Bearer " + token
