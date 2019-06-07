@@ -115,6 +115,7 @@
     <div class="plan-article">
       <div class="etc_area mb-3">
         <div class="evaluation">
+<!--
           {{#if (eq planStatus "consideration")}}
           <i class="fa fa-star fa-2x icon-middle plan-info-ic active"></i>
           {{else}}
@@ -126,13 +127,12 @@
           {{#if (eq planStatus "confirm")}}
           <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic active"></i>
           {{else}}
-          <!--<i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>-->
+          <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>
           {{/if}}
-          <!--
           <span class="plan-info-icon-text">
             <a>123</a>
           </span>
-          -->
+-->
         </div>
         {{#if postDate}}
         <div>
@@ -234,11 +234,15 @@
             }
           },
           indention: function(str) {
-            // Replace line feed code
-            str = str.replace(/\r\n/g, '\\n');
-            str = str.replace(/\r/g, '\\n');
-            str = str.replace(/\n/g, '\\n');
-            return str.split("\\n");
+            if (str) {
+              // Replace line feed code
+              str = str.replace(/\r\n/g, '\\n');
+              str = str.replace(/\r/g, '\\n');
+              str = str.replace(/\n/g, '\\n');
+              return str.split("\\n");
+            }
+            
+            return str;
           }
         });
         var source = $("#main-template").text();
