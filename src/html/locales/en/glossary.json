@@ -13,6 +13,12 @@
         "update": "updated the event.",
         "delete": "The event has been deleted.",
         "confirmDelete": "Delete an event Is it OK?",
-        "back": "will return to the list screen."
+        "back": "return to the list screen."
+    },
+    "attributesMessage": {
+        "regist": "MyData has been registered.",
+        "update": "updated the MyData.",
+        "delete": "The MyData has been deleted.",
+        "back": "return to the management screen."
     }
 }

@@ -1,13 +1,18 @@
-// Login
+/*
+ * When using this engine, please use the account with the following authority for accInfo.APP_CELL_ADMIN_INFO.
+ * ・Read / write to "__/MyData"
+ * ・Read / write to "__/OData"
+ * ・auth-read
+ * ・social-read
+ */
 function(request){
     try {
-        //personium.validateRequestMethod(["POST"], request);
+        var startDateTime = new Date();
 
-        var cell = dc.as({
-            cellUrl: accInfo.APP_CELL_URL,
-            userId: "me",
-            password: "personium"
-        }).cell();
+        var cell = dc.as(accInfo.APP_CELL_ADMIN_INFO).cell();
+
+        var syncState = getFile('sync.json', cell);
+        setDefaultState(syncState);
         
         var url = accInfo.APP_CELL_URL + "__ctl/Role('syncTarget')/$links/_ExtCell";
         var headers = {
@@ -22,63 +27,133 @@ function(request){
         var updateCnt = 0;
         if (rleList.d) {
             var results = rleList.d.results;
-            for (var i = 0; i < results.length; i++) {
-                var uri = results[i].uri;
-                var matchUri = uri.match(/\('(.+)'\)/);
-                var cellUrl = matchUri[1];
 
-                // Get app certified transcell token
-                var tToken = getTranscellToken(cellUrl, cell.getToken().refresh_token);
-                var aToken = personium.getAppToken(cellUrl);
-                var bToken = getBoxAccessToken(cellUrl, tToken.access_token, aToken.access_token);
-
-                // Get Box URL
-                var boxUrl = getBoxUrl(cellUrl, bToken.access_token);
-
-                // Get event details from the cell that registered the event
-                var infoRes = getEventInfo(boxUrl, bToken.access_token);
-
-                if (infoRes.status == "200") {
-                    var infoBody = JSON.parse(infoRes.body);
-                    var infoList = infoBody.d.results;
-                    for (var j = 0; j < infoList.length; j++) {
-                        var info = infoList[j];
-                        uuidRes = odataEntity.query().filter("event_id eq '" + info.__id + "' and cellUrl eq '" + cellUrl + "'").select('__id').run().d.results;
-
-                        var propList = {};
-                        propList['event_id'] = info.__id;
-                        propList['cellUrl'] = cellUrl;
-                        propList['startDate'] = info.startDate;
-                        propList['endDate'] = info.endDate;
-                        propList['title'] = info.title;
-                        propList['image'] = info.image;
-                        propList['serviceImage'] = info.serviceImage;
-                        propList['serviceName'] = info.serviceName;
-                        propList['latitude'] = info.latitude;
-                        propList['longitude'] = info.longitude;
-                        propList['recruiter'] = info.recruiter;
-                        propList['address'] = info.address;
-                        propList['keywords'] = info.keywords;
-                        if (uuidRes.length != 0) {
-                            var uuid = uuidRes[0].__id;
-                            odataEntity.merge(
-                                uuid,
-                                propList,
-                                "*"
-                            );
-                        } else {
-                            odataEntity.create(propList);
+            syncLoop:
+            for (var sync = 0; sync < 1; sync++) {
+                for (var i = 0; i < results.length; i++) {
+                    var uri = results[i].uri;
+                    var matchUri = uri.match(/\('(.+)'\)/);
+                    var cellUrl = matchUri[1];
+    
+                    var matchIndex = syncState.findIndex(function(item) {
+                        return item.cell == cellUrl;
+                    })
+                    if (matchIndex >= 0) {
+                        var match = syncState[matchIndex];
+                        if (match.status == "finished") {
+                            continue;
                         }
-                        updateCnt++;
+                    } else {
+                        syncState.push({cell: cellUrl});
+                        matchIndex = syncState.length - 1;
+                    }
+    
+                    // Get app certified transcell token
+                    var tToken = getTranscellToken(cellUrl, cell.getToken().refresh_token);
+                    var aToken = personium.getAppToken(cellUrl);
+                    var bToken = getBoxAccessToken(cellUrl, tToken.access_token, aToken.access_token);
+    
+                    // Get Box URL
+                    var boxUrl = getBoxUrl(cellUrl, bToken.access_token);
+    
+                    // Get event details from the cell that registered the event
+                    var infoRes = getEventInfo(boxUrl, bToken.access_token, syncState[matchIndex].updated);
+    
+                    if (infoRes.status == "200") {
+                        var infoBody = JSON.parse(infoRes.body);
+                        var infoList = infoBody.d.results;
+                        var updated;
+                        for (var j = 0; j < infoList.length; j++) {
+                            if ((new Date().getTime() - startDateTime.getTime()) > 30000) {
+                                // sync update 処理
+                                syncState[matchIndex].updated = updated;
+                                break syncLoop;
+                            }
+                            var info = infoList[j];
+                            updated = info.__updated;
+                            uuidRes = odataEntity.query().filter("event_id eq '" + info.__id + "' and cellUrl eq '" + cellUrl + "'").select('__id').run().d.results;
+    
+                            var propList = {};
+                            propList['event_id'] = info.__id;
+                            propList['cellUrl'] = cellUrl;
+                            propList['startDate'] = info.startDate;
+                            propList['endDate'] = info.endDate;
+                            propList['title'] = info.title;
+                            propList['image'] = info.image;
+                            propList['serviceImage'] = info.serviceImage;
+                            propList['serviceName'] = info.serviceName;
+                            propList['latitude'] = info.latitude;
+                            propList['longitude'] = info.longitude;
+                            propList['recruiter'] = info.recruiter;
+                            propList['address'] = info.address;
+                            propList['keywords'] = info.keywords;
+                            if (uuidRes.length != 0) {
+                                var uuid = uuidRes[0].__id;
+                                odataEntity.merge(
+                                    uuid,
+                                    propList,
+                                    "*"
+                                );
+                            } else {
+                                odataEntity.create(propList);
+                            }
+                            updateCnt++;
+                        }
+
+                        // sync finish 処理
+                        syncState[matchIndex].updated = updated;
+                        syncState[matchIndex].status = "finished";
                     }
                 }
+
+                // syncState　finish リセット
+                syncState = resetFinished(syncState);
             }
+
+            // syncState 更新
+            updateFile('sync.json', syncState, cell);
         }
 
         return personium.createResponse(200, "We have updated "+updateCnt+" item of data.");
     } catch (e) {
         return personium.createErrorResponse(e);
     }
+}
+
+function getFile(filename, cell) {
+  //OData Service Collection of the App Cell this script is running on
+  var box = cell.box(); // _p.as('serviceSubject').cell().box()
+  var string = box.getString('MyData/'+ filename);
+  return JSON.parse(string);
+};
+
+function setDefaultState(syncState) {
+    if (syncState.length == 0) {
+        syncState = [];
+    }
+};
+
+function updateFile(filename, contents, cell) {
+  var path = "MyData/" + filename;
+  var jsonObj = contents;
+  var box = cell.box(); // _p.as('serviceSubject').cell().box()
+  if (!_.isEmpty(jsonObj)) {
+      box.put({
+          path: path,
+          data: JSON.stringify(jsonObj),
+          contentType: "application/json",
+          charset: "utf-8",
+          etag: "*"
+      });
+  };
+};
+
+function resetFinished(contents) {
+    for(var i = 0; i < contents.length;i++) {
+        contents[i].status = "";
+    }
+
+    return contents;
 }
 
 // Get Transcell Token
@@ -130,14 +205,17 @@ function getBoxUrl(eventCellUrl, token) {
 }
 
 // Get event details
-function getEventInfo(eventCellBoxUrl, token) {
+function getEventInfo(eventCellBoxUrl, token, targetUpdate) {
     var url = eventCellBoxUrl + "OData/Events";
-    var filter = "$filter=startDate%20ge%20datetimeoffset'" + moment.tz("Asia/Tokyo").startOf("day").toISOString() + "'";
+    var filter = "";
+    if (targetUpdate) {
+        filter = "$filter=__updated ge datetimeoffset'" + moment.tz(targetUpdate, "Asia/Tokyo").toISOString() + "'";
+    }
     var select = "$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
     var top = "$top=10000";
     var inlinecount = "$inlinecount=allpages";
     var orderBy = "$orderby=__updated%20asc";
-    var queryUrl = url + "?" + filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy;
+    var queryUrl = url + "?" + encodeURI(filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy);
     var headers = {
         "Accept": "application/json",
         "Authorization": "Bearer " + token

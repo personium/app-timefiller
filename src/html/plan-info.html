@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!-- Bootstrap CSS -->
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/openlayers/4.6.5/ol.css' rel='stylesheet' type='text/css'>
   <link href='./css/bootstrap-4.0.0.min.css' rel='stylesheet' type='text/css'>
   <link href="./css/fontawesone-5.0.8.all.css" rel="stylesheet">
   <link rel="stylesheet" href="./css/personium.css">
@@ -114,6 +115,7 @@
     <div class="plan-article">
       <div class="etc_area mb-3">
         <div class="evaluation">
+<!--
           {{#if (eq planStatus "consideration")}}
           <i class="fa fa-star fa-2x icon-middle plan-info-ic active"></i>
           {{else}}
@@ -125,13 +127,12 @@
           {{#if (eq planStatus "confirm")}}
           <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic active"></i>
           {{else}}
-          <!--<i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>-->
+          <i class="fas fa-check-circle fa-2x icon-middle plan-info-ic"></i>
           {{/if}}
-          <!--
           <span class="plan-info-icon-text">
             <a>123</a>
           </span>
-          -->
+-->
         </div>
         {{#if postDate}}
         <div>
@@ -233,11 +234,15 @@
             }
           },
           indention: function(str) {
-            // Replace line feed code
-            str = str.replace(/\r\n/g, '\\n');
-            str = str.replace(/\r/g, '\\n');
-            str = str.replace(/\n/g, '\\n');
-            return str.split("\\n");
+            if (str) {
+              // Replace line feed code
+              str = str.replace(/\r\n/g, '\\n');
+              str = str.replace(/\r/g, '\\n');
+              str = str.replace(/\n/g, '\\n');
+              return str.split("\\n");
+            }
+            
+            return str;
           }
         });
         var source = $("#main-template").text();

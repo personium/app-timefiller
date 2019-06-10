@@ -74,8 +74,11 @@ function setAttributes() {
             }
         })
     }).done(function(){
-        sessionStorage.keywords = JSON.stringify(currentInterests);
-        location.href = 'data_manager.html';
+        // Registration success modal
+        Common.openCommonDialog("glossary:attributesMessage.update", "glossary:attributesMessage.back", function() {
+          sessionStorage.keywords = JSON.stringify(currentInterests);
+          location.href = 'data_manager.html';
+        });
     });
     
     
