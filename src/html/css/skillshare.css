@@ -730,6 +730,19 @@ footer>button>.icon-text {
   border: 1px solid #EE632C;
 }
 
+.carousel-control-prev,
+.carousel-control-next {
+  background-color: #6c6c6c; 
+}
+
+.transparent {
+  background-color: transparent !important;
+}
+
+.transparent > * {
+  display: none;
+}
+
 body.data-manager {
   background-color: #F6F7FB;
 }
