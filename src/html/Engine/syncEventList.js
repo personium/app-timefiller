@@ -214,7 +214,7 @@ function getEventInfo(eventCellBoxUrl, token, targetUpdate) {
     var select = "$select=__id,title,startDate,endDate,image,serviceName,serviceImage,latitude,longitude,recruiter,address,keywords";
     var top = "$top=10000";
     var inlinecount = "$inlinecount=allpages";
-    var orderBy = "$orderby=__updated%20asc";
+    var orderBy = "$orderby=__updated asc";
     var queryUrl = url + "?" + encodeURI(filter + "&" + select + "&" + top + "&" + inlinecount + "&" + orderBy);
     var headers = {
         "Accept": "application/json",

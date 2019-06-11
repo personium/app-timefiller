@@ -1,4 +1,5 @@
 const MAX_PLANLIST_SIZE = 15;
+const CAROUSEL_SIZE = 5; // Maximum number of event switches
 
 function getRecommendList(nowDate, callback) {
   let urlOData = Common.getAppCellUrl() + "__/OData/EventList";
@@ -127,7 +128,16 @@ function setRecommendSchedule(resultList, list) {
   let result = resultList;
   _.each(list, function(plan, i, p_list) {
     // Check if it is already registered
-    let grepList = $.grep(result, function(elem, index){return (elem.__id == plan.__id)});
+    let grepList = $.grep(result, function(elem, index){
+      if (elem.carouselList) {
+        let carouselList = $.grep(elem.carouselList, function(carousel, cIndex){
+          return (carousel.__id == plan.__id)
+        });
+        return (carouselList.length > 0)
+      } else {
+        return (elem.__id == plan.__id)
+      }
+    });
     if (grepList.length <= 0) {
       // Get Start date and time of Scheduled Registration Event
       let planStartMoment = moment(plan.startDate);
@@ -138,6 +148,7 @@ function setRecommendSchedule(resultList, list) {
       let resCnt = 0;
       let pushCnt = -1;
       let skipFlg = false;
+      let carousel = false;
       // Search current schedule list
       _.every(result, function(res) {
         // Ignore events that do not have an end date because they are out of scope events such as move
@@ -145,6 +156,14 @@ function setRecommendSchedule(resultList, list) {
           // Get start date and time of scheduled event
           let resStartMoment = moment(res.startDate);
           let tempPlanEndMoment = moment(planEndMoment);
+          // Determine if it is an event switch target
+          if (checkCarousel(res, plan)) {
+            // Add event to carouselList if event switching target
+            pushCnt = resCnt;
+            carousel = true;
+            return false;
+          }
+
           if (res.longitude && res.latitude) {
             // Calculate travel time if latitude / longitude is registered to the next event of the event to be inserted
             let lon = plan.longitude;
@@ -200,31 +219,40 @@ function setRecommendSchedule(resultList, list) {
         return true;
       })
       if (!skipFlg) {
-        if (pushCnt >= 0) {
-          // Add an event at the end of the schedule
-          if (result[pushCnt - 1] && (result[pushCnt - 1].type == "transportation" || result[pushCnt - 1].type == "section")) {
-            pushCnt--;
-          }
-          let sectionEvent = getSection();
-          let resultIndex = checkLonLat(result, plan, pushCnt);
-          if (resultIndex != null) {
-            sectionEvent = getMove(plan, result[resultIndex]);
-          }
-          result.splice(pushCnt, 0, plan);
-          result.splice(pushCnt, 0, sectionEvent);
+        if (carousel) {
+          // Add to Event Carousel List
+          let planExtend = $.extend(true, {}, plan);
+          planExtend.carouselNo = result[pushCnt].carouselList.length;
+          result[pushCnt].carouselList.push(planExtend);
         } else {
-          let addMinutes = 0;
-          // Insert an event
-          let sectionEvent = getSection();
-          let resultIndex = checkLonLat(result, plan, result.length - 1);
-          if (resultIndex != null) {
-            sectionEvent = getMove(plan, result[resultIndex]);
-            addMinutes = getTravelTime(result[resultIndex].longitude, result[resultIndex].latitude, plan.longitude, plan.latitude);
-          }
-
-          if (tempPrevRes && moment(tempPrevRes.endDate).add(addMinutes, "minutes").isSameOrBefore(planStartMoment)) {
-            result.push(plan);
-            result.splice(result.length - 1, 0, sectionEvent);
+          // Create an event list for a new event
+          let eventList = initEventList(plan);
+          if (pushCnt >= 0) {
+            // Add an event at the end of the schedule
+            if (result[pushCnt - 1] && (result[pushCnt - 1].type == "transportation" || result[pushCnt - 1].type == "section")) {
+              pushCnt--;
+            }
+            let sectionEvent = getSection();
+            let resultIndex = checkLonLat(result, eventList, pushCnt);
+            if (resultIndex != null) {
+              sectionEvent = getMove(eventList, result[resultIndex]);
+            }
+            result.splice(pushCnt, 0, eventList);
+            result.splice(pushCnt, 0, sectionEvent);
+          } else {
+            let addMinutes = 0;
+            // Insert an event
+            let sectionEvent = getSection();
+            let resultIndex = checkLonLat(result, eventList, result.length - 1);
+            if (resultIndex != null) {
+              sectionEvent = getMove(eventList, result[resultIndex]);
+              addMinutes = getTravelTime(result[resultIndex].longitude, result[resultIndex].latitude, eventList.longitude, eventList.latitude);
+            }
+  
+            if (tempPrevRes && moment(tempPrevRes.endDate).add(addMinutes, "minutes").isSameOrBefore(planStartMoment)) {
+              result.push(eventList);
+              result.splice(result.length - 1, 0, sectionEvent);
+            }
           }
         }
       }
@@ -232,6 +260,58 @@ function setRecommendSchedule(resultList, list) {
   })
 
   return result;
+}
+
+/**
+ * Check if event to add to carouselList
+ */
+function checkCarousel(parentPlan, plan) {
+  // Do not add if the number of carouselList satisfies the specified value
+  if (!parentPlan.carouselList || parentPlan.carouselList.length >= CAROUSEL_SIZE){
+    return false;
+  }
+
+  // Do not add if the type = event
+  if (parentPlan.type != "event") {
+    return false;
+  }
+
+  // Do not add if the events with latitude and longitude
+  if (parentPlan.longitude && parentPlan.latitude) {
+    return false;
+  }
+
+  let pStartMoment = moment(parentPlan.startDate);
+  let pEndMoment = moment(parentPlan.endDate);
+  let startMoment = moment(plan.startDate);
+  let endMoment = moment(plan.endDate);
+  if (pStartMoment.isAfter(startMoment) || pEndMoment.isBefore(endMoment)) {
+    // Add if it does not affect the event time before and after
+    return false;
+  }
+
+  return true;
+}
+
+/**
+ * If type = event, replace with eventList
+ */
+function initEventList(plan) {
+  let eventList = plan;
+  if (plan.type == "event") {
+    plan.carouselNo = "0";
+    eventList = {
+      "type": plan.type,
+      "startDate": plan.startDate,
+      "endDate": plan.endDate,
+      "longitude": plan.longitude,
+      "latitude": plan.latitude,
+      "eventNo": moment(plan.startDate).format("HHmm"),
+      "carouselList": [plan]
+    }  
+  }
+
+  return eventList;
 }
 
 /**
