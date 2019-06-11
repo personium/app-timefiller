@@ -129,7 +129,14 @@ function setRecommendSchedule(resultList, list) {
   _.each(list, function(plan, i, p_list) {
     // Check if it is already registered
     let grepList = $.grep(result, function(elem, index){
-      return (elem.__id == plan.__id)
+      if (elem.carouselList) {
+        let carouselList = $.grep(elem.carouselList, function(carousel, cIndex){
+          return (carousel.__id == plan.__id)
+        });
+        return (carouselList.length > 0)
+      } else {
+        return (elem.__id == plan.__id)
+      }
     });
     if (grepList.length <= 0) {
       // Get Start date and time of Scheduled Registration Event
@@ -214,8 +221,9 @@ function setRecommendSchedule(resultList, list) {
       if (!skipFlg) {
         if (carousel) {
           // Add to Event Carousel List
-          plan.carouselNo = result[pushCnt].carouselList.length;
-          result[pushCnt].carouselList.push(plan);
+          let planExtend = $.extend(true, {}, plan);
+          planExtend.carouselNo = result[pushCnt].carouselList.length;
+          result[pushCnt].carouselList.push(planExtend);
         } else {
           // Create an event list for a new event
           let eventList = initEventList(plan);
