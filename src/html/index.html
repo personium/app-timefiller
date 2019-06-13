@@ -67,10 +67,6 @@
       $("#today").text(nowMoment.format('M/DD(ddd)'));
       getRecommendList(nowMoment.toISOString(), createList);
     });
-
-    $(document).click(function(event){
-      transparentCarouselCtl();
-    });
   }
 </script>
 <body>
@@ -249,6 +245,17 @@
             <!-- Event -->
             {{#if (eq type "event")}}
             <div id="event_{{eventNo}}" class="carousel slide" data-ride="carousel" data-interval="false">
+              {{#if (checkCarousel carouselList)}}
+              <ol class="carousel-indicators">
+                {{#each carouselList}}
+                {{#if (eq carouselNo "0")}}
+                  <li data-target="#event_{{../eventNo}}" data-slide-to="{{carouselNo}}" class="active"></li>
+                {{else}}
+                  <li data-target="#event_{{../eventNo}}" data-slide-to="{{carouselNo}}"></li>
+                {{/if}}
+                {{/each}}
+              </ol>
+              {{/if}}
               <div class="carousel-inner">
                 {{#each carouselList}}
                 {{#if (eq carouselNo "0")}}
@@ -475,6 +482,9 @@
                   },
                   'noImage': function() {
                     return Common.getAppCellUrl() + "__/html/img/no_image_thumbnail.jpg";
+                  },
+                  'checkCarousel': function(list) {
+                    return (list.length > 1);
                   }
                 });
                 var source = $("#recommended-template").text();
@@ -485,22 +495,26 @@ console.log(recommendedSchedule);
                 $("#recommended-schedule").html(html);
                 
                 $(".carousel-control-prev, .carousel-control-next").off().click(function() {
-                  // Add an exception class to the pressed carousel-control (prev, next)
-                  $(this).parent().children("[class^='carousel-control-']").addClass("transparencyExemption");
-                  if ($(this).siblings(".carousel-item").length > 1 && $(this).hasClass("transparent")) {
-                    // If the button is transparent, just make the button opaque. There is no switching of events.
+                  // Do not process if there is only one carousel-item
+                  if ($(this).siblings(".carousel-item").length > 1) {
+                    // Remove the hidden class
                     $(this).parent().children().removeClass("transparent");
-                    transparentCarouselCtl();
-                    return false;
+                    // Restore transparency made by animation
+                    $(this).parent().children(".carousel-control-prev, .carousel-control-next").css("opacity", .5);
+
+                    // Wait a minute for the slide time and then gradually hide the displayed button.
+                    $(this).parent().children(".carousel-control-prev, .carousel-control-next").stop().delay(500).animate({
+                      'opacity': '0'
+                    },
+                    1000,
+                    function() {
+                      // Reapply hidden classes after the animation is over
+                      $(this).parent().children(".carousel-control-prev, .carousel-control-next").addClass("transparent");
+                    }
+                    );
+
                   }
                 })
-              }
-
-              // After making the carousel-control other than the exception class transparent, remove the exception class
-              transparentCarouselCtl = function() {
-                $(".carousel-control-prev").not(".transparencyExemption").addClass("transparent");
-                $(".carousel-control-next").not(".transparencyExemption").addClass("transparent");
-                $(".transparencyExemption").removeClass("transparencyExemption");
               }
           </script>
         </div>
