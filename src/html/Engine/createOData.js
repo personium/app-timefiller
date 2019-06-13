@@ -32,7 +32,8 @@ function(request){
             {Name:"endDate",Type:"Edm.DateTime"},
             {Name:"startDate",Type:"Edm.DateTime"},
             {Name:"cellUrl",Type:"Edm.String",Nullable:"false"},
-            {Name:"event_id",Type:"Edm.String",Nullable:"false"}
+            {Name:"event_id",Type:"Edm.String",Nullable:"false"},
+            {Name:"starCount",Type:"Edm.Int32"}
         ];
 
         // Cell
