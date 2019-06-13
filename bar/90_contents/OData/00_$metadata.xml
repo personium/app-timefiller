@@ -31,6 +31,7 @@
                 <Property Name="summary" Nullable="true" Type="Edm.String"/>
                 <Property Name="thumbnailUrl" Nullable="true" Type="Edm.String"/>
                 <Property Name="title" Nullable="true" Type="Edm.String"/>
+                <Property Name="memo" Nullable="true" Type="Edm.String"/>
             </EntityType>
             <EntityType Name="planningList" OpenType="true">
                 <Key>
