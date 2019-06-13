@@ -9,7 +9,7 @@ function(request){
         personium.validateRequestMethod(["POST"], request);
 
         // cell info
-        var cellUrl = "https://app-timefiller-wakaba.demo.personium.io/";
+        var cellUrl = "https://app-timefiller-wakaba.demo.personium.io/"; // CellUrl to create OData
         var cellAcc = "***"; // Specify account with admin privileges
         var cellPass = "***"; // Specify account with admin privileges
         // create OData name
@@ -18,21 +18,21 @@ function(request){
         var entityType = "EventList";
         // create Prop list
         var addProp = [
-            {Name:"keywords",Type:"Edm.String",CollectionKind:"List"},
-            {Name:"address",Type:"Edm.String"},
-            {Name:"recruiter",Type:"Edm.String"},
-            {Name:"thumbnailUrl",Type:"Edm.String"},
+            {Name:"event_id",Type:"Edm.String",Nullable:"false"},
+            {Name:"cellUrl",Type:"Edm.String",Nullable:"false"},
+            {Name:"title",Type:"Edm.String"},
+            {Name:"summary",Type:"Edm.String"},
+            {Name:"startDate",Type:"Edm.DateTime"},
+            {Name:"endDate",Type:"Edm.DateTime"},
             {Name:"longitude",Type:"Edm.Double"},
             {Name:"latitude",Type:"Edm.Double"},
-            {Name:"summary",Type:"Edm.String"},
-            {Name:"title",Type:"Edm.String"},
+            {Name:"thumbnailUrl",Type:"Edm.String"},
+            {Name:"image",Type:"Edm.String"},
+            {Name:"address",Type:"Edm.String"},
+            {Name:"recruiter",Type:"Edm.String"},
             {Name:"serviceImage",Type:"Edm.String"},
             {Name:"serviceName",Type:"Edm.String"},
-            {Name:"image",Type:"Edm.String"},
-            {Name:"endDate",Type:"Edm.DateTime"},
-            {Name:"startDate",Type:"Edm.DateTime"},
-            {Name:"cellUrl",Type:"Edm.String",Nullable:"false"},
-            {Name:"event_id",Type:"Edm.String",Nullable:"false"},
+            {Name:"keywords",Type:"Edm.String",CollectionKind:"List"},
             {Name:"starCount",Type:"Edm.Int32"}
         ];
 
