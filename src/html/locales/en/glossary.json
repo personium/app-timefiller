@@ -5,7 +5,8 @@
         "start": "start",
         "end": "end",
         "btn": {
-            "OK": "OK"
+            "OK": "OK",
+            "Add": "Add"
         }
     },
     "eventMessage": {
@@ -20,5 +21,10 @@
         "update": "updated the MyData.",
         "delete": "The MyData has been deleted.",
         "back": "return to the management screen."
+    },
+    "skillsMessage": {
+        "addSkills": "Add Skills",
+        "confirmDelete": "Delete Is it OK?",
+        "errorNotSkills": "Please enter the skills you want to add."
     }
 }

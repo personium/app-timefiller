@@ -33,6 +33,57 @@ function getProfileFromSession(callback) {
   Common.getProfile(Common.getCellUrl(), callback);
 };
 
+function getSkills() {
+    return $.ajax({
+        type: "GET",
+        url: Common.getBoxUrl() + "Engine/data?filename=skills.json",
+        headers: {
+            'Authorization': 'Bearer ' + Common.getToken(),
+            'Accept':'application/json'
+        }
+    });
+}
+
+function deleteSkills(keyword) {
+    Common.showConfirmDialog("glossary:skillsMessage.confirmDelete", function() {
+      $("[data-keyword='"+keyword+"']").remove();
+      updateSkills();
+    });
+}
+
+function addSkills() {
+    const addSkill = $("#pSkill").val();
+    if (addSkill.length > 0) {
+        let html = [
+          "<li data-keyword='"+addSkill+"' class='pn-check-list check-position-r'>",
+           "<div class='pn-list pn-list-no-arrow'>",
+            "<span>"+addSkill+"</span>",
+           "</div>",
+           "<button class='pn-btn icon-right' onclick='deleteSkills(\""+addSkill+"\")'>",
+            "<i class='fas fa-trash-alt fa-2x header-ic-02'></i>",
+           "</button>",
+          "</li>"
+        ].join("");
+        $("#skill-list").append(html);
+        updateSkills();
+    } else {
+        $("#errorAddSkills").text(i18next.t("glossary:skillsMessage.errorNotSkills"));
+    }
+}
+
+function updateSkills() {
+    const currentInterests = _.map(
+        $('#not-change-bg-check-list li'),
+        function(item) {
+            return $(item).data("keyword");
+        }
+    );
+    updateMyData("skills.json", currentInterests, function() {
+        $('#modal-common').modal('hide');
+        $('#modal-create-keyword').modal('hide');
+    })
+}
+
 function selectAttributes() {
     $.ajax({
         type: "GET",
@@ -59,7 +110,16 @@ function setAttributes() {
             return $(item).data("keyword");
         }
     );
-    
+    updateMyData("interests.json", currentInterests, function() {
+        // Registration success modal
+        Common.openCommonDialog("glossary:attributesMessage.update", "glossary:attributesMessage.back", function() {
+          sessionStorage.keywords = JSON.stringify(currentInterests);
+          location.href = 'data_manager.html';
+        });
+    })
+};
+
+function updateMyData(filename, list, callback) {
     $.ajax({
         type: "POST",
         url: Common.getBoxUrl() + "Engine/data",
@@ -68,21 +128,17 @@ function setAttributes() {
             'Authorization':'Bearer ' + Common.getToken()
         },
         data: JSON.stringify({
-            filename: "interests.json",
+            filename: filename,
             contents: {
-                keywords: currentInterests
+                keywords: list
             }
         })
     }).done(function(){
-        // Registration success modal
-        Common.openCommonDialog("glossary:attributesMessage.update", "glossary:attributesMessage.back", function() {
-          sessionStorage.keywords = JSON.stringify(currentInterests);
-          location.href = 'data_manager.html';
-        });
+        if ((typeof callback !== "undefined") && $.isFunction(callback)) {
+          callback();
+        }
     });
-    
-    
-};
+}
 
 function getSortedEvents(paramObj) {
   let urlOData = Common.getAppCellUrl() + "__/OData/EventList";

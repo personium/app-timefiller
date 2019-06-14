@@ -33,25 +33,25 @@
 
 <body class="data-manager">
   <header class="top">
-    <a class="header-btn pn-back-btn" onclick="backPrevScreen();">
+    <a class="header-btn pn-back-btn" href="data_manager.html">
       <div id="back_btn" class="pn-btn white">
         <i class="fas fa-angle-left fa-2x icon"></i>
       </div>
     </a>
-    <div class="header-title">
-      <div class="title">マイデータの登録</div>
+    <div class="header-title header-app-icon">
+      <img class="img-fluid" src="./img/skillshare@3x.png" alt="スキル">
+      <span class="title">スキル</span>
     </div>
   </header>
 
-  <main>
+  <main class="h-footer">
     <div class="extcell-profile">
       <div id="data-manager-role" class="role-img-area"></div>
-
       <script id="data-manager-template" type="text/x-handlebars-template">
         <div class="arrow-to-img">
           <div class="my_icon user-icon user-icon-large" style="background-image: url({{dispImage}});"></div>
           <div class="font-weight-bold">{{dispName}}</div>
-        </div>
+      </div>
       </script>
       <script>
           $(function() {
@@ -65,16 +65,8 @@
             Common.getProfile(Common.getCellUrl(), function(profObj) {
               var html = template(profObj);
               $("#data-manager-role").html(html);
-            });          
+            });
           });
-
-          function backPrevScreen() {
-            if (sessionStorage.screen) {
-              location.href = sessionStorage.screen + ".html";
-            } else {
-              location.href = "index.html";
-            }
-          }
       </script>
 
       <div class="user-description">
@@ -83,66 +75,59 @@
       </div>
     </div>
 
-    <ul class="hover-action application">
-      <a href="javascript:void(0)">
-        <li>
-          <div class="pn-list">
-            <div class="data-info">
-              <div class="title">
-                <span class="app-icon">
-                  <img class="img-fluid" src="img/address@3x.png" alt="フィットネス">
-                </span>
-                <span class="app-name">性別・年齢・家族構成</span>
-              </div>
+    <div id="not-change-bg-check-list">
+      <ul id="skill-list"></ul>
+      <script id="skill-template" type="text/x-handlebars-template">
+        {{#each keywords}}
+          <li data-keyword="{{this}}" class="pn-check-list check-position-r">
+            <div class="pn-list pn-list-no-arrow">
+              <span>{{this}}</span>
             </div>
-          </div>
-        </li>
-      </a>
-      <a href="data_manager_info.html">
-        <li>
-          <div class="pn-list">
-            <div class="data-info">
-              <div class="title">
-                <span class="app-icon">
-                  <img class="img-fluid" src="img/game@3x.png" alt="興味・関心">
-                </span>
-                <span class="app-name">興味・関心</span>
-              </div>
-            </div>
-          </div>
-        </li>
-      </a>
-      <a href="javascript:void(0)">
-        <li>
-          <div class="pn-list">
-            <div class="data-info">
-              <div class="title">
-                <span class="app-icon">
-                  <img class="img-fluid" src="img/fitness@3x.png" alt="フィットネス">
-                </span>
-                <span class="app-name">フィットネス</span>
-              </div>
-            </div>
-          </div>
-        </li>
-      </a>
-      <a href="data_manager_skill.html">
-        <li>
-          <div class="pn-list">
-            <div class="data-info">
-              <div class="title">
-                <span class="app-icon">
-                  <img class="img-fluid" src="img/skillshare@3x.png" alt="スキル">
-                </span>
-                <span class="app-name">スキル</span>
-              </div>
-            </div>
-          </div>
-        </li>
-      </a>
-    </ul>
+            <button class="pn-btn icon-right" onclick="deleteSkills('{{this}}')">
+              <i class="fas fa-trash-alt fa-2x header-ic-02"></i>
+            </button>
+          </li>
+        {{/each}}
+      </script>
+    </div>
   </main>
+  <script>
+    $(function() {
+        getSkills().done(function(data){
+            skills = data;
+            var source = $("#skill-template").text();
+            var template = Handlebars.compile(source);
+            var html = template(skills);
+            $("#skill-list").html(html);
+        });
+    });
+  </script>
 
+  <footer>
+    <button type="button" class="btn add-btn" onclick="$('#modal-create-keyword').modal('show');">追加</button>
+  </footer>
+
+  <div id="modal-create-keyword" class="modal fade" role="dialog" data-backdrop="static">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header login-header">
+                    <h4 class="modal-title" data-i18n="glossary:skillsMessage.addSkills">Add Skills</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <input id="pSkill" type="text" class="fontBlack"/>
+                            <span id="errorAddSkills" style="color:red"></span>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn" data-dismiss="modal" data-i18n="btn.cancel">Cancel</button>
+                    <button type="button" class="btn btn-primary" data-i18n="glossary:event.btn.Add" onclick="addSkills();">Add</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
