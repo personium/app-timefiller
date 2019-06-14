@@ -452,7 +452,7 @@ Common.appendCommonDialog = function() {
                     '</div>',
                     '<div class="modal-body"></div>',
                     '<div class="modal-footer">',
-                        '<button type="button" class="btn btn-primary" id="b-common-cancel" data-i18n="sessionExpiredDialog.cancelBtn" style="display:none;" onclick="$(\'#modal-common\').modal(\'hide\');"></button>',
+                        '<button type="button" class="btn" id="b-common-cancel" data-i18n="sessionExpiredDialog.cancelBtn" style="display:none;" onclick="$(\'#modal-common\').modal(\'hide\');"></button>',
                         '<button type="button" class="btn btn-primary" id="b-common-ok" data-i18n="sessionExpiredDialog.btnOk"></button>',
                     '</div>',
                '</div>',
