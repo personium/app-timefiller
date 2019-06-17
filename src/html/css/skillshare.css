@@ -934,6 +934,22 @@ footer .add-btn {
     color: #8492af;
 }
 
+.icon-right {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    font-size: 1.0em;
+    vertical-align: middle;
+    font-weight: 900;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #2978FF;
+}
+
+.skill-del-icon {
+    width: 1.2em;
+}
+
 @media print, screen and (max-width: 599px) and (min-width: 480px) {
   .plan-info-top-content {
     height: 310px;

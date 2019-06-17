@@ -25,6 +25,7 @@
     "skillsMessage": {
         "addSkills": "Add Skills",
         "confirmDelete": "Delete Is it OK?",
-        "errorNotSkills": "Please enter the skills you want to add."
+        "errorNotSkills": "Please enter the skills you want to add.",
+        "errorDuplicate": "It is already registered."
     }
 }

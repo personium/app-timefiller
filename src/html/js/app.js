@@ -44,31 +44,53 @@ function getSkills() {
     });
 }
 
-function deleteSkills(keyword) {
+function deleteSkills(aDom) {
+    const keyword = $(aDom).data('skill');
     Common.showConfirmDialog("glossary:skillsMessage.confirmDelete", function() {
-      $("[data-keyword='"+keyword+"']").remove();
+      $("[data-keyword='"+keyword.replace(/'/g, '\\\'')+"']").remove();
       updateSkills();
     });
 }
 
 function addSkills() {
-    const addSkill = $("#pSkill").val();
-    if (addSkill.length > 0) {
-        let html = [
-          "<li data-keyword='"+addSkill+"' class='pn-check-list check-position-r'>",
-           "<div class='pn-list pn-list-no-arrow'>",
-            "<span>"+addSkill+"</span>",
-           "</div>",
-           "<button class='pn-btn icon-right' onclick='deleteSkills(\""+addSkill+"\")'>",
-            "<i class='fas fa-trash-alt fa-2x header-ic-02'></i>",
-           "</button>",
-          "</li>"
-        ].join("");
-        $("#skill-list").append(html);
-        updateSkills();
-    } else {
-        $("#errorAddSkills").text(i18next.t("glossary:skillsMessage.errorNotSkills"));
-    }
+    if (!processing) {
+      processing = true;
+      const addSkill = $("#pSkill").val();
+      if (addSkill.length > 0) {
+          if ($("[data-keyword='"+addSkill.replace(/'/g, '\\\'')+"']").length > 0) {
+            $("#errorAddSkills").text(i18next.t("glossary:skillsMessage.errorDuplicate"));
+            processing = false;
+            return;
+          }
+
+          let aLi = $("<li>", {
+            "data-keyword": addSkill,
+            class: "pn-check-list check-position-r"
+          });
+          let aDiv = $("<div>", {
+            class: "pn-list pn-list-no-arrow"
+          });
+          let aSpan = $("<span>").text(addSkill);
+          aDiv.append(aSpan);
+          aLi.append(aDiv);
+          let aBtn = $("<button>", {
+            class: "pn-btn icon-right",
+            onclick: 'deleteSkills(this)',
+            "data-skill": addSkill
+          });
+          let aImg = $("<img>", {
+            class: "img-fluid skill-del-icon",
+            src: "./img/skill_del.png"
+          })
+          aBtn.append(aImg);
+          aLi.append(aBtn);
+          $("#skill-list").append(aLi);
+          updateSkills();
+      } else {
+          $("#errorAddSkills").text(i18next.t("glossary:skillsMessage.errorNotSkills"));
+          processing = false;
+      }
+    } 
 }
 
 function updateSkills() {

@@ -25,6 +25,7 @@
     "skillsMessage": {
         "addSkills": "スキルの追加",
         "confirmDelete": "削除します。よろしいですか？",
-        "errorNotSkills": "追加するスキルを入力して下さい。"
+        "errorNotSkills": "追加するスキルを入力して下さい。",
+        "errorDuplicate": "既に登録されています。"
     }
 }

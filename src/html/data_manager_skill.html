@@ -83,8 +83,9 @@
             <div class="pn-list pn-list-no-arrow">
               <span>{{this}}</span>
             </div>
-            <button class="pn-btn icon-right" onclick="deleteSkills('{{this}}')">
-              <i class="fas fa-trash-alt fa-2x header-ic-02"></i>
+            <button class="pn-btn icon-right" data-skill="{{this}}" onclick="deleteSkills(this)">
+              <!--<i class="fas fa-trash-alt fa-2x header-ic-02"></i>-->
+              <img class="img-fluid skill-del-icon" src="./img/skill_del.png">
             </button>
           </li>
         {{/each}}
@@ -99,6 +100,14 @@
             var template = Handlebars.compile(source);
             var html = template(skills);
             $("#skill-list").html(html);
+        });
+
+        $('#modal-create-keyword').on('shown.bs.modal', function () {
+            processing = false;
+        });
+        $('#modal-create-keyword').on('hidden.bs.modal', function () {
+            $("#pSkill").val("");
+            $("#errorAddSkills").text("");
         });
     });
   </script>
