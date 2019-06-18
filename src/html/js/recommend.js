@@ -17,12 +17,24 @@ function getRecommendList(nowDate, callback) {
   $.when(
     getAPI(queryUrl, Common.getToken()),
     getPlanningAPI(),
-    getMyDataAPI('interests.json')
-  ).done(function(planObj, planningObj, myInterests) {
+    getMyDataAPI('interests.json'),
+    getMyDataAPI('skills.json')
+  ).done(function(planObj, planningObj, myInterests, mySkills) {
     // TODO Handle Error Response
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
-    const myKeywords = myInterests[0].keywords;
+    let myKeywords = myInterests[0].keywords;
+    let tempKeywords = mySkills[0].keywords;
+    if (!_.isUndefined(tempKeywords)) {
+      if (!_.isUndefined(myKeywords)) {
+        // skill merge
+        myKeywords = $.merge(myKeywords, tempKeywords);
+        // delete Duplicate
+        myKeywords = myKeywords.filter(function(x,i,self){return self.indexOf(x)===i})
+      } else {
+        myKeywords = tempKeywords;
+      }
+    }
     if (!_.isUndefined(myKeywords)) {
       sessionStorage.keywords = JSON.stringify(myKeywords);
     }
@@ -61,6 +73,8 @@ function getRecommendList(nowDate, callback) {
           "type": "allday",
           "title": cSchedule.allday,
         })
+      } else {
+        $("#recommended-schedule").removeClass("mask-event");
       }
 
       // home
