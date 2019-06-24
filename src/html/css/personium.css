@@ -184,6 +184,18 @@ main {
     flex: 1;
 }
 
+.icon-right {
+    position: absolute;
+    top: 50%;
+    right: 15px;
+    font-size: 1.0em;
+    vertical-align: middle;
+    font-weight: 900;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #2978FF;
+}
+
 .check-mark-right::after {
     font-family: "Font Awesome 5 Free";
     content: "\f00c";
@@ -199,6 +211,7 @@ main {
 }
 .check-position-r{
     padding-right: 60px;
+    padding-left: 20px;
 }
 
 .check-mark-left::before {

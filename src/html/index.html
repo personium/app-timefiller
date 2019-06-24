@@ -244,62 +244,93 @@
 
             <!-- Event -->
             {{#if (eq type "event")}}
-            <li class="time-list">
-              <div class="list-text">
-                {{time startDate}}
-              </div>
-            </li>
-            <a href="recommend-info.html?eventId={{__id}}">
-            <li class="{{planStatus}}-schedule event schedule-list-m">
-              <div class="list-image">
-                <div class="list-thumbnail-s">
-                  {{#if thumbnailUrl}}
-                    <img src="{{thumbnailUrl}}" class="list-thumbnail">
-                  {{else}}
-                    {{#if image}}
-                      <img src="{{image}}" class="list-thumbnail">
-                    {{else}}
-                      <img src="{{noImage image}}" class="list-thumbnail">
-                    {{/if}}
-                  {{/if}}                
+            <div id="event_{{eventNo}}" class="carousel slide" data-ride="carousel" data-interval="false">
+              {{#if (checkCarousel carouselList)}}
+              <ol class="carousel-indicators">
+                {{#each carouselList}}
+                {{#if (eq carouselNo "0")}}
+                  <li data-target="#event_{{../eventNo}}" data-slide-to="{{carouselNo}}" class="active"></li>
+                {{else}}
+                  <li data-target="#event_{{../eventNo}}" data-slide-to="{{carouselNo}}"></li>
+                {{/if}}
+                {{/each}}
+              </ol>
+              {{/if}}
+              <div class="carousel-inner">
+                {{#each carouselList}}
+                {{#if (eq carouselNo "0")}}
+                <div class="carousel-item active">
+                {{else}}
+                <div class="carousel-item">
+                {{/if}}
+                  <li class="time-list">
+                    <div class="list-text">
+                      {{time startDate}}
+                    </div>
+                  </li>
+                  <a href="recommend-info.html?eventId={{__id}}">
+                    <li class="{{planStatus}}-schedule event schedule-list-m">
+                      <div class="list-image">
+                        <div class="list-thumbnail-s">
+                          {{#if thumbnailUrl}}
+                            <img src="{{thumbnailUrl}}" class="list-thumbnail">
+                          {{else}}
+                            {{#if image}}
+                              <img src="{{image}}" class="list-thumbnail">
+                            {{else}}
+                              <img src="{{noImage image}}" class="list-thumbnail">
+                            {{/if}}
+                          {{/if}}                
+                        </div>
+                      </div>
+                      <div class="list-text">
+                        <div class="title"><p class="ellipsis">
+                          {{title}}
+                        </p></div>
+                        <div class="etc_area">
+                          <div class="status text-hidden">
+                            {{#if serviceImage}}
+                              <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.25em;">
+                            {{/if}}
+                            <span>【{{serviceName}}】</span>
+                          </div>
+                          <div class="evaluation">
+<!--        
+                            {{#if (eq planStatus "consideration")}}
+                            <i class="fa fa-star fa-2x icon active"></i>
+                            {{else}}
+                            <i class="fa fa-star fa-2x icon"></i>
+                            {{/if}}
+                            <span>{{star starCount}}</span>
+                            {{#if (eq planStatus "confirm")}}
+                            <i class="fas fa-check-circle fa-2x icon active"></i>
+                            {{else}}
+                            <i class="fas fa-check-circle fa-2x icon"></i>
+                            {{/if}}
+                            <span>123</span>
+-->       
+                          </div>
+                        </div>
+                      </div>
+                    </li>
+                  </a>
+                  <li class="time-list">
+                    <div class="list-text">
+                      {{time endDate}}
+                    </div>
+                  </li>
                 </div>
+                {{/each}}
+                <a class="carousel-control-prev transparent" href="#event_{{eventNo}}" role="button" data-slide="prev">
+                  <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next transparent" href="#event_{{eventNo}}" role="button" data-slide="next">
+                  <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                  <span class="sr-only">Next</span>
+                </a>
               </div>
-              <div class="list-text">
-                <div class="title"><p class="ellipsis">
-                  {{title}}
-                </p></div>
-                <div class="etc_area">
-                  <div class="status">
-                    {{#if serviceImage}}
-                      <img src="{{serviceImage}}" style="width: 18px; height: 18px; vertical-align: -.25em;">
-                    {{/if}}
-                    <span>【{{serviceName}}】</span>
-                  </div>
-                  <div class="evaluation">
-<!--
-                    {{#if (eq planStatus "consideration")}}
-                    <i class="fa fa-star fa-2x icon active"></i>
-                    {{else}}
-                    <i class="fa fa-star fa-2x icon"></i>
-                    {{/if}}
-                    <span>{{star starCount}}</span>
-                    {{#if (eq planStatus "confirm")}}
-                    <i class="fas fa-check-circle fa-2x icon active"></i>
-                    {{else}}
-                    <i class="fas fa-check-circle fa-2x icon"></i>
-                    {{/if}}
-                    <span>123</span>
--->
-                  </div>
-                </div>
-              </div>
-            </li>
-            </a>
-            <li class="time-list">
-              <div class="list-text">
-                {{time endDate}}
-              </div>
-            </li>
+            </div>
             {{/if}}
 
             {{#if (eq type "PR")}}
@@ -451,6 +482,9 @@
                   },
                   'noImage': function() {
                     return Common.getAppCellUrl() + "__/html/img/no_image_thumbnail.jpg";
+                  },
+                  'checkCarousel': function(list) {
+                    return (list.length > 1);
                   }
                 });
                 var source = $("#recommended-template").text();
@@ -459,6 +493,28 @@
 console.log(recommendedSchedule);
                 var html = template(recommendedSchedule);
                 $("#recommended-schedule").html(html);
+                
+                $(".carousel-control-prev, .carousel-control-next").off().click(function() {
+                  // Do not process if there is only one carousel-item
+                  if ($(this).siblings(".carousel-item").length > 1) {
+                    // Remove the hidden class
+                    $(this).parent().children().removeClass("transparent");
+                    // Restore transparency made by animation
+                    $(this).parent().children(".carousel-control-prev, .carousel-control-next").css("opacity", .5);
+
+                    // Wait a minute for the slide time and then gradually hide the displayed button.
+                    $(this).parent().children(".carousel-control-prev, .carousel-control-next").stop().delay(500).animate({
+                      'opacity': '0'
+                    },
+                    1000,
+                    function() {
+                      // Reapply hidden classes after the animation is over
+                      $(this).parent().children(".carousel-control-prev, .carousel-control-next").addClass("transparent");
+                    }
+                    );
+
+                  }
+                })
               }
           </script>
         </div>
