@@ -5,7 +5,8 @@
         "start": "開始",
         "end": "終了",
         "btn": {
-            "OK": "OK"
+            "OK": "OK",
+            "Add": "追加"
         }
     },
     "eventMessage": {
@@ -20,5 +21,11 @@
         "update": "マイデータを更新しました。",
         "delete": "マイデータを削除しました。",
         "back": "管理画面に戻ります。"
+    },
+    "skillsMessage": {
+        "addSkills": "スキルの追加",
+        "confirmDelete": "削除します。よろしいですか？",
+        "errorNotSkills": "追加するスキルを入力して下さい。",
+        "errorDuplicate": "既に登録されています。"
     }
 }

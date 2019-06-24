@@ -195,7 +195,7 @@ main .slide-area .list {
   display: flex;
   flex-direction: row;
   font-size: 0.9rem;
-  width: 70%;
+  width: calc(100vw - 100px);
 }
 
 .etc_area>.date {
@@ -595,14 +595,14 @@ footer {
 }
 
 footer>button {
-  width: 20%;
+  width: 25%;
   background: none;
   border: none;
   color: #9c9c9c;
 }
 
 footer>button.current {
-  width: 20%;
+  width: 25%;
   background: none;
   border: none;
   color: #09BBD3;
@@ -918,6 +918,36 @@ footer .add-btn {
 .user-icon>img {
   overflow: hidden;
   object-fit: cover;
+}
+
+.carousel-indicators .active {
+    background-color: #9c9c9c !important;
+}
+
+.modal-body input[type="text"] {
+    border: 1px solid #d4d9e3;
+    font-size: 14px;
+    font-weight: 300;
+    margin: 5px 0;
+    padding: 14px 10px;
+    width: 100%;
+    color: #8492af;
+}
+
+.icon-right {
+    position: absolute;
+    top: 50%;
+    right: 0px;
+    font-size: 1.0em;
+    vertical-align: middle;
+    font-weight: 900;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    color: #2978FF;
+}
+
+.skill-del-icon {
+    width: 1.2em;
 }
 
 @media print, screen and (max-width: 599px) and (min-width: 480px) {
