@@ -100,6 +100,13 @@ function updateSkills() {
             return $(item).data("keyword");
         }
     );
+    if (currentInterests.length > 0) {
+      $("#skill-list").show();
+      $("#no-skill-list").hide();
+    } else {
+      $("#skill-list").hide();
+      $("#no-skill-list").show();
+    }
     updateMyData("skills.json", currentInterests, function() {
         $('#modal-common').modal('hide');
         $('#modal-create-keyword').modal('hide');
