@@ -91,11 +91,25 @@
         {{/each}}
       </script>
     </div>
+    <ul id="no-skill-list" style="display:none;">
+      <li class="pn-check-list check-position-r">
+        <div class="pn-list pn-list-no-arrow">
+          <span>登録データはありません。</span>
+        </div>
+      </li>
+    </ul>
   </main>
   <script>
     $(function() {
         getSkills().done(function(data){
             skills = data;
+            if (skills.keywords.length == 0) {
+              $("#skill-list").hide();
+              $("#no-skill-list").show();
+              return;
+            }
+            $("#skill-list").show();
+            $("#no-skill-list").hide();
             var source = $("#skill-template").text();
             var template = Handlebars.compile(source);
             var html = template(skills);
