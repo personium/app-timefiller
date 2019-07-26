@@ -23,8 +23,8 @@ function getRecommendList(nowDate, callback) {
     // TODO Handle Error Response
     let planList = planObj[0].d.results;
     let planningList = planningObj[0].d.results;
-    let myKeywords = myInterests[0].keywords;
-    let tempKeywords = mySkills[0].keywords;
+    let myKeywords = mySkills[0].keywords;
+    let tempKeywords = myInterests[0].keywords;
     if (!_.isUndefined(tempKeywords)) {
       if (!_.isUndefined(myKeywords)) {
         // skill merge
