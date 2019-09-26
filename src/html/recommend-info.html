@@ -61,7 +61,7 @@
   });
   </script>
 
-  <title>プラン詳細</title>
+  <title data-i18n="glossary:planDetailMessage.title"></title>
 </head>
 
 <body>
@@ -148,7 +148,7 @@
           <br>
         {{/each}}
         <br>
-        日時:{{eventDate startDate}}{{eventTime startDate}} ～ {{eventTime endDate}}
+        {{i18n "glossary:planDetailMessage.date"}}:{{eventDate startDate endDate}}
         <br>
         {{#if recruiterLabel}}
           {{#if recruiter}}
@@ -162,7 +162,7 @@
 
       {{#if (Venue place postalCode address latitude longitude phoneNumber)}}
         <div class="plan-info-place mb-2 mt-2">
-            <div class="plan-info-place-title mb-2">開催場所</div>
+          <div class="plan-info-place-title mb-2">{{i18n "glossary:planDetailMessage.place"}}</div>
           <div class="mb-2" id="mapImage" style="height:350px">
           </div>
           <div class="place-address  mb-2">
@@ -171,7 +171,7 @@
             <br>
           {{/if}}
           {{#if address}}
-            住所:
+            {{i18n "glossary:planDetailMessage.address"}}:
             {{#if postalCode}}
               〒{{postalCode}}
             {{/if}}
@@ -179,7 +179,7 @@
           {{/if}}
           <br>
           {{#if phoneNumber}}
-            お問い合わせ:{{phoneNumber}}
+            {{i18n "glossary:planDetailMessage.contact"}}:{{phoneNumber}}
           {{/if}}
           </div>
         </div>
@@ -187,7 +187,7 @@
     </div>
     {{#if keywords}}
     <div class="reference-skill">
-      キーワード:<br>
+        {{i18n "glossary:planDetailMessage.keywords"}}:<br>
       {{keywords}}
     </div>
     {{/if}}
@@ -199,15 +199,36 @@
           'eq': function(v1, v2) {
             return v1 == v2;
           },
-          'postDate': function(date) {
-            return moment(date).format('YYYY/MM/DD(ddd) H:mm');
+          'i18n': function(key) {
+            return i18next.t(key);
           },
+          'postDate': function(date) {
+            const format = (i18next.language == 'ja')
+              ? 'YYYY/MM/DD(ddd) H:mm' : 'H:mm, ddd, MMM DD, YYYY';
+            return moment(date).format(format);
+          },
+          'eventDate': function(startDate, endDate) {
+            moment.locale(i18next.language);
+            if (i18next.language == 'ja') {
+              const d = moment(startDate).format('M/DD (ddd) ');
+              const s = moment(startDate).format('H:mm');
+              const e = moment(endDate).format('H:mm');
+              return d + s + ' ~ ' + e;
+            } else {
+              const s = moment(startDate).format('H:mm');
+              const e = moment(endDate).format('H:mm');
+              const d = moment(startDate).format(', ddd, MMM DD');
+              return s + ' ~ ' + e + d;
+            }
+          },
+          /*
           'eventDate': function(date) {
             return moment(date).format('M/DD (ddd) ');
           },
           'eventTime': function(date) {
             return moment(date).format('H:mm');
           },
+          */
           'Venue': function(place, postalCode, address, lat, lon, phoneNumber) {
             if (place || postalCode || address || lat || lon || phoneNumber) {
               return true;
@@ -265,7 +286,14 @@
   </script>
 
   <footer>
-    <button type="button" class="btn full-footer-btn plan-footer-btn plan-star-btn" data-label="検討する" data-label-ng="検討しない">検討する</button>
+    <button
+      type="button"
+      class="btn full-footer-btn plan-footer-btn plan-star-btn"
+      data-label="glossary:planDetailMessage.addToFavorite"
+      data-label-ng="glossary:planDetailMessage.removeFromFavorite"
+      data-i18n="glossary:planDetailMessage.addToFavorite"
+    >
+    </button>
     <!--<button type="button" class="btn footer-btn plan-footer-btn plan-check-btn" data-label="参加する" data-label-ng="参加しない">参加する</button>-->
   </footer>
 </body>

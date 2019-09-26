@@ -32,7 +32,7 @@
   <script src="./js/skillshare.js"></script>
   <script src="./js/recommend.js"></script>
 
-  <title>おすすめスケジュール</title>
+  <title data-i18n="glossary:scheduleMessage.title"></title>
 </head>
 <script>
   additionalCallback = function() {
@@ -40,6 +40,7 @@
 
     sessionStorage.screen = "index";
     targetCellName = sessionStorage.cellname;
+    moment.locale(i18next.language);
     if (!sessionStorage.day) {
       sessionStorage.day = moment().format("YYYY-MM-DD");
     }
@@ -51,20 +52,22 @@
       
     }
     nowMoment = moment(sessionStorage.day);
-    $("#today").text(nowMoment.format('M/DD(ddd)'));
+    const todayFormat = (i18next.language == 'ja')
+      ? 'M/DD(ddd)' : 'ddd, MMM DD';
+    $("#today").text(nowMoment.format(todayFormat));
     getRecommendList(nowMoment.toISOString(), createList);
 
     $('#prev-btn').off().click(function () {
       nowMoment.add(-1,"day");
       sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-      $("#today").text(nowMoment.format('M/DD(ddd)'));
+      $("#today").text(nowMoment.format(todayFormat));
       getRecommendList(nowMoment.toISOString(), createList);
     });
 
     $('#next-btn').off().click(function () {
       nowMoment.add(1,"day");
       sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-      $("#today").text(nowMoment.format('M/DD(ddd)'));
+      $("#today").text(nowMoment.format(todayFormat));
       getRecommendList(nowMoment.toISOString(), createList);
     });
   }
@@ -72,7 +75,7 @@
 <body>
   <header class="top schedule-list">
     <div class="header-title">
-      <div class="title">おすすめスケジュール</div>
+      <div class="title" data-i18n="glossary:scheduleMessage.title"></div>
     </div>
     <button id="setting_btn" class="header-btn pn-btn header-right" style="display:none;" onclick="javascript:location.href = 'data_manager.html';">
       <i class="fas fa-cog fa-2x icon"></i>
@@ -101,7 +104,7 @@
             {{#if (eq type "allday")}}
             <li class="time-list not-mask">
               <div class="list-text">
-                終日イベント
+                {{i18n "glossary:event.allDayEvent"}}
               </div>
             </li>
             <li class="default-schedule schedule-list-s not-mask">
@@ -420,6 +423,9 @@
                   'eq': function(v1, v2) {
                     return v1 == v2;
                   },
+                  'i18n': function(key) {
+                    return i18next.t(key);
+                  },
                   'time': function(date) {
                     return moment(date).format('H:mm');
                   },
@@ -528,7 +534,7 @@ console.log(recommendedSchedule);
   <footer class="schedule-list">
     <button class="current" onclick="javascript:location.href = 'index.html';">
       <i class="fas fa-calendar-alt fa-2x icon"></i>
-      <div class="icon-text">おすすめ</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.recommended"></div>
     </button>
 <!--    <button>
       <i class="fa fa-bullhorn fa-2x icon"></i>
@@ -537,11 +543,11 @@ console.log(recommendedSchedule);
 -->
     <button onclick="javascript:sessionStorage.removeItem('planStatus');location.href = 'plan.html';">
       <i class="fas fa-clipboard fa-2x icon"></i>
-      <div class="icon-text">プラン一覧</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.planList"></div>
     </button>
     <button onclick="javascript:sessionStorage.planStatus = 'consideration';location.href = 'plan.html';">
       <i class="fas fa-star fa-2x icon"></i>
-      <div class="icon-text">検討中</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.favorite"></div>
     </button>
 <!--    <button>
       <i class="fas fa-check-circle fa-2x icon"></i>

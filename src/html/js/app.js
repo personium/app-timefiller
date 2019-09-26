@@ -113,6 +113,49 @@ function updateSkills() {
     })
 }
 
+function Add_Check_Mark() {
+  $('.pn-check-list').click(function (event) {
+
+    //CASE: sort list
+    if ($(this).parents('#sort-menu').length != 0) {
+      $('#sort-menu').find('.check-mark-right').removeClass('check-mark-right');
+      $(this).addClass('check-mark-right');
+    }
+
+    //CASE: icon list
+    if ($(this).parents('#icon-check-list').length != 0) {
+      $(this).find('.pn-icon-check').toggle();
+      if (!($(this).find('.pn-icon-check').css('display') == 'none')) {
+        $(this).css('background-color', '#EEEEEE');
+      } else {
+        $(this).css('background-color', '#FFFFFF');
+      }
+    }
+
+    //CASE: check list
+    if ($(this).parents('#check-list').length != 0) {
+      if ($(this).hasClass('checked')) {
+        $(this).removeClass('checked');
+        $(this).css('background-color', '#FFFFFF');
+      } else {
+        $(this).addClass('checked');
+        $(this).css('background-color', '#EEEEEE');
+      }
+    }
+
+    //CASE: check list
+    if ($(this).parents('#not-change-bg-check-list').length != 0) {
+      if ($(this).hasClass('checked')) {
+        $(this).removeClass('checked');
+      } else {
+        $(this).addClass('checked');
+      }
+    }
+
+  });
+
+}
+
 function selectAttributes() {
     $.ajax({
         type: "GET",
@@ -285,7 +328,6 @@ $(function () {
   Control_Slide_List();
   Sort_Menu();
   Control_Dialog();
-  Add_Check_Mark();
   Resize_Textarea();
 
   /**
@@ -435,53 +477,6 @@ $(function () {
     $('.pn-three-modal').on('click', function () {
       $('.three-btn-modal').modal('show');
     });
-  }
-
-  /**
-   * Add_Check_Mark
-   * param:none
-   */
-  function Add_Check_Mark() {
-    $('.pn-check-list').click(function (event) {
-
-      //CASE: sort list
-      if ($(this).parents('#sort-menu').length != 0) {
-        $('#sort-menu').find('.check-mark-right').removeClass('check-mark-right');
-        $(this).addClass('check-mark-right');
-      }
-
-      //CASE: icon list
-      if ($(this).parents('#icon-check-list').length != 0) {
-        $(this).find('.pn-icon-check').toggle();
-        if (!($(this).find('.pn-icon-check').css('display') == 'none')) {
-          $(this).css('background-color', '#EEEEEE');
-        } else {
-          $(this).css('background-color', '#FFFFFF');
-        }
-      }
-
-      //CASE: check list
-      if ($(this).parents('#check-list').length != 0) {
-        if ($(this).hasClass('checked')) {
-          $(this).removeClass('checked');
-          $(this).css('background-color', '#FFFFFF');
-        } else {
-          $(this).addClass('checked');
-          $(this).css('background-color', '#EEEEEE');
-        }
-      }
-
-      //CASE: check list
-      if ($(this).parents('#not-change-bg-check-list').length != 0) {
-        if ($(this).hasClass('checked')) {
-          $(this).removeClass('checked');
-        } else {
-          $(this).addClass('checked');
-        }
-      }
-
-    });
-
   }
 
   /**

@@ -152,7 +152,7 @@ function getEventInfo() {
 		address: $("#address").val(),
 		serviceImage: profImage,
 		serviceName: profName,
-		recruiterLabel: "主催者",
+		recruiterLabel: i18next.t("glossary:planDetailMessage.organizer"),
 		recruiter: $("#recruiter").val(),
 		phoneNumber: $("#phoneNumber").val(),
 		keywords: $("#keywords").val().split(",")

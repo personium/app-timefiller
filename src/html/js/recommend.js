@@ -81,7 +81,7 @@ function getRecommendList(nowDate, callback) {
       recommendSchedule.push({
           "type": "home",
           "planStatus": "confirm",
-          "title": "自宅",
+          "title": i18next.t('glossary:scheduleMessage.home'),
           "startDate": startMoment.toISOString(),
           "endDate": moment(startMoment).add(30, "minutes").toISOString(),
           "longitude": 9999, // Interim
@@ -106,7 +106,7 @@ function getRecommendList(nowDate, callback) {
       let homePlan = {
           "type": "home",
           "planStatus": "confirm",
-          "title": "自宅",
+          "title": i18next.t('glossary:scheduleMessage.home'),
           "startDate": lastHomeEndMoment.toISOString(),
           "longitude": 9999, // Interim
           "latitude": 9999 // Interim
@@ -341,7 +341,7 @@ function getTravelTime(stLon, stLat, edLon, edLat) {
  * (Unmounted: fixed for 300M)
  */
 function getTravelDistance(stLon, stLat, edLon, edLat) {
-  return "約300M";
+  return i18next.t("glossary:scheduleMessage.distance", { distance: 300 });
 }
 
 /**
@@ -383,7 +383,7 @@ function getSection() {
 function getMove(plan, resultPlan) {
   return {
     "type": "transportation",
-    "title": "移動",
+    "title": i18next.t("glossary:scheduleMessage.move"),
     "distance": getTravelDistance(
                 resultPlan.longitude
               , resultPlan.latitude

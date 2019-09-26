@@ -28,7 +28,7 @@
   <script src="./js/common.js"></script>
   <script src="./js/app.js"></script>
 
-  <title>マイデータの登録</title>
+  <title data-i18n="glossary:myDataMessage.title"></title>
 </head>
 
 <body class="data-manager">
@@ -39,135 +39,67 @@
       </div>
     </a>
     <div class="header-title header-app-icon">
-      <img class="img-fluid" src="img/game@3x.png" alt="興味・関心">
-      <span class="title">興味・関心</span>
+      <img class="img-fluid" src="img/game@3x.png" alt="interests">
+      <span class="title" data-i18n="glossary:myDataMessage.interests"></span>
     </div>
   </header>
 
-  <main class="h-footer">
-    <div class="extcell-profile">
-      <div id="data-manager-role" class="role-img-area"></div>
-      <script id="data-manager-template" type="text/x-handlebars-template">
-        <div class="arrow-to-img">
-          <div class="my_icon user-icon user-icon-large" style="background-image: url({{dispImage}});"></div>
-          <div class="font-weight-bold">{{dispName}}</div>
+  <main id="main" class="h-footer">
+    <script id="data-manager-template" type="text/x-handlebars-template">
+      <div class="extcell-profile">
+        <div id="data-manager-role" class="role-img-area">
+          <div class="arrow-to-img">
+            <div class="my_icon user-icon user-icon-large" style="background-image: url({{dispImage}});"></div>
+            <div class="font-weight-bold">{{dispName}}</div>
+          </div>
+        </div>
+        <div class="user-description" data-i18n="glossary:myDataMessage.description">
+        </div>
       </div>
-      </script>
-      <script>
-          $(function() {
-            Handlebars.registerHelper({
-              'eq': function(v1, v2) {
-                return v1 == v2;
-              }
-            });
-            var source = $("#data-manager-template").text();
-            var template = Handlebars.compile(source);
-            Common.getProfile(Common.getCellUrl(), function(profObj) {
-              var html = template(profObj);
-            $("#data-manager-role").html(html);
-          });
-          });
-      </script>
-
-      <div class="user-description">
-        <!-- <div class="font-weight-bold">マイデータの登録</div> -->
-        マイデータを登録すると<!-- <br> -->より良いおすすめスケジュール提案ができます
+      <div id="not-change-bg-check-list">
+        <ul>
+          {{#each keywords}}
+          <li data-keyword="{{this}}" class="pn-check-list check-position-l check-mark-left">
+            <div class="pn-list pn-list-no-arrow">
+              <span data-i18n="glossary:interests.{{this}}"></span>
+            </div>
+          </li>
+          {{/each}}
+        </ul>
       </div>
-    </div>
-
-    <div id="not-change-bg-check-list">
-      <ul>
-        <li data-keyword="キッズ" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>キッズ</span>
-          </div>
-        </li>
-        <li data-keyword="スポーツ" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>スポーツ</span>
-          </div>
-        </li>
-        <li data-keyword="アウトドア" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>アウトドア</span>
-          </div>
-        </li>
-        <li data-keyword="音楽" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>音楽</span>
-          </div>
-        </li>
-        <li data-keyword="映画" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>映画</span>
-          </div>
-        </li>
-        <li data-keyword="読書" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>読書</span>
-          </div>
-        </li>
-        <li data-keyword="ゲーム" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>ゲーム</span>
-          </div>
-        </li>
-        <li data-keyword="コンピュータ" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>コンピュータ</span>
-          </div>
-        </li>
-        <li data-keyword="アート" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>アート</span>
-          </div>
-        </li>
-        <li data-keyword="ビジネス" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>ビジネス</span>
-          </div>
-        </li>
-        <li data-keyword="科学" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>科学</span>
-          </div>
-        </li>
-        <li data-keyword="美容" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>美容</span>
-          </div>
-        </li>
-        <li data-keyword="料理" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>料理</span>
-          </div>
-        </li>
-        <li data-keyword="グルメ" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>グルメ</span>
-          </div>
-        </li>
-        <li data-keyword="旅行" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>旅行</span>
-          </div>
-        </li>
-        <li data-keyword="ペット" class="pn-check-list check-position-l check-mark-left">
-          <div class="pn-list pn-list-no-arrow">
-            <span>ペット</span>
-          </div>
-        </li>
-      </ul>
-    </div>
+    </script>
+    <script>
+      $(function() {
+        Handlebars.registerHelper({
+          'eq': function(v1, v2) {
+            return v1 == v2;
+          }
+        });
+        var keywords = [
+          "kids", "sport", "outdoor", "music", "movie", "reading", "game",
+          "computer", "art", "business", "science", "beauty","cuisine",
+          "gourmet", "travel", "pet"
+        ];
+        var source = $("#data-manager-template").text();
+        var template = Handlebars.compile(source);
+        Common.getProfile(Common.getCellUrl(), function(profObj) {
+          profObj.keywords = keywords;
+          var html = template(profObj);
+          $("#main").html(html);
+          Common.updateContent();
+          Add_Check_Mark();
+          selectAttributes();
+        });
+      });
+    </script>
   </main>
-  <script>
-    $(function() {
-        selectAttributes();
-    });
-  </script>
 
   <footer>
-    <button type="button" class="btn add-btn" onclick="setAttributes()">登録</button>
+    <button
+      type="button" class="btn add-btn" onclick="setAttributes()"
+      data-i18n="glossary:attributesMessage.registButton"
+    >
+    </button>
   </footer>
 </body>
 

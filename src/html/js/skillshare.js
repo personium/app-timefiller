@@ -33,13 +33,12 @@ $(function () {
     $('.plan-footer-btn').on('click', function () {
       $(this).toggleClass('clicked');
       if ($(this).hasClass('clicked')) {
-        let strLabel = $(this).data('labelNg');
-        $(this).text(strLabel||'キャンセルする');
+        const strLabel = i18next.t($(this).data('labelNg'));
+        $(this).text(strLabel||i18next.t("glossary:planDetailMessage.cancel"));
       } else {
-        let strLabel = $(this).data('label');
+        const strLabel = i18next.t($(this).data('label'));
         $(this).text(strLabel);
       }
-
       return false;
     });
   }
