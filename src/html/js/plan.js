@@ -17,24 +17,34 @@
 
 const MAX_PLANLIST_SIZE = 10;
 
+function createDateFormat() {
+  return (i18next.language == 'ja') ? 'M/DD(ddd)' : 'ddd, MMM DD';
+} 
+
+(i18next.language == 'ja')
+  ? 'M/DD(ddd)' : 'ddd, MMM DD';
+
 $(function() {
   $("#setting_btn").show();
   sessionStorage.screen = "plan";
   setTargetDay();
-  displayPlanningList();
+  // Workaround: wait for i18n.language initilization
+  // displayPlanningList();
+  setTimeout(displayPlanningList, 50);
+  const todayFormat = createDateFormat();
 
   // Set up next / previous button when ready
   $('#prev-btn').off().click(function () {
     nowMoment.add(-1,"day");
     sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-    $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+    $("#title-date").text(nowMoment.format(todayFormat));
     displayPlanningList();
   });
   
   $('#next-btn').off().click(function () {
     nowMoment.add(1,"day");
     sessionStorage.day = nowMoment.format("YYYY-MM-DD");
-    $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+    $("#title-date").text(nowMoment.format(todayFormat));
     displayPlanningList();
   });
 });
@@ -48,8 +58,10 @@ function setTargetDay() {
 }
 
 function displayPlanningList() {
+  moment.locale(i18next.language);
   nowMoment = moment(sessionStorage.day);
-  $("#title-date").text(nowMoment.format('M/DD(ddd)'));
+  const todayFormat = createDateFormat();
+  $("#title-date").text(nowMoment.format(todayFormat));
   const paramObj = {
     'startDate': nowMoment.startOf("day").add(8,"hour").toISOString(),
     'endDate': nowMoment.endOf("day").toISOString()
@@ -70,7 +82,7 @@ function displayPlanningList() {
 
 function setPlanList(planningObj) {
   if (_.isUndefined(sessionStorage.planStatus) || _.isNull(sessionStorage.planStatus)) {
-    $("title").text("プラン一覧");
+    $("title").text(i18next.t("glossary:planListMessage.title"));
     $("#planList").addClass("current");
     $("#considerationList").removeClass("current");
     if (sessionStorage.keywords) {
@@ -91,8 +103,8 @@ function setPlanList(planningObj) {
       })
     });
   } else {
-    $("title").text("検討中一覧");
-    $(".header-title .title").text("検討中一覧");
+    $("title").text(i18next.t("glossary:FavoriteListMessage.title"));
+    $(".header-title .title").text(i18next.t("glossary:FavoriteListMessage.title"));
     $("#considerationList").addClass("current");
     $("#planList").removeClass("current");
     planStatus = sessionStorage.planStatus;

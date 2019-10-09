@@ -7,7 +7,8 @@
         "btn": {
             "OK": "OK",
             "Add": "Add"
-        }
+        },
+        "allDayEvent": "All day event"
     },
     "eventMessage": {
         "regist": "event has been registered.",
@@ -16,16 +17,72 @@
         "confirmDelete": "Delete an event Is it OK?",
         "back": "return to the list screen."
     },
+    "myDataMessage": {
+        "title": "Register my data",
+        "description": "If you register My Data, you can propose a better recommended schedule",
+        "attributes": "Gender, age, family composition",
+        "interests": "Interests",
+        "fitness": "Fitness",
+        "skills": "Skills"
+    },
+    "interests": {
+        "kids": "Kids",
+        "sport": "Sport",
+        "outdoor": "Outdoor",
+        "music": "Music",
+        "movie": "Movie",
+        "reading": "Reading",
+        "game": "Game",
+        "computer": "Computer",
+        "art": "Art",
+        "business": "Business",
+        "science": "Science",
+        "beauty": "Beauty",
+        "cuisine": "Cuisine",
+        "gourmet": "Gourmet",
+        "travel": "Travel",
+        "pet": "Pet"
+    },
     "attributesMessage": {
+        "registButton": "Register",
         "regist": "MyData has been registered.",
         "update": "updated the MyData.",
         "delete": "The MyData has been deleted.",
         "back": "return to the management screen."
     },
     "skillsMessage": {
+        "noData": "There is no registration data.",
         "addSkills": "Add Skills",
         "confirmDelete": "Delete Is it OK?",
         "errorNotSkills": "Please enter the skills you want to add.",
         "errorDuplicate": "It is already registered."
+    },
+    "scheduleMessage": {
+        "title": "Recommended schedule",
+        "home": "Home",
+        "move": "Move",
+        "distance": "About {{distance}}M",
+        "recommended": "Recommended",
+        "planList": "Plan List",
+        "favorite": "Favorite"
+    },
+    "planListMessage": {
+        "title": "Plan List",
+        "noData": "There are no events."
+    },
+    "FavoriteListMessage": {
+        "title": "Favorite List"
+    },
+    "planDetailMessage": {
+        "title": "Plan Detail",
+        "date": "Date",
+        "organizer": "Organizer",
+        "place": "Place",
+        "address": "Address",
+        "contact": "Contact",
+        "keywords": "Keywords",
+        "addToFavorite": "Add to favorite",
+        "removeFromFavorite": "Remove from favorite",
+        "cancel": "Cancel"
     }
 }

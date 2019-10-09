@@ -31,13 +31,13 @@
   <script src="./js/skillshare.js"></script>
   <script src="./js/plan.js"></script>
   
-  <title>プラン一覧</title>
+  <title data-i18n="glossary:planListMessage.title"></title>
 </head>
 
 <body>
   <header class="top schedule-list">
     <div class="header-title">
-      <div class="title">プラン一覧</div>
+      <div class="title" data-i18n="glossary:planListMessage.title"></div>
     </div>
     <button id="setting_btn" class="header-btn pn-btn header-right" style="display:none;" onclick="javascript:location.href = 'data_manager.html';">
       <i class="fas fa-cog fa-2x icon"></i>
@@ -60,9 +60,7 @@
         <div class="list">
           <ul id="plan-list" class="plan-list-area"></ul>
           <ul id="not-plan-list" class="plan-list-area" style="display:none">
-            <li>
-              イベントはありません。
-            </li>
+            <li data-i18n="glossary:planListMessage.noData"></li>
           </ul>
         </div>
       </div>
@@ -92,7 +90,7 @@
           </div>
           <div class="etc_area">
             <div class="status text-hidden">
-              {{time startDate}}～{{time endDate}} {{address}}　{{recruiter}}
+              {{time startDate}}～{{time endDate}} {{address}} {{recruiter}}
             </div>
             <div class="evaluation">
 <!--
@@ -121,7 +119,7 @@
   <footer class="schedule-list">
     <button id="recommandList" onclick="javascript:location.href = 'index.html';">
       <i class="fas fa-calendar-alt fa-2x icon"></i>
-      <div class="icon-text">おすすめ</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.recommended"></div>
     </button>
 <!--    <button>
       <i class="fa fa-bullhorn fa-2x icon"></i>
@@ -130,11 +128,11 @@
 -->
     <button id="planList" class="current" onclick="javascript:sessionStorage.removeItem('planStatus');location.href = 'plan.html';">
       <i class="fas fa-clipboard fa-2x icon"></i>
-      <div class="icon-text">プラン一覧</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.planList"></div>
     </button>
     <button id="considerationList" onclick="javascript:sessionStorage.planStatus = 'consideration';location.href = 'plan.html';">
       <i class="fas fa-star fa-2x icon"></i>
-      <div class="icon-text">検討中</div>
+      <div class="icon-text" data-i18n="glossary:scheduleMessage.favorite"></div>
     </button>
 <!--    <button>
       <i class="fas fa-check-circle fa-2x icon"></i>

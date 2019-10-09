@@ -7,7 +7,8 @@
         "btn": {
             "OK": "OK",
             "Add": "追加"
-        }
+        },
+        "allDayEvent": "終日イベント"
     },
     "eventMessage": {
         "regist": "イベントを登録しました。",
@@ -16,16 +17,72 @@
         "confirmDelete": "イベントを削除します。よろしいですか？",
         "back": "一覧画面に戻ります。"
     },
+    "myDataMessage": {
+        "title": "マイデータの登録",
+        "description": "マイデータを登録するとより良いおすすめスケジュール提案ができます",
+        "attributes": "性別・年齢・家族構成",
+        "interests": "興味・関心",
+        "fitness": "フィットネス",
+        "skills": "スキル"
+    },
+    "interests": {
+        "kids": "キッズ",
+        "sport": "スポーツ",
+        "outdoor": "アウトドア",
+        "music": "音楽",
+        "movie": "映画",
+        "reading": "読書",
+        "game": "ゲーム",
+        "computer": "コンピュータ",
+        "art": "アート",
+        "business": "ビジネス",
+        "science": "科学",
+        "beauty": "美容",
+        "cuisine": "料理",
+        "gourmet": "グルメ",
+        "travel": "旅行",
+        "pet": "ペット"
+    },
     "attributesMessage": {
+        "registButton": "登録",
         "regist": "マイデータを登録しました。",
         "update": "マイデータを更新しました。",
         "delete": "マイデータを削除しました。",
         "back": "管理画面に戻ります。"
     },
     "skillsMessage": {
+        "noData": "登録データはありません。",
         "addSkills": "スキルの追加",
         "confirmDelete": "削除します。よろしいですか？",
         "errorNotSkills": "追加するスキルを入力して下さい。",
         "errorDuplicate": "既に登録されています。"
+    },
+    "scheduleMessage": {
+        "title": "おすすめスケジュール",
+        "home": "自宅",
+        "move": "移動",
+        "distance": "約{{distance}}M",
+        "recommended": "おすすめ",
+        "planList": "プラン一覧",
+        "favorite": "お気に入り"
+    },
+    "planListMessage": {
+        "title": "プラン一覧",
+        "noData": "イベントはありません。"
+    },
+    "FavoriteListMessage": {
+        "title": "検討中一覧"
+    },
+    "planDetailMessage": {
+        "title": "プラン詳細",
+        "date": "日時",
+        "organizer": "主催者",
+        "place": "開催場所",
+        "address": "住所",
+        "contact": "お問い合わせ先",
+        "keywords": "キーワード",
+        "addToFavorite": "検討する",
+        "removeFromFavorite": "検討しない",
+        "cancel": "キャンセルする"
     }
 }
