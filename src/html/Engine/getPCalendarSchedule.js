@@ -26,6 +26,8 @@ function(request){
         var body = "grant_type=refresh_token&refresh_token=" + params.refToken + "&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + aaat;
         var httpClient = new _p.extension.HttpClient();
         var pcalRes = httpClient.post(url, headers, contentType, body);
+        checkStatusCode(pcalRes, 'Get user cell token failed.');
+
         var pcalToken = JSON.parse(pcalRes.body);
 
         // get BoxName
@@ -38,6 +40,8 @@ function(request){
         if (pcalBoxRes.status == "403" || pcalBoxRes.status == "404") {
             // Personium Calendar is not installed
             return personium.createResponse(200, calendarSchedule);
+        } else {
+            checkStatusCode(pcalBoxRes, 'Get calendar box url failed.');
         }
         var pcalBox = JSON.parse(pcalBoxRes.body);
         var pcalBoxUrl = pcalBox.Url;
@@ -52,6 +56,8 @@ function(request){
         if (pcalDataRes.status == "403" || pcalDataRes.status == "404") {
             // Personium Calendar is not installed
             return personium.createResponse(200, calendarSchedule);
+        } else {
+            checkStatusCode(pcalDataRes, 'Get calendar event odata failed.');
         }
         var pcalDataBody = JSON.parse(pcalDataRes.body);
         var pcalData = pcalDataBody.d.results;
@@ -68,6 +74,8 @@ function(request){
             if (pcalProf.Image) {
                 pcalProfImage = pcalProf.Image;
             }
+        } else {
+            checkStatusCode(pcalProfRes, 'Get calendar app cell profile.json failed.');
         }
 
         // Format to time filling(Duplicate events are combined into one event)
@@ -130,6 +138,15 @@ function(request){
 
     } catch (e) {
         return personium.createErrorResponse(e);
+    }
+}
+
+function checkStatusCode(res, message) {
+    var status = parseInt(res.status);
+    if (status >= 400) {
+        var err = new Error(message + 'body=(' + res.body + ')');
+        err.code = status;
+        throw err;
     }
 }
 
