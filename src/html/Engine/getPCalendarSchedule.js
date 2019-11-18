@@ -9,27 +9,21 @@ function(request){
         personium.setRequiredKeys(['p_target', 'refToken', 'targetDay']);
         personium.validateKeys(params);
 
-        // Get app cell token
-        var appToken = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(params.p_target).getToken();
-        var aaat = appToken.access_token;
-
         // Definition of return variable
         var calendarSchedule = {
             "allday": [],
             "oneday": []
         };
-
+        
+        // Make sure that this endpoint is executed by the rightful user by cross-checking the Box URL retrieved by token with p_target
+        verifyUserUrl(request, params.p_target);
+        
         // Acquisition of token for Calendar Box access
-        var url = params.p_target + "__token";
-        var headers = {'Accept': 'application/json'};
-        var contentType = "application/x-www-form-urlencoded";
-        var body = "grant_type=refresh_token&refresh_token=" + params.refToken + "&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + aaat;
+        var pcalToken = getCalAccessToken(params);
+
+        var url;
+        var headers;
         var httpClient = new _p.extension.HttpClient();
-        var pcalRes = httpClient.post(url, headers, contentType, body);
-        checkStatusCode(pcalRes, 'Get user cell token failed.');
-
-        var pcalToken = JSON.parse(pcalRes.body);
-
         // get BoxName
         url = params.p_target + "__box";
         headers = {
@@ -140,7 +134,74 @@ function(request){
         return personium.createErrorResponse(e);
     }
 }
-
+function verifyUserUrl(request, url) {
+    var httpClient = new _p.extension.HttpClient();
+    var token = request["headers"]["authorization"];
+    var headers = {
+        "Accept": "application/json",
+        "Authorization": token // "Bearer" included
+    };
+    
+    // get BoxName 
+    var res = httpClient.get(url + "__box", headers);
+    var status = parseInt(res.status);
+    if (status >= 400) {
+        var err = [
+            "io.personium.client.DaoException: " + status + ",",
+            res.body
+        ].join("");
+        throw new _p.PersoniumException(err);
+    }
+    var box = JSON.parse(res.body);
+    var boxUrl = box.Url;
+    if (!boxUrl.startsWith(url)) {
+        var err = [
+            "io.personium.client.DaoException: 400,",
+            JSON.stringify({
+                "code": "PR400-AN-0002",
+                "message": {
+                    "lang": "en",
+                    "value": "Invalid p_target"
+                }
+            })
+        ].join("");
+        throw new _p.PersoniumException(err);
+    }
+}
+function getCalAccessToken(params) {
+    var userCellUrl = params.p_target;
+    var url;
+    var headers = {'Accept': 'application/json'};
+    var contentType = "application/x-www-form-urlencoded";
+    var httpClient = new _p.extension.HttpClient();
+    
+    // Get App token for app-timefiller (app-personium-calendar)
+    var appTokenTimefiller = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(accInfo.APP_CELL_URL).getToken();
+    
+    // Get token for cross-app access for app-timefiller
+    url = accInfo.APP_CELL_URL + "__token"; // app-timefiller
+    var body = "grant_type=password&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + appTokenTimefiller.access_token + "&username=" + accInfo.APP_CELL_ADMIN_INFO.userId + "&password=" + accInfo.APP_CELL_ADMIN_INFO.password;
+    var res = httpClient.post(url, headers, contentType, body);
+    checkStatusCode(res, "Failed to get cross-app access token for app-timefiller!");
+    var crossAppToken = JSON.parse(res.body);
+    
+    // Get App token for userCellUrl (app-personium-calendar)
+    var appTokenUser = _p.as(accInfo.COOP_APP_CELL_ADMIN_INFO).cell(userCellUrl).getToken();
+    
+    // Get Transcell token
+    url = accInfo.APP_CELL_URL + "__token"; // app-timefiller
+    body = "grant_type=refresh_token&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + appTokenTimefiller.access_token + "&p_target=" + userCellUrl + "&refresh_token=" + crossAppToken.refresh_token;
+    res = httpClient.post(url, headers, contentType, body);
+    checkStatusCode(res, "Failed to get Transcell token for app-timefiller!");
+    var transcellToken = JSON.parse(res.body);
+    
+    // Get protected box access token (user's calendar box)
+    url = userCellUrl + "__token";
+    body = "grant_type=urn:ietf:params:oauth:grant-type:saml2-bearer&client_id=" + accInfo.COOP_APP_CELL_URL + "&client_secret=" + appTokenUser.access_token + "&assertion=" + transcellToken.access_token;
+    res = httpClient.post(url, headers, contentType, body);
+    checkStatusCode(res, "Failed to get protected box access token (user's calendar box)!");
+    return JSON.parse(res.body);
+}
 function checkStatusCode(res, message) {
     var status = parseInt(res.status);
     if (status >= 400) {
