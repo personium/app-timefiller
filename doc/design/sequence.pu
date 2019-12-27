@@ -1,0 +1,155 @@
+@startuml timefiller
+title App-timefiller Sequence Diagram
+
+actor EndUser as user
+participant "App-timefiller\nJavaScript App" as apptimeFillerClient
+participant "App-Calendar\nJavaScript App" as calendarClient
+
+box User Cell #e9ffe9
+  participant "Engine Script\n in User Calendar Box" as calendarEngine
+  participant "Engine Script\n in User Timefiller Box" as timefillerEngine
+  participant "User\nCalendar Box" as userCalendarBox
+  participant "User\nTimefiller Box" as userTimefillerBox
+end box
+
+participant "Google\nCalendar API" as calendarApi
+
+box App Cell #d4e1f5
+  participant "Engine Script\nin App-timefiller Main Box" as appcellEngine
+  participant "App-timefiller\nMain Box" as appcell
+end box
+
+box Organization Cell
+  participant "Engine Script\nin Org Box" as extDataSync
+  participant "Organization\nTimefiller Box" as orgCell
+end box
+
+participant "External\nData Resource" as extDataResource
+
+== Batch ==
+
+group Synchronize External Data
+  loop
+    extDataSync -> extDataResource : Get Event Data
+    activate extDataSync
+    activate extDataResource
+    extDataResource --> extDataSync : (Event Data)
+    deactivate extDataResource
+    extDataSync -> extDataSync : Transform Data
+    extDataSync -> orgCell : Write Event Data\n as OrgCell#me: admin
+    activate orgCell
+    orgCell --> extDataSync :
+    deactivate orgCell
+    deactivate extDataSync
+  end
+end
+
+group Aggregate Org Data to App-timefiller
+  loop
+    appcellEngine -> orgCell : Get Event Data\n as AppCell#tokenAcc: EventRead
+    activate appcellEngine
+    activate orgCell
+    orgCell --> appcellEngine : (Event Data)
+    deactivate orgCell
+    appcellEngine -> appcell : Write Event Data\nas AppCell#tokenAcc: writeOData
+    activate appcell
+    appcell --> appcellEngine :
+    deactivate appcell
+    deactivate appcellEngine
+  end
+end
+
+== App Calendar ==
+
+group Synchronize User Calendar Data
+  user -> calendarClient: Launch
+  activate calendarClient
+
+  loop
+    calendarClient -> calendarEngine
+    activate calendarEngine
+    calendarEngine -> calendarApi : Call API
+
+    activate calendarApi
+    calendarApi --> calendarEngine : (User Calendar Data)
+    deactivate calendarApi
+    calendarEngine -> userCalendarBox : Write as User\n(User Calendar Data)
+    activate userCalendarBox
+    userCalendarBox --> calendarEngine :
+    calendarEngine --> calendarClient
+    deactivate userCalendarBox
+    deactivate calendarEngine
+  end
+
+  calendarClient --> user : Display User Calendar Data
+  deactivate calendarClient
+end
+
+== App Timefiller ==
+
+group Register Profile Data
+  user -> apptimeFillerClient : Launch Registration Screen
+  activate apptimeFillerClient
+  user -> apptimeFillerClient : Input Profile Data
+  apptimeFillerClient -> timefillerEngine : Update Profile Data\n(Profile Data)
+  activate timefillerEngine
+  timefillerEngine -> userTimefillerBox : Write Data as User\n(Profile Data)
+  activate userTimefillerBox
+  userTimefillerBox --> timefillerEngine :
+  deactivate userTimefillerBox
+  timefillerEngine --> apptimeFillerClient
+  deactivate timefillerEngine
+  apptimeFillerClient --> user :
+  deactivate apptimeFillerClient
+end
+
+group Display Recommended Schedule
+  user -> apptimeFillerClient : Launch Recommended Screen
+  activate apptimeFillerClient
+  apptimeFillerClient -> appcellEngine
+  activate appcellEngine
+  appcellEngine -> userCalendarBox : Get User Calendar Data\nas AppCell#tokenAcc: CalendarViewer
+  activate userCalendarBox
+  userCalendarBox --> appcellEngine : (User Calendar Data)
+  deactivate userCalendarBox
+  appcellEngine --> apptimeFillerClient : Get User Calendar Data
+  deactivate appcellEngine
+  apptimeFillerClient -> appcellEngine : Get User Profile Data
+  activate appcellEngine
+  appcellEngine -> userTimefillerBox : Get User Profile Data\nas User
+  activate userTimefillerBox
+  userTimefillerBox --> appcellEngine : (User Profile Data)
+  deactivate userTimefillerBox
+  appcellEngine --> apptimeFillerClient
+  deactivate appcellEngine
+  apptimeFillerClient -> appcell : Get Event Data
+  activate appcell
+  appcell --> apptimeFillerClient : (Event Data)
+  deactivate appcell
+  apptimeFillerClient -> apptimeFillerClient : Make Recommended Schedule\n Using User Calendar and\nProfile Data.
+  note right: In the future, Recommendation will be executed on Server side.
+  apptimeFillerClient --> user : Display Recommended Schedule
+  deactivate apptimeFillerClient
+end
+
+group Display Event Detail
+  user -> apptimeFillerClient : Launch Event Detail Screen
+  activate apptimeFillerClient
+
+  apptimeFillerClient -> appcellEngine : Get Event Detail (eventId)
+  activate appcellEngine
+
+  appcellEngine -> orgCell : Get Event Data Detail\nas AppCell#tokenAcc: EventRead
+  activate orgCell
+  orgCell --> appcellEngine : (Event Data Detail)
+  deactivate orgCell
+
+  appcellEngine --> apptimeFillerClient : (Event Data Detail)
+  deactivate
+
+  apptimeFillerClient --> user : Display Event Detail
+  deactivate apptimeFillerClient
+
+end
+
+@enduml
