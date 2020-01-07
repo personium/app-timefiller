@@ -73,7 +73,7 @@ group Synchronize User Calendar Data
     activate calendarApi
     calendarApi --> calendarEngine : (User Calendar Data)
     deactivate calendarApi
-    calendarEngine -> userCalendarBox : Write as User\n(User Calendar Data)
+    calendarEngine -> userCalendarBox : Write as UserCell#me: admin\n(User Calendar Data)
     activate userCalendarBox
     userCalendarBox --> calendarEngine :
     calendarEngine --> calendarClient
@@ -93,7 +93,7 @@ group Register Profile Data
   user -> apptimeFillerClient : Input Profile Data
   apptimeFillerClient -> timefillerEngine : Update Profile Data\n(Profile Data)
   activate timefillerEngine
-  timefillerEngine -> userTimefillerBox : Write Data as User\n(Profile Data)
+  timefillerEngine -> userTimefillerBox : Write Data as UserCell#me: admin\n(Profile Data)
   activate userTimefillerBox
   userTimefillerBox --> timefillerEngine :
   deactivate userTimefillerBox
@@ -116,7 +116,7 @@ group Display Recommended Schedule
   deactivate appcellEngine
   apptimeFillerClient -> appcellEngine : Get User Profile Data
   activate appcellEngine
-  appcellEngine -> userTimefillerBox : Get User Profile Data\nas User
+  appcellEngine -> userTimefillerBox : Get User Profile Data\nas UserCell#me: admin
   activate userTimefillerBox
   userTimefillerBox --> appcellEngine : (User Profile Data)
   deactivate userTimefillerBox
