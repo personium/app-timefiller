@@ -116,14 +116,14 @@ group Display Recommended Schedule
   deactivate userCalendarBox
   appcellEngine --> apptimeFillerClient : Get User Calendar Data
   deactivate appcellEngine
-  apptimeFillerClient -> appcellEngine : Get User Profile Data as UserCell#me: admin
-  activate appcellEngine
-  appcellEngine -> userTimefillerBox : Get User Profile Data\nas UserCell#me: admin
+  apptimeFillerClient -> timefillerEngine : Get User Profile Data as UserCell#me: admin
+  activate timefillerEngine
+  timefillerEngine -> userTimefillerBox : Get User Profile Data\nas UserCell#me: admin
   activate userTimefillerBox
-  userTimefillerBox --> appcellEngine : (User Profile Data)
+  userTimefillerBox --> timefillerEngine : (User Profile Data)
   deactivate userTimefillerBox
-  appcellEngine --> apptimeFillerClient
-  deactivate appcellEngine
+  timefillerEngine --> apptimeFillerClient
+  deactivate timefillerEngine
   apptimeFillerClient -> appcell : Get Event Data
   activate appcell
   appcell --> apptimeFillerClient : (Event Data)
