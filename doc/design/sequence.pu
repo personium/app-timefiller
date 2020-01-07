@@ -37,6 +37,7 @@ group Synchronize External Data
     deactivate extDataResource
     extDataSync -> extDataSync : Transform Data
     extDataSync -> orgCell : Write Event Data\n as OrgCell#me: admin
+    note right: Operation User Format:\n{Cell}#{Account}: {Role}
     activate orgCell
     orgCell --> extDataSync :
     deactivate orgCell
