@@ -67,7 +67,7 @@ group Synchronize User Calendar Data
   activate calendarClient
 
   loop
-    calendarClient -> calendarEngine
+    calendarClient -> calendarEngine : Call Script as\nUsercell#me: admin
     activate calendarEngine
     calendarEngine -> calendarApi : Call API
 
@@ -93,7 +93,7 @@ group Register Profile Data
   user -> apptimeFillerClient : Launch Registration Screen
   activate apptimeFillerClient
   user -> apptimeFillerClient : Input Profile Data
-  apptimeFillerClient -> timefillerEngine : Update Profile Data\n(Profile Data)
+  apptimeFillerClient -> timefillerEngine : Update Profile Data\nas UserCell#me: admin\n(Profile Data)
   activate timefillerEngine
   timefillerEngine -> userTimefillerBox : Write Data as UserCell#me: admin\n(Profile Data)
   activate userTimefillerBox
@@ -108,7 +108,7 @@ end
 group Display Recommended Schedule
   user -> apptimeFillerClient : Launch Recommended Screen
   activate apptimeFillerClient
-  apptimeFillerClient -> appcellEngine
+  apptimeFillerClient -> appcellEngine : Get User Calendar Data as UserCell#me: admin
   activate appcellEngine
   appcellEngine -> userCalendarBox : Get User Calendar Data\nas AppCell#tokenAcc: CalendarViewer
   activate userCalendarBox
@@ -116,7 +116,7 @@ group Display Recommended Schedule
   deactivate userCalendarBox
   appcellEngine --> apptimeFillerClient : Get User Calendar Data
   deactivate appcellEngine
-  apptimeFillerClient -> appcellEngine : Get User Profile Data
+  apptimeFillerClient -> appcellEngine : Get User Profile Data as UserCell#me: admin
   activate appcellEngine
   appcellEngine -> userTimefillerBox : Get User Profile Data\nas UserCell#me: admin
   activate userTimefillerBox
