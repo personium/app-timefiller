@@ -83,6 +83,7 @@ group Synchronize User Calendar Data
   end
 
   calendarClient --> user : Display User Calendar Data
+  note right: Until calendar data synchronization ends, it is not displayed.
   deactivate calendarClient
 end
 
