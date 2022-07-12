@@ -1,5 +1,6 @@
 # app-timefiller-wakaba
-Sharing hub application
+A sample Personium App that uses app-personium-calendar data and recommend activities for users' free time based on their personal preference.
+
 
 ## App deployment
 We will explain the procedure for deploying the time filling app to the app cell. Account names and role names do not have to be exactly as described. If you change it, please replace it with the changed name.
